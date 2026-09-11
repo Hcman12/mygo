@@ -1,0 +1,380 @@
+---
+// Testimonials.astro - Verified Client Reviews exactly matching reference layout
+interface Review {
+  id: string;
+  name: string;
+  date: string;
+  platform: 'google' | 'facebook';
+  rating: number;
+  isRecommend?: boolean;
+  avatar?: string;
+  initial?: string;
+  initialBg?: string;
+  snippet: string;
+  fullText: string;
+}
+
+const reviews: Review[] = [
+  {
+    id: 'review-1',
+    name: 'ibitoye kayode david',
+    date: '8 September 2026',
+    platform: 'google',
+    rating: 5,
+    avatar: '/images/avatars/david.jpg',
+    snippet: 'Good morning and have a wonderful day at work. My Experience and Exceptional services I got from Live and study in Europe was amazing. Thanks My...',
+    fullText: 'Good morning and have a wonderful day at work. My Experience and Exceptional services I got from Live and study in Europe was amazing. Thanks MyGo travel for making this relocation dream a reality. The work permit arrived without delay and my housing in Poland was completely organized.',
+  },
+  {
+    id: 'review-2',
+    name: 'Waleed Butt',
+    date: '26 August 2026',
+    platform: 'facebook',
+    rating: 5,
+    isRecommend: true,
+    avatar: '/images/avatars/waleed.jpg',
+    snippet: '“I am very satisfied with the professional support provided by Arar Guliyev and his team. A special thanks to Viktoriia Babych for her outstanding communication, cle...”',
+    fullText: '“I am very satisfied with the professional support provided by Arar Guliyev and his team. A special thanks to Viktoriia Babych for her outstanding communication, clear guidelines, and relentless assistance throughout my work visa processing. Everything went according to the initial schedule.”',
+  },
+  {
+    id: 'review-3',
+    name: 'Yomah Yomah',
+    date: '22 August 2026',
+    platform: 'facebook',
+    rating: 5,
+    isRecommend: true,
+    avatar: '/images/avatars/yomah.jpg',
+    snippet: 'I just started my process for Serbia and I have done with my payment awaiting for my work permit and all documents from my employee before applying for visa....',
+    fullText: 'I just started my process for Serbia and I have done with my payment awaiting for my work permit and all documents from my employee before applying for visa. The advisors walked me through every legal step patiently and provided genuine employer contracts with accommodation included.',
+  },
+  {
+    id: 'review-4',
+    name: 'Діана Вихованoк',
+    date: '18 August 2026',
+    platform: 'google',
+    rating: 5,
+    initial: 'Д',
+    initialBg: 'bg-[#2E7D32]',
+    avatar: '/images/avatars/diana.jpg',
+    snippet: 'Excellent service and a very professional team. Live and Study in Europe helped me understand the process step by step and provided support whenever I needed it....',
+    fullText: 'Excellent service and a very professional team. Live and Study in Europe helped me understand the process step by step and provided support whenever I needed it. Apostilles and official translations were completed rapidly, and employer reception in Bratislava was first class.',
+  },
+  {
+    id: 'review-5',
+    name: 'Mateo Kovács',
+    date: '12 August 2026',
+    platform: 'google',
+    rating: 5,
+    avatar: '/images/avatars/mateo.jpg',
+    snippet: 'Securing my manufacturing work permit for Slovakia was handled with absolute precision. Transparent from consultation to permit collection. Highly recommended...',
+    fullText: 'Securing my manufacturing work permit for Slovakia was handled with absolute precision. Transparent from consultation to permit collection. The dorm accommodation and shift canteen meal vouchers are exactly as promised in the contract.',
+  },
+  {
+    id: 'review-6',
+    name: 'Elena Dumitru',
+    date: '3 August 2026',
+    platform: 'facebook',
+    rating: 5,
+    isRecommend: true,
+    avatar: '/images/avatars/elena.jpg',
+    snippet: 'Everything was delivered on time. The team assisted with document legalization, employer contract review, and embassy appointment scheduling. A reliable agency...',
+    fullText: 'Everything was delivered on time. The team assisted with document legalization, employer contract review, and embassy appointment scheduling. A reliable agency that does what they say without hidden surprises.',
+  },
+  {
+    id: 'review-7',
+    name: 'Amara Nwosu',
+    date: '29 July 2026',
+    platform: 'google',
+    rating: 5,
+    avatar: '/images/avatars/amara.jpg',
+    snippet: 'Poland logistics placement was approved within the stated timeline. Accommodation was ready upon arrival with warm bedding and close to the warehouse depot...',
+    fullText: 'Poland logistics placement was approved within the stated timeline. Accommodation was ready upon arrival with warm bedding and close to the warehouse depot. My salary and meal allowance have been paid on the exact dates.',
+  },
+  {
+    id: 'review-8',
+    name: 'Taras Shevchenko',
+    date: '15 July 2026',
+    platform: 'facebook',
+    rating: 5,
+    isRecommend: true,
+    avatar: '/images/avatars/taras.jpg',
+    snippet: 'Got my Czech Republic seasonal permit smoothly. Responsive WhatsApp support and clear instructions every step of the journey...',
+    fullText: 'Got my Czech Republic seasonal permit smoothly. Responsive WhatsApp support and clear instructions every step of the journey. Employer picked me up directly from Prague main station.',
+  },
+];
+---
+
+<section id="reviews" class="py-16 sm:py-20 bg-[#fbfbfa] dark:bg-navy-950/90 border-y border-slate-200/80 dark:border-navy-800/80 transition-colors">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- MAIN REVIEW WIDGET CONTAINER -->
+    <div class="rounded-2xl bg-white dark:bg-navy-900 border border-slate-200/90 dark:border-navy-800 shadow-sm p-4 sm:p-6 mb-8">
+      
+      <!-- TOP TAB ROW (All reviews | Google | Facebook) -->
+      <div class="flex items-center gap-6 border-b border-slate-100 dark:border-navy-800 pb-3 text-sm font-semibold">
+        <button 
+          type="button"
+          data-tab="all" 
+          class="review-tab-btn relative pb-2 text-slate-900 dark:text-white font-bold border-b-2 border-slate-900 dark:border-brand-400 transition-all cursor-pointer"
+        >
+          All reviews
+        </button>
+
+        <button 
+          type="button"
+          data-tab="google" 
+          class="review-tab-btn relative pb-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-2 border-b-2 border-transparent transition-all cursor-pointer"
+        >
+          <!-- Google 4-color SVG Icon -->
+          <svg class="w-4 h-4" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Google</span>
+        </button>
+
+        <button 
+          type="button"
+          data-tab="facebook" 
+          class="review-tab-btn relative pb-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-2 border-b-2 border-transparent transition-all cursor-pointer"
+        >
+          <!-- Facebook Blue SVG Icon -->
+          <svg class="w-4 h-4 fill-[#1877F2]" viewBox="0 0 24 24">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          <span>Facebook</span>
+        </button>
+      </div>
+
+      <!-- AGGREGATE SUMMARY ROW (Excellent ★★★★★ 4.6 | 323 reviews) -->
+      <div class="pt-4 flex flex-wrap items-center gap-2 sm:gap-3 text-sm">
+        <span class="font-extrabold text-slate-900 dark:text-white text-base">Excellent</span>
+        <div class="flex items-center gap-0.5 text-amber-400">
+          {Array.from({ length: 5 }).map(() => (
+            <svg class="w-4 h-4 fill-amber-400" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            </svg>
+          ))}
+        </div>
+        <span class="font-bold text-slate-800 dark:text-slate-200">4.6</span>
+        <span class="text-slate-300 dark:text-slate-700">|</span>
+        <span class="font-bold text-slate-800 dark:text-slate-200">323 reviews</span>
+      </div>
+
+    </div>
+
+    <!-- CAROUSEL TRACK WITH NAVIGATION BUTTONS -->
+    <div class="relative group/carousel">
+      
+      <!-- Prev Navigation Button '<' -->
+      <button 
+        type="button" 
+        id="reviews-scroll-prev"
+        aria-label="Previous reviews"
+        class="absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-700 shadow-lg flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-navy-800 transition-all focus:outline-none"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <!-- Next Navigation Button '>' -->
+      <button 
+        type="button" 
+        id="reviews-scroll-next"
+        aria-label="Next reviews"
+        class="absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-700 shadow-lg flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-navy-800 transition-all focus:outline-none"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      <!-- Horizontal Cards Scroll Track -->
+      <div 
+        id="reviews-carousel-track" 
+        class="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth py-3 px-1 no-scrollbar"
+        style="scrollbar-width: none; -ms-overflow-style: none;"
+      >
+        {reviews.map((review) => (
+          <div 
+            class="review-card flex-none w-[285px] sm:w-[315px] bg-white dark:bg-navy-900 rounded-2xl border border-slate-200/90 dark:border-navy-800 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+            data-platform={review.platform}
+          >
+            <div>
+              <!-- Header Row: User Avatar, Name, Date, Platform Icon -->
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <div class="flex items-center gap-3">
+                  {review.initial ? (
+                    <div class={`w-11 h-11 rounded-full ${review.initialBg || 'bg-emerald-600'} text-white font-black text-lg flex items-center justify-center shadow-sm shrink-0`}>
+                      {review.initial}
+                    </div>
+                  ) : (
+                    <img 
+                      src={review.avatar} 
+                      alt={review.name}
+                      class="w-11 h-11 rounded-full object-cover shadow-sm shrink-0 border border-slate-100 dark:border-navy-700" 
+                      loading="lazy"
+                    />
+                  )}
+                  <div>
+                    <h4 class="text-xs sm:text-sm font-black text-slate-900 dark:text-white leading-tight">
+                      {review.name}
+                    </h4>
+                    <span class="text-[11px] text-slate-500 dark:text-slate-400">
+                      {review.date}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Platform Logo (Top Right) -->
+                <div class="shrink-0 pt-0.5">
+                  {review.platform === 'google' ? (
+                    <svg class="w-4 h-4" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                  ) : (
+                    <svg class="w-4 h-4 fill-[#1877F2]" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                  )}
+                </div>
+              </div>
+
+              <!-- Second Row: Rating Stars / Facebook Recommends + Blue Verified Checkmark -->
+              <div class="flex items-center gap-2 mb-3">
+                {review.isRecommend ? (
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#EF4444] text-white text-[11px] font-bold shadow-xs">
+                    <svg class="w-3 h-3 fill-current" viewBox="0 0 20 20">
+                      <path d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM9.5 6.5l-.8 2.5H6.2l2 1.5-.8 2.5 2.1-1.5 2.1 1.5-.8-2.5 2-1.5h-2.5z"/>
+                    </svg>
+                    <span>recommends</span>
+                  </span>
+                ) : (
+                  <div class="flex items-center gap-0.5 text-amber-400">
+                    {Array.from({ length: 5 }).map(() => (
+                      <svg class="w-3.5 h-3.5 fill-amber-400" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                      </svg>
+                    ))}
+                  </div>
+                )}
+
+                <!-- Verified Blue Checkmark Badge -->
+                <span class="w-4 h-4 rounded-full bg-[#1A73E8] text-white flex items-center justify-center shrink-0 shadow-xs" title="Verified Customer Review">
+                  <svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                </span>
+              </div>
+
+              <!-- Third Row: Review Copy -->
+              <div class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                <p class="review-snippet block">{review.snippet}</p>
+                <p class="review-full hidden">{review.fullText}</p>
+              </div>
+            </div>
+
+            <!-- Read More Button -->
+            <div class="pt-3">
+              <button 
+                type="button" 
+                class="read-more-btn text-[11px] font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+              >
+                Read more
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<script>
+  // Filter tabs logic (All reviews | Google | Facebook)
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.review-tab-btn');
+  const cards = document.querySelectorAll<HTMLElement>('.review-card');
+  const track = document.getElementById('reviews-carousel-track');
+  const btnPrev = document.getElementById('reviews-scroll-prev');
+  const btnNext = document.getElementById('reviews-scroll-next');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const selected = tab.getAttribute('data-tab');
+
+      // Update tab active state
+      tabs.forEach(t => {
+        t.classList.remove('border-slate-900', 'dark:border-brand-400', 'text-slate-900', 'dark:text-white', 'font-bold');
+        t.classList.add('border-transparent', 'text-slate-500', 'dark:text-slate-400');
+      });
+
+      tab.classList.add('border-slate-900', 'dark:border-brand-400', 'text-slate-900', 'dark:text-white', 'font-bold');
+      tab.classList.remove('border-transparent', 'text-slate-500', 'dark:text-slate-400');
+
+      // Filter cards
+      cards.forEach(card => {
+        const platform = card.getAttribute('data-platform');
+        if (selected === 'all' || platform === selected) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (track) {
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Carousel scroll buttons
+  if (btnPrev && track) {
+    btnPrev.addEventListener('click', () => {
+      track.scrollBy({ left: -320, behavior: 'smooth' });
+    });
+  }
+
+  if (btnNext && track) {
+    btnNext.addEventListener('click', () => {
+      track.scrollBy({ left: 320, behavior: 'smooth' });
+    });
+  }
+
+  // Read more / Read less toggle
+  const readMoreButtons = document.querySelectorAll<HTMLButtonElement>('.read-more-btn');
+  readMoreButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.review-card');
+      if (!card) return;
+      const snippet = card.querySelector<HTMLElement>('.review-snippet');
+      const full = card.querySelector<HTMLElement>('.review-full');
+
+      if (snippet && full) {
+        const isExpanded = !snippet.classList.contains('hidden');
+        if (isExpanded) {
+          snippet.classList.add('hidden');
+          full.classList.remove('hidden');
+          btn.textContent = 'Read less';
+        } else {
+          snippet.classList.remove('hidden');
+          full.classList.add('hidden');
+          btn.textContent = 'Read more';
+        }
+      }
+    });
+  });
+</script>

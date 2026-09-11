@@ -1,0 +1,1641 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { isAuthenticated } from '../lib/auth';
+
+export const prerender = false;
+
+const authenticated = isAuthenticated(Astro.cookies);
+---
+
+<Layout title="MyGo Management Portal · Relocation Admissions Directorate" hideHeaderFooter={true}>
+  {
+    !authenticated ? (
+      /* ================= LOGIN SCREEN ================= */
+      <div class="min-h-screen flex items-center justify-center bg-slate-950 px-4 py-12 relative overflow-hidden">
+        <!-- Subtle ambient glows -->
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-brand-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-8 relative z-10">
+          <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-600/10 border border-brand-500/20 text-brand-400 mb-4 shadow-inner">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-white tracking-tight">MyGo Travel Portal</h1>
+            <p class="text-sm text-slate-400 mt-1">European Relocation Directorate &amp; Admissions Control</p>
+          </div>
+
+          <div id="login-error" class="hidden mb-5 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-sm text-center"></div>
+
+          <form id="admin-login-form" class="space-y-5">
+            <div>
+              <label for="admin-user" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Username</label>
+              <div class="relative">
+                <input
+                  type="text"
+                  id="admin-user"
+                  name="username"
+                  required
+                  autocomplete="username"
+                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 text-sm transition"
+                  placeholder="Enter administrator username"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="admin-password" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Password</label>
+              <div class="relative">
+                <input
+                  type="password"
+                  id="admin-password"
+                  name="password"
+                  required
+                  autocomplete="current-password"
+                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 text-sm transition"
+                  placeholder="Enter administrator password"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              id="login-submit-btn"
+              class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold py-3 px-4 rounded-xl transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-brand-600/20 text-sm mt-2 cursor-pointer"
+            >
+              <span>Authenticate &amp; Open Portal</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+              </svg>
+            </button>
+          </form>
+
+          <div class="mt-6 pt-6 border-t border-slate-800/80 text-center">
+            <span class="text-xs text-slate-500 flex items-center justify-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              PostgreSQL Connected: Aiven Cloud DefaultDB
+            </span>
+          </div>
+        </div>
+
+        <script is:inline>
+          const form = document.getElementById('admin-login-form');
+          const errBox = document.getElementById('login-error');
+          const submitBtn = document.getElementById('login-submit-btn');
+
+          form?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (errBox) errBox.classList.add('hidden');
+            if (submitBtn) {
+              submitBtn.setAttribute('disabled', 'true');
+              submitBtn.innerHTML = 'Verifying credentials...';
+            }
+
+            const username = (document.getElementById('admin-user')).value;
+            const password = (document.getElementById('admin-password')).value;
+
+            try {
+              const res = await fetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+              });
+              const data = await res.json();
+
+              if (res.ok && data.success) {
+                window.location.reload();
+              } else {
+                if (errBox) {
+                  errBox.textContent = data.error || 'Authentication rejected. Check credentials.';
+                  errBox.classList.remove('hidden');
+                }
+                if (submitBtn) {
+                  submitBtn.removeAttribute('disabled');
+                  submitBtn.innerHTML = 'Authenticate &amp; Open Portal';
+                }
+              }
+            } catch (err) {
+              if (errBox) {
+                errBox.textContent = 'Server connection error. Please retry.';
+                errBox.classList.remove('hidden');
+              }
+              if (submitBtn) {
+                submitBtn.removeAttribute('disabled');
+                submitBtn.innerHTML = 'Authenticate &amp; Open Portal';
+              }
+            }
+          });
+        </script>
+      </div>
+    ) : (
+      /* ================= AUTHENTICATED ADMIN CONSOLE ================= */
+      <div class="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-brand-600 selection:text-white">
+        <!-- Toast Notification Container -->
+        <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-3 pointer-events-none"></div>
+
+        <!-- Top Navigation Bar -->
+        <header class="bg-slate-900/90 backdrop-blur border-b border-slate-800 sticky top-0 z-40 px-4 lg:px-8 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-brand-600 flex items-center justify-center font-black text-white text-lg tracking-wider shadow">
+              M
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-white text-base tracking-tight">MyGo Travel</span>
+                <span class="text-[10px] uppercase font-bold tracking-widest bg-brand-500/20 text-brand-300 border border-brand-500/30 px-2 py-0.5 rounded">Admin Console</span>
+              </div>
+              <p class="text-xs text-slate-400">European Admissions &amp; Inquiries Directorate</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="hidden md:flex items-center gap-2 text-xs bg-emerald-950/40 text-emerald-400 border border-emerald-800/40 px-3 py-1.5 rounded-full">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Aiven PostgreSQL Live</span>
+            </div>
+
+            <a href="/" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white px-2.5 py-1.5 rounded-lg border border-slate-800 hover:border-slate-700 transition">
+              <span>View Site</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </a>
+
+            <a href="/assess" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 text-xs text-brand-400 hover:text-brand-300 px-2.5 py-1.5 rounded-lg border border-brand-900/50 hover:border-brand-700 transition">
+              <span>Intake Form</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </a>
+
+            <button id="btn-admin-logout" class="flex items-center gap-1.5 text-xs font-semibold text-rose-400 hover:text-rose-300 bg-rose-950/30 hover:bg-rose-950/50 border border-rose-900/50 px-3 py-1.5 rounded-lg transition cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="bg-slate-900/70 border-b border-slate-800 px-4 lg:px-8 py-2 flex items-center gap-2 overflow-x-auto text-sm">
+          <button id="tab-btn-evaluations" class="tab-button active flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-white bg-brand-600 transition shadow cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>Candidate Evaluations</span>
+            <span id="badge-eval-count" class="ml-1 px-2 py-0.5 text-xs rounded-full bg-brand-700 font-mono text-white">0</span>
+          </button>
+
+          <button id="tab-btn-analytics" class="tab-button flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-slate-400 hover:text-white hover:bg-slate-800/60 transition cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            <span>Traffic &amp; Geolocation</span>
+          </button>
+
+          <button id="tab-btn-email" class="tab-button flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-slate-400 hover:text-white hover:bg-slate-800/60 transition cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <span>Email Composer &amp; Dispatches</span>
+            <span id="badge-email-count" class="ml-1 px-2 py-0.5 text-xs rounded-full bg-slate-800 font-mono text-slate-300">0</span>
+          </button>
+        </nav>
+
+        <!-- Main Workspace Body -->
+        <main class="flex-grow p-4 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
+
+          <!-- ================= TAB 1: EVALUATIONS INTAKE ================= -->
+          <section id="section-evaluations" class="space-y-5">
+            <!-- Search, Filters & Action Controls -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl space-y-3">
+              <div class="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between">
+                <!-- Search Input -->
+                <div class="relative flex-grow max-w-lg">
+                  <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500 pointer-events-none">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                  </span>
+                  <input
+                    type="text"
+                    id="eval-search-input"
+                    placeholder="Search candidate, tracking ID (mygo...), email, phone, notes..."
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                  />
+                  <button id="btn-clear-search" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-xs text-slate-400 hover:text-white">✕</button>
+                </div>
+
+                <!-- Filters & Sorting -->
+                <div class="flex flex-wrap items-center gap-2.5">
+                  <!-- Destination Filter -->
+                  <select id="eval-country-filter" class="bg-slate-950 border border-slate-800 text-slate-300 text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-brand-500 cursor-pointer">
+                    <option value="">All Destinations</option>
+                    <option value="Poland">Poland</option>
+                    <option value="Slovakia">Slovakia</option>
+                    <option value="Czech Republic">Czech Republic</option>
+                    <option value="Lithuania">Lithuania</option>
+                    <option value="Bulgaria">Bulgaria</option>
+                    <option value="Hungary">Hungary</option>
+                    <option value="Portugal">Portugal</option>
+                    <option value="Serbia">Serbia</option>
+                    <option value="Latvia">Latvia</option>
+                    <option value="Croatia">Croatia</option>
+                    <option value="Romania">Romania</option>
+                  </select>
+
+                  <!-- Status Filter -->
+                  <select id="eval-status-filter" class="bg-slate-950 border border-slate-800 text-slate-300 text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-brand-500 cursor-pointer">
+                    <option value="all">All Statuses</option>
+                    <option value="pending">Pending Review</option>
+                    <option value="reviewing">In Review</option>
+                    <option value="approved">Approved</option>
+                    <option value="docs_requested">Docs Requested</option>
+                    <option value="interview">Interview Scheduled</option>
+                    <option value="visa_processing">Visa Processing</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
+
+                  <!-- Sort Selector -->
+                  <select id="eval-sort-by" class="bg-slate-950 border border-slate-800 text-slate-300 text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-brand-500 cursor-pointer">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="score_desc">Highest Score</option>
+                    <option value="score_asc">Lowest Score</option>
+                    <option value="status">By Status</option>
+                  </select>
+
+                  <!-- Export to CSV Button -->
+                  <button id="btn-export-csv" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-emerald-600/30 text-emerald-400 border border-slate-700 hover:border-emerald-500/50 text-xs font-semibold transition cursor-pointer" title="Export current list to CSV">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>Export CSV</span>
+                  </button>
+
+                  <!-- Refresh Button -->
+                  <button id="btn-refresh-evals" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition cursor-pointer">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <span>Refresh</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Evaluations Table Container -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-300">
+                  <thead class="bg-slate-950/90 text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-800">
+                    <tr>
+                      <th class="py-3.5 px-4">Tracking ID</th>
+                      <th class="py-3.5 px-4">Candidate</th>
+                      <th class="py-3.5 px-4">Contact</th>
+                      <th class="py-3.5 px-4">Matched Role</th>
+                      <th class="py-3.5 px-4">Destination</th>
+                      <th class="py-3.5 px-4">Applicant Origin (IP)</th>
+                      <th class="py-3.5 px-4">Status</th>
+                      <th class="py-3.5 px-4">Submitted</th>
+                      <th class="py-3.5 px-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="evaluations-table-body" class="divide-y divide-slate-800/60">
+                    <tr>
+                      <td colspan="9" class="py-12 text-center text-slate-500">
+                        <div class="flex flex-col items-center justify-center gap-2">
+                          <svg class="w-8 h-8 animate-spin text-brand-500" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                          </svg>
+                          <span>Loading candidate records from Aiven PostgreSQL database...</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Table Footer with Pagination Controls -->
+              <div class="bg-slate-950/80 px-4 py-3 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+                <div class="flex items-center gap-3">
+                  <div>Showing <span id="table-showing-start" class="text-white font-semibold">0</span>–<span id="table-showing-end" class="text-white font-semibold">0</span> of <span id="table-total-count" class="text-white font-semibold">0</span> records</div>
+                  <div class="flex items-center gap-1.5 border-l border-slate-800 pl-3">
+                    <span>Per page:</span>
+                    <select id="eval-page-limit" class="bg-slate-900 border border-slate-800 rounded px-2 py-0.5 text-white focus:outline-none">
+                      <option value="15">15</option>
+                      <option value="30">30</option>
+                      <option value="50" selected>50</option>
+                      <option value="100">100</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Pagination Buttons -->
+                <div class="flex items-center gap-2">
+                  <button id="btn-page-prev" class="px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                    ← Previous
+                  </button>
+                  <span id="pagination-page-label" class="px-2 font-mono text-slate-300">Page 1 of 1</span>
+                  <button id="btn-page-next" class="px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                    Next →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= TAB 2: ANALYTICS & GEOLOCATION ================= -->
+          <section id="section-analytics" class="hidden space-y-6">
+            <!-- Stat Cards Row -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Applications</span>
+                  <span class="p-2 rounded-xl bg-brand-500/10 text-brand-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                  </span>
+                </div>
+                <div class="text-3xl font-extrabold text-white mt-2" id="kpi-evaluations">0</div>
+                <p class="text-xs text-slate-500 mt-1">Full dossiers submitted</p>
+              </div>
+
+              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Site Traffic (Views)</span>
+                  <span class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                  </span>
+                </div>
+                <div class="text-3xl font-extrabold text-white mt-2" id="kpi-pageviews">0</div>
+                <p class="text-xs text-slate-500 mt-1">Total page impressions logged</p>
+              </div>
+
+              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Unique Visitors</span>
+                  <span class="p-2 rounded-xl bg-indigo-500/10 text-indigo-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                  </span>
+                </div>
+                <div class="text-3xl font-extrabold text-white mt-2" id="kpi-unique-visitors">0</div>
+                <p class="text-xs text-slate-500 mt-1">Distinct IP addresses tracked</p>
+              </div>
+
+              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Outbound Emails</span>
+                  <span class="p-2 rounded-xl bg-amber-500/10 text-amber-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                  </span>
+                </div>
+                <div class="text-3xl font-extrabold text-white mt-2" id="kpi-emails-sent">0</div>
+                <p class="text-xs text-slate-500 mt-1">Official replies &amp; dispatches</p>
+              </div>
+            </div>
+
+            <!-- Pipeline Status Widgets Row -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+              <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                <span>Candidate Pipeline Status Breakdown</span>
+              </h3>
+              <div id="status-widgets-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 text-center">
+                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                  <div class="text-xs text-slate-500">Pending</div>
+                  <div class="text-lg font-bold text-amber-400 mt-1" id="stat-status-pending">0</div>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                  <div class="text-xs text-slate-500">In Review</div>
+                  <div class="text-lg font-bold text-blue-400 mt-1" id="stat-status-reviewing">0</div>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                  <div class="text-xs text-slate-500">Approved</div>
+                  <div class="text-lg font-bold text-emerald-400 mt-1" id="stat-status-approved">0</div>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                  <div class="text-xs text-slate-500">Docs Needed</div>
+                  <div class="text-lg font-bold text-purple-400 mt-1" id="stat-status-docs">0</div>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                  <div class="text-xs text-slate-500">Interview</div>
+                  <div class="text-lg font-bold text-indigo-400 mt-1" id="stat-status-interview">0</div>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                  <div class="text-xs text-slate-500">Visa Prep</div>
+                  <div class="text-lg font-bold text-teal-400 mt-1" id="stat-status-visa">0</div>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                  <div class="text-xs text-slate-500">Rejected</div>
+                  <div class="text-lg font-bold text-rose-400 mt-1" id="stat-status-rejected">0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Two-column Analytics details -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- Visitor Origins by IP Geolocation -->
+              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                  <svg class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <span>Visitor Origins (IP Geolocation)</span>
+                </h3>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm text-left text-slate-300">
+                    <thead class="text-xs uppercase text-slate-500 border-b border-slate-800">
+                      <tr>
+                        <th class="py-2.5">Origin Country</th>
+                        <th class="py-2.5 text-right">Visits</th>
+                      </tr>
+                    </thead>
+                    <tbody id="geo-breakdown-body" class="divide-y divide-slate-800/60">
+                      <tr>
+                        <td colspan="2" class="py-4 text-center text-slate-500">Loading geolocation insights...</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Top Elaborated Site Pages -->
+              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                  <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+                  <span>Pages Visited &amp; Elaborated</span>
+                </h3>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm text-left text-slate-300">
+                    <thead class="text-xs uppercase text-slate-500 border-b border-slate-800">
+                      <tr>
+                        <th class="py-2.5">Page Path</th>
+                        <th class="py-2.5 text-right">Views</th>
+                      </tr>
+                    </thead>
+                    <tbody id="page-breakdown-body" class="divide-y divide-slate-800/60">
+                      <tr>
+                        <td colspan="2" class="py-4 text-center text-slate-500">Loading page analytics...</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Matched Relocation Destination Distribution -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+              <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>European Destination Distribution</span>
+              </h3>
+              <div id="destinations-distribution-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="col-span-full text-center py-6 text-slate-500">Loading destination analytics...</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= TAB 3: EMAIL COMPOSER ================= -->
+          <section id="section-email" class="hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <!-- Left Column: Composer Form -->
+              <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="border-b border-slate-800 pb-4 mb-5 flex items-center justify-between">
+                  <div>
+                    <h2 class="text-lg font-bold text-white">Direct Email Dispatcher</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Send official European relocation case notices directly to candidates</p>
+                  </div>
+                  <span class="text-xs px-2.5 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-300 font-mono">
+                    Outbound Channel Ready
+                  </span>
+                </div>
+
+                <div id="email-feedback" class="hidden mb-4 p-3 rounded-xl text-sm"></div>
+
+                <form id="admin-composer-form" class="space-y-4">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Recipient Email *</label>
+                      <input
+                        type="email"
+                        id="composer-to-email"
+                        required
+                        placeholder="candidate@example.com"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition"
+                      />
+                    </div>
+
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Recipient Name</label>
+                      <input
+                        type="text"
+                        id="composer-to-name"
+                        placeholder="e.g. David Sterling"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Tracking ID Reference</label>
+                      <input
+                        type="text"
+                        id="composer-tracking-id"
+                        placeholder="e.g. mygo582194"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-brand-500 transition"
+                      />
+                    </div>
+
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Quick Message Template</label>
+                      <select id="composer-template-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-brand-500 cursor-pointer">
+                        <option value="">Custom Message</option>
+                        <option value="congrats">Approval &amp; Next Steps for Visa Dossier</option>
+                        <option value="docs">Request for High-Resolution Passport Bio Data</option>
+                        <option value="interview">Sponsor Consular Interview Scheduled</option>
+                        <option value="work_permit">Work Permit Issued &amp; Flight Scheduling</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Subject Line *</label>
+                    <input
+                      type="text"
+                      id="composer-subject"
+                      required
+                      placeholder="e.g. Official Update: European Placement & Work Permit Progress"
+                      class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition"
+                    />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Email Message Body *</label>
+                    <textarea
+                      id="composer-message"
+                      rows="7"
+                      required
+                      placeholder="Write your official response to the candidate..."
+                      class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-sm text-white focus:outline-none focus:border-brand-500 leading-relaxed font-sans transition"
+                    ></textarea>
+                  </div>
+
+                  <div class="flex items-center justify-end gap-3 pt-2">
+                    <button
+                      type="button"
+                      id="btn-clear-composer"
+                      class="px-4 py-2.5 rounded-xl border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 text-sm font-medium transition cursor-pointer"
+                    >
+                      Reset
+                    </button>
+
+                    <button
+                      type="submit"
+                      id="btn-send-dispatch"
+                      class="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold flex items-center gap-2 shadow-lg shadow-brand-600/20 transition cursor-pointer"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                      <span>Dispatch Email</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Right Column: Dispatched Emails History -->
+              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col">
+                <div class="border-b border-slate-800 pb-3 mb-4 flex items-center justify-between">
+                  <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span>Sent Email Log</span>
+                  </h3>
+                  <button id="btn-refresh-sent" class="text-xs text-brand-400 hover:text-brand-300 font-medium cursor-pointer">Refresh</button>
+                </div>
+
+                <div class="mb-3">
+                  <input
+                    type="text"
+                    id="sent-email-search"
+                    placeholder="Filter sent emails..."
+                    class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                  />
+                </div>
+
+                <div id="sent-emails-list" class="flex-grow overflow-y-auto max-h-[500px] space-y-2.5 pr-1 text-xs">
+                  <div class="text-center py-8 text-slate-500">Loading sent history...</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </main>
+
+        <!-- ================= FULL CANDIDATE PROFILE MODAL ================= -->
+        <div id="eval-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-3xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/80">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-600/20 border border-brand-500/30 text-brand-400 flex items-center justify-center font-bold text-sm">
+                  ID
+                </div>
+                <div>
+                  <h3 id="modal-candidate-name" class="font-bold text-white text-base">Candidate Profile</h3>
+                  <div class="flex items-center gap-2 text-xs text-slate-400 font-mono">
+                    <span>Tracking:</span>
+                    <span id="modal-tracking-id" class="text-brand-400 font-bold">mygo000000</span>
+                    <button id="btn-copy-tracking" class="text-slate-500 hover:text-slate-300 p-0.5" title="Copy tracking ID">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Status Changer in Modal Header -->
+              <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-slate-400 hidden sm:inline">Status:</span>
+                  <select id="modal-status-select" class="bg-slate-950 border border-slate-700 text-xs font-semibold rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand-500 cursor-pointer">
+                    <option value="pending">Pending Review</option>
+                    <option value="reviewing">In Review</option>
+                    <option value="approved">Approved</option>
+                    <option value="docs_requested">Docs Requested</option>
+                    <option value="interview">Interview Scheduled</option>
+                    <option value="visa_processing">Visa Processing</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
+                </div>
+
+                <button id="btn-close-modal" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition cursor-pointer">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Modal Scrollable Content -->
+            <div class="p-6 overflow-y-auto space-y-6 text-sm text-slate-300">
+              <!-- Top Summary Banner -->
+              <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 p-4 rounded-xl bg-slate-950 border border-slate-800">
+                <div class="w-24 h-28 rounded-xl bg-slate-800 border border-slate-700 overflow-hidden shrink-0 flex items-center justify-center text-slate-500 relative group">
+                  <img id="modal-photo-img" src="" alt="Applicant Photo" class="w-full h-full object-cover hidden" />
+                  <span id="modal-photo-placeholder" class="text-xs text-center px-2">No Photo Uploaded</span>
+                </div>
+
+                <div class="space-y-1.5 text-center sm:text-left flex-grow">
+                  <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                    <span id="modal-badge-destination" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-500/20 text-brand-300 border border-brand-500/30">
+                      Destination
+                    </span>
+                    <span id="modal-badge-score" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      Score: 96%
+                    </span>
+                    <span id="modal-badge-status" class="px-2.5 py-0.5 rounded-full text-xs font-semibold">
+                      Pending
+                    </span>
+                  </div>
+
+                  <div class="text-xs text-slate-400 pt-1 space-y-0.5">
+                    <div><strong>Matched Role:</strong> <span id="modal-matched-job" class="text-white font-medium"></span></div>
+                    <div><strong>Processing Time:</strong> <span id="modal-processing-time" class="text-white"></span></div>
+                    <div><strong>Housing &amp; Meals:</strong> <span class="text-emerald-400">Employer Sponsorship Guaranteed</span></div>
+                    <div><strong>Submission Date:</strong> <span id="modal-submitted-date" class="text-slate-300"></span></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Comprehensive Details Grid -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                  <span class="text-xs text-slate-500 uppercase font-semibold block">Email Address</span>
+                  <span id="modal-email" class="text-white font-medium break-all"></span>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                  <span class="text-xs text-slate-500 uppercase font-semibold block">Phone / WhatsApp</span>
+                  <span id="modal-phone" class="text-white font-medium"></span>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                  <span class="text-xs text-slate-500 uppercase font-semibold block">Age &amp; Marital Status</span>
+                  <span id="modal-age-marital" class="text-white font-medium"></span>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                  <span class="text-xs text-slate-500 uppercase font-semibold block">Passport / National ID</span>
+                  <span id="modal-passport" class="text-white font-mono font-medium"></span>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                  <span class="text-xs text-slate-500 uppercase font-semibold block">Work Experience Level</span>
+                  <span id="modal-experience" class="text-white font-medium"></span>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                  <span class="text-xs text-slate-500 uppercase font-semibold block">Attached CV / Dossier</span>
+                  <div class="flex items-center justify-between mt-0.5">
+                    <span id="modal-cv" class="text-brand-300 font-mono text-xs truncate max-w-[200px]"></span>
+                    <button id="btn-view-cv" class="px-2 py-0.5 text-[11px] rounded bg-brand-600/20 text-brand-300 hover:bg-brand-600/40 border border-brand-500/30 transition">
+                      Inspect
+                    </button>
+                  </div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80 sm:col-span-2">
+                  <span class="text-xs text-slate-500 uppercase font-semibold block">Residence Address</span>
+                  <span id="modal-address" class="text-white font-medium"></span>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80 sm:col-span-2">
+                  <span class="text-xs text-slate-500 uppercase font-semibold block">Submission IP &amp; Geolocation</span>
+                  <div class="flex items-center gap-2 mt-0.5">
+                    <span id="modal-ip" class="text-slate-400 font-mono text-xs"></span>
+                    <span id="modal-geo-location" class="text-white font-medium"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Admissions Internal Notes Editor -->
+              <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                <div class="flex items-center justify-between">
+                  <label for="modal-admin-notes" class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    <span>Admissions Staff Internal Notes</span>
+                  </label>
+                  <span id="notes-save-status" class="text-[11px] text-slate-500"></span>
+                </div>
+                <textarea
+                  id="modal-admin-notes"
+                  rows="3"
+                  placeholder="Record admissions interview impressions, missing passport documents, or employer feedback..."
+                  class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brand-500 leading-relaxed font-sans"
+                ></textarea>
+                <div class="flex justify-end">
+                  <button id="btn-save-notes" class="px-4 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition cursor-pointer">
+                    Save Internal Notes
+                  </button>
+                </div>
+              </div>
+
+              <!-- Candidate Communications History (Sent Emails) -->
+              <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+                <h4 class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                  <span>Communications Dispatched to Candidate</span>
+                </h4>
+                <div id="modal-communications-list" class="space-y-2 text-xs">
+                  <div class="text-slate-500 py-2">Loading communication history...</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modal Footer Actions -->
+            <div class="px-6 py-4 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between">
+              <button id="modal-btn-delete" class="px-4 py-2 rounded-xl bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/60 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                <span>Delete Evaluation</span>
+              </button>
+
+              <div class="flex items-center gap-3">
+                <button id="modal-btn-reply" class="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold flex items-center gap-1.5 transition shadow cursor-pointer">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                  <span>Dispatch Official Email</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= SENT EMAIL DETAIL MODAL ================= -->
+        <div id="sent-email-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/80">
+              <h3 class="font-bold text-white text-sm">Dispatched Email Record</h3>
+              <button id="btn-close-sent-modal" class="text-slate-400 hover:text-white p-1 rounded-lg">✕</button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4 text-xs text-slate-300">
+              <div class="p-3 bg-slate-950 rounded-xl space-y-1">
+                <div><strong class="text-slate-400">Recipient:</strong> <span id="sent-modal-to" class="text-white font-medium"></span></div>
+                <div><strong class="text-slate-400">Sent Date:</strong> <span id="sent-modal-date" class="text-slate-300"></span></div>
+                <div><strong class="text-slate-400">Reference:</strong> <span id="sent-modal-tracking" class="text-brand-400 font-mono"></span></div>
+                <div><strong class="text-slate-400">Subject:</strong> <span id="sent-modal-subject" class="text-white font-semibold"></span></div>
+              </div>
+              <div>
+                <strong class="text-slate-400 block mb-1">Message Content:</strong>
+                <div id="sent-modal-body" class="p-4 bg-slate-950 rounded-xl border border-slate-800 text-slate-200 leading-relaxed font-mono text-[11px] whitespace-pre-wrap"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= INLINE MANAGEMENT JAVASCRIPT ================= -->
+        <script is:inline>
+          let evaluationsCache = [];
+          let currentSelectedEval = null;
+          let sentEmailsCache = [];
+
+          // Pagination & Filtering state
+          let currentPage = 1;
+          let pageLimit = 50;
+          let totalRecords = 0;
+
+          // Toast notification utility
+          function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' 
+              ? 'bg-emerald-950 border-emerald-800 text-emerald-200' 
+              : type === 'error' 
+                ? 'bg-rose-950 border-rose-800 text-rose-200' 
+                : 'bg-brand-950 border-brand-800 text-brand-200';
+
+            toast.className = `p-3.5 rounded-xl border shadow-xl text-xs font-medium transition-all duration-300 transform translate-y-2 opacity-0 flex items-center gap-2 ${bgClass}`;
+            toast.innerHTML = `
+              <span>${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+              toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+              toast.classList.add('opacity-0', 'translate-x-4');
+              setTimeout(() => toast.remove(), 300);
+            }, 4000);
+          }
+
+          // Status Badges & Colors Mapping
+          const statusConfig = {
+            pending: { label: 'Pending Review', bg: 'bg-amber-950/60 text-amber-300 border-amber-800/60' },
+            reviewing: { label: 'In Review', bg: 'bg-blue-950/60 text-blue-300 border-blue-800/60' },
+            approved: { label: 'Approved', bg: 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60' },
+            docs_requested: { label: 'Docs Requested', bg: 'bg-purple-950/60 text-purple-300 border-purple-800/60' },
+            interview: { label: 'Interview', bg: 'bg-indigo-950/60 text-indigo-300 border-indigo-800/60' },
+            visa_processing: { label: 'Visa Prep', bg: 'bg-teal-950/60 text-teal-300 border-teal-800/60' },
+            rejected: { label: 'Rejected', bg: 'bg-rose-950/60 text-rose-300 border-rose-800/60' }
+          };
+
+          function renderStatusBadge(status) {
+            const conf = statusConfig[status?.toLowerCase()] || statusConfig.pending;
+            return `<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold border ${conf.bg}">${conf.label}</span>`;
+          }
+
+          // Tab Navigation
+          const tabBtns = {
+            evaluations: document.getElementById('tab-btn-evaluations'),
+            analytics: document.getElementById('tab-btn-analytics'),
+            email: document.getElementById('tab-btn-email')
+          };
+
+          const tabSections = {
+            evaluations: document.getElementById('section-evaluations'),
+            analytics: document.getElementById('section-analytics'),
+            email: document.getElementById('section-email')
+          };
+
+          function switchTab(target) {
+            Object.keys(tabBtns).forEach(key => {
+              if (key === target) {
+                tabBtns[key]?.classList.add('bg-brand-600', 'text-white', 'shadow');
+                tabBtns[key]?.classList.remove('text-slate-400');
+                tabSections[key]?.classList.remove('hidden');
+              } else {
+                tabBtns[key]?.classList.remove('bg-brand-600', 'text-white', 'shadow');
+                tabBtns[key]?.classList.add('text-slate-400');
+                tabSections[key]?.classList.add('hidden');
+              }
+            });
+
+            if (target === 'analytics') loadAnalytics();
+            if (target === 'email') loadSentEmails();
+          }
+
+          tabBtns.evaluations?.addEventListener('click', () => switchTab('evaluations'));
+          tabBtns.analytics?.addEventListener('click', () => switchTab('analytics'));
+          tabBtns.email?.addEventListener('click', () => switchTab('email'));
+
+          // Sign Out Handler
+          document.getElementById('btn-admin-logout')?.addEventListener('click', async () => {
+            if (confirm('Sign out from MyGo Admin Console?')) {
+              await fetch('/api/admin/logout', { method: 'POST' });
+              window.location.reload();
+            }
+          });
+
+          // Fetch Evaluations with Filters & Pagination
+          async function loadEvaluations() {
+            const tableBody = document.getElementById('evaluations-table-body');
+            const searchVal = document.getElementById('eval-search-input')?.value.trim() || '';
+            const destinationVal = document.getElementById('eval-country-filter')?.value || '';
+            const statusVal = document.getElementById('eval-status-filter')?.value || 'all';
+            const sortByVal = document.getElementById('eval-sort-by')?.value || 'newest';
+            const limitVal = parseInt(document.getElementById('eval-page-limit')?.value || '50', 10);
+            pageLimit = limitVal;
+
+            const offset = (currentPage - 1) * pageLimit;
+
+            try {
+              let url = `/api/admin/evaluations?limit=${pageLimit}&offset=${offset}&sortBy=${sortByVal}`;
+              if (searchVal) url += `&q=${encodeURIComponent(searchVal)}`;
+              if (destinationVal) url += `&destination=${encodeURIComponent(destinationVal)}`;
+              if (statusVal && statusVal !== 'all') url += `&status=${encodeURIComponent(statusVal)}`;
+
+              const res = await fetch(url);
+              if (res.status === 401) {
+                window.location.reload();
+                return;
+              }
+              const data = await res.json();
+              evaluationsCache = data.evaluations || [];
+              totalRecords = data.total || 0;
+
+              // Update badge count
+              const badgeCount = document.getElementById('badge-eval-count');
+              if (badgeCount) badgeCount.textContent = totalRecords;
+
+              // Update Pagination Counters
+              const totalPages = Math.max(1, Math.ceil(totalRecords / pageLimit));
+              document.getElementById('table-total-count').textContent = totalRecords;
+              document.getElementById('table-showing-start').textContent = totalRecords === 0 ? 0 : offset + 1;
+              document.getElementById('table-showing-end').textContent = Math.min(offset + evaluationsCache.length, totalRecords);
+              document.getElementById('pagination-page-label').textContent = `Page ${currentPage} of ${totalPages}`;
+
+              document.getElementById('btn-page-prev').disabled = currentPage <= 1;
+              document.getElementById('btn-page-next').disabled = currentPage >= totalPages;
+
+              if (evaluationsCache.length === 0) {
+                if (tableBody) {
+                  tableBody.innerHTML = `
+                    <tr>
+                      <td colspan="9" class="py-12 text-center text-slate-500">
+                        No candidate evaluations match your search or filter criteria.
+                      </td>
+                    </tr>
+                  `;
+                }
+                return;
+              }
+
+              if (tableBody) {
+                tableBody.innerHTML = evaluationsCache.map(item => {
+                  const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString(undefined, {
+                    month: 'short', day: 'numeric', year: 'numeric'
+                  }) : 'Recent';
+
+                  const locStr = [item.city, item.country].filter(Boolean).join(', ') || 'Global';
+                  const currentStatus = item.status || 'pending';
+
+                  return `
+                    <tr class="hover:bg-slate-800/40 transition group">
+                      <td class="py-3 px-4 font-mono font-bold text-brand-400">
+                        <div class="flex items-center gap-1.5">
+                          <span>${item.tracking_id}</span>
+                        </div>
+                      </td>
+                      <td class="py-3 px-4 font-medium text-white">
+                        <div class="flex items-center gap-1.5">
+                          <span>${item.full_name}</span>
+                          ${item.score >= 95 ? '<span class="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">Top</span>' : ''}
+                        </div>
+                        <div class="text-xs text-slate-400">${item.age ? `${item.age} yrs` : 'Age: -'} • ${item.marital_status || 'Single'}</div>
+                      </td>
+                      <td class="py-3 px-4 text-xs">
+                        <div class="text-slate-200 font-medium">${item.email}</div>
+                        <div class="text-slate-400">${item.phone || '-'}</div>
+                      </td>
+                      <td class="py-3 px-4 text-xs">
+                        <div class="text-white font-medium truncate max-w-[180px]" title="${item.matched_job_title || item.job_category || 'Logistics'}">${item.matched_job_title || item.job_category || 'Logistics'}</div>
+                        <div class="text-slate-400">${item.experience_years || 'Experienced'}</div>
+                      </td>
+                      <td class="py-3 px-4 text-xs">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-brand-950/60 text-brand-300 border border-brand-800/50">
+                          ${item.matched_country || 'Europe'}
+                        </span>
+                      </td>
+                      <td class="py-3 px-4 text-xs text-slate-300">
+                        <div>${locStr}</div>
+                        <div class="text-[11px] font-mono text-slate-500">${item.ip_address || ''}</div>
+                      </td>
+                      <td class="py-3 px-4 text-xs">
+                        <select onchange="updateRowStatus('${item.tracking_id}', this.value)" class="bg-slate-950 border border-slate-800 text-xs font-semibold rounded-lg px-2 py-1 focus:outline-none cursor-pointer">
+                          <option value="pending" ${currentStatus === 'pending' ? 'selected' : ''}>Pending</option>
+                          <option value="reviewing" ${currentStatus === 'reviewing' ? 'selected' : ''}>In Review</option>
+                          <option value="approved" ${currentStatus === 'approved' ? 'selected' : ''}>Approved</option>
+                          <option value="docs_requested" ${currentStatus === 'docs_requested' ? 'selected' : ''}>Docs Needed</option>
+                          <option value="interview" ${currentStatus === 'interview' ? 'selected' : ''}>Interview</option>
+                          <option value="visa_processing" ${currentStatus === 'visa_processing' ? 'selected' : ''}>Visa Prep</option>
+                          <option value="rejected" ${currentStatus === 'rejected' ? 'selected' : ''}>Rejected</option>
+                        </select>
+                      </td>
+                      <td class="py-3 px-4 text-xs text-slate-400 whitespace-nowrap">
+                        ${dateStr}
+                      </td>
+                      <td class="py-3 px-4 text-right space-x-1.5 whitespace-nowrap">
+                        <button onclick="openModal('${item.tracking_id}')" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 hover:bg-brand-600 text-slate-200 hover:text-white transition font-medium cursor-pointer">
+                          Dossier
+                        </button>
+                        <button onclick="quickReply('${item.email}', '${encodeURIComponent(item.full_name || '')}', '${item.tracking_id}')" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-200 hover:text-white transition font-medium cursor-pointer" title="Dispatch email">
+                          Email
+                        </button>
+                        <button onclick="deleteRecord('${item.tracking_id}')" class="px-2 py-1 text-xs rounded-lg bg-slate-800 hover:bg-rose-600 text-slate-400 hover:text-white transition cursor-pointer" title="Delete evaluation">
+                          ✕
+                        </button>
+                      </td>
+                    </tr>
+                  `;
+                }).join('');
+              }
+            } catch (err) {
+              console.error('Error fetching evaluations:', err);
+              if (tableBody) {
+                tableBody.innerHTML = `
+                  <tr>
+                    <td colspan="9" class="py-8 text-center text-rose-400">
+                      Failed to load evaluations: ${err.message}
+                    </td>
+                  </tr>
+                `;
+              }
+            }
+          }
+
+          // Inline Row Status Changer
+          window.updateRowStatus = async function(trackingId, newStatus) {
+            try {
+              const res = await fetch('/api/admin/evaluations', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ trackingId, status: newStatus })
+              });
+              const data = await res.json();
+              if (res.ok && data.success) {
+                showToast(`Updated ${trackingId} status to ${newStatus}`);
+                loadAnalytics();
+              } else {
+                showToast(data.error || 'Failed to update status', 'error');
+              }
+            } catch (err) {
+              showToast('Error updating status: ' + err.message, 'error');
+            }
+          };
+
+          // Search and Filters Event Handlers
+          let searchTimeout = null;
+          const searchInput = document.getElementById('eval-search-input');
+          const countryFilter = document.getElementById('eval-country-filter');
+          const statusFilter = document.getElementById('eval-status-filter');
+          const sortBySelect = document.getElementById('eval-sort-by');
+          const pageLimitSelect = document.getElementById('eval-page-limit');
+          const clearSearchBtn = document.getElementById('btn-clear-search');
+
+          searchInput?.addEventListener('input', (e) => {
+            const val = e.target.value.trim();
+            if (clearSearchBtn) {
+              clearSearchBtn.classList.toggle('hidden', val.length === 0);
+            }
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+              currentPage = 1;
+              loadEvaluations();
+            }, 300);
+          });
+
+          clearSearchBtn?.addEventListener('click', () => {
+            if (searchInput) searchInput.value = '';
+            clearSearchBtn.classList.add('hidden');
+            currentPage = 1;
+            loadEvaluations();
+          });
+
+          countryFilter?.addEventListener('change', () => {
+            currentPage = 1;
+            loadEvaluations();
+          });
+
+          statusFilter?.addEventListener('change', () => {
+            currentPage = 1;
+            loadEvaluations();
+          });
+
+          sortBySelect?.addEventListener('change', () => {
+            currentPage = 1;
+            loadEvaluations();
+          });
+
+          pageLimitSelect?.addEventListener('change', () => {
+            currentPage = 1;
+            loadEvaluations();
+          });
+
+          document.getElementById('btn-refresh-evals')?.addEventListener('click', () => {
+            loadEvaluations();
+            showToast('Evaluations list refreshed');
+          });
+
+          // Pagination Buttons
+          document.getElementById('btn-page-prev')?.addEventListener('click', () => {
+            if (currentPage > 1) {
+              currentPage--;
+              loadEvaluations();
+            }
+          });
+
+          document.getElementById('btn-page-next')?.addEventListener('click', () => {
+            const totalPages = Math.ceil(totalRecords / pageLimit);
+            if (currentPage < totalPages) {
+              currentPage++;
+              loadEvaluations();
+            }
+          });
+
+          // Export to CSV
+          document.getElementById('btn-export-csv')?.addEventListener('click', () => {
+            const dest = countryFilter?.value || '';
+            const st = statusFilter?.value || 'all';
+            let url = `/api/admin/export-csv?`;
+            if (dest) url += `destination=${encodeURIComponent(dest)}&`;
+            if (st && st !== 'all') url += `status=${encodeURIComponent(st)}&`;
+            showToast('Exporting evaluations CSV...');
+            window.location.href = url;
+          });
+
+          // Open Full Details Modal
+          window.openModal = async function(trackingId) {
+            const modal = document.getElementById('eval-modal');
+            modal?.classList.remove('hidden');
+
+            try {
+              const res = await fetch(`/api/admin/evaluations?id=${trackingId}`);
+              if (!res.ok) throw new Error('Could not fetch candidate details');
+              const item = await res.json();
+              currentSelectedEval = item;
+
+              const nameEl = document.getElementById('modal-candidate-name');
+              const trackEl = document.getElementById('modal-tracking-id');
+              const photoEl = document.getElementById('modal-photo-img');
+              const photoPlaceholder = document.getElementById('modal-photo-placeholder');
+              const destBadge = document.getElementById('modal-badge-destination');
+              const scoreBadge = document.getElementById('modal-badge-score');
+              const statusBadge = document.getElementById('modal-badge-status');
+              const statusSelect = document.getElementById('modal-status-select');
+              const jobEl = document.getElementById('modal-matched-job');
+              const procEl = document.getElementById('modal-processing-time');
+              const subDateEl = document.getElementById('modal-submitted-date');
+              const emailEl = document.getElementById('modal-email');
+              const phoneEl = document.getElementById('modal-phone');
+              const ageMaritalEl = document.getElementById('modal-age-marital');
+              const passEl = document.getElementById('modal-passport');
+              const expEl = document.getElementById('modal-experience');
+              const cvEl = document.getElementById('modal-cv');
+              const addrEl = document.getElementById('modal-address');
+              const ipEl = document.getElementById('modal-ip');
+              const geoEl = document.getElementById('modal-geo-location');
+              const notesEl = document.getElementById('modal-admin-notes');
+              const commsList = document.getElementById('modal-communications-list');
+
+              if (nameEl) nameEl.textContent = item.full_name;
+              if (trackEl) trackEl.textContent = item.tracking_id;
+
+              if (item.photo_data && photoEl && photoPlaceholder) {
+                photoEl.src = item.photo_data;
+                photoEl.classList.remove('hidden');
+                photoPlaceholder.classList.add('hidden');
+              } else if (photoEl && photoPlaceholder) {
+                photoEl.classList.add('hidden');
+                photoPlaceholder.classList.remove('hidden');
+              }
+
+              if (destBadge) destBadge.textContent = item.matched_country || 'European Placement';
+              if (scoreBadge) scoreBadge.textContent = `Score: ${item.score || 95}%`;
+
+              const currentStatus = item.status || 'pending';
+              if (statusSelect) statusSelect.value = currentStatus;
+              if (statusBadge) {
+                const conf = statusConfig[currentStatus] || statusConfig.pending;
+                statusBadge.textContent = conf.label;
+                statusBadge.className = `px-2.5 py-0.5 rounded-full text-xs font-semibold border ${conf.bg}`;
+              }
+
+              if (jobEl) jobEl.textContent = item.matched_job_title || item.job_category || 'Logistics & Distribution Lead';
+              if (procEl) procEl.textContent = item.matched_processing_time || '2–4 months';
+              if (subDateEl) subDateEl.textContent = item.created_at ? new Date(item.created_at).toLocaleString() : 'Recent';
+              if (emailEl) emailEl.textContent = item.email;
+              if (phoneEl) phoneEl.textContent = item.phone || 'Not provided';
+              if (ageMaritalEl) ageMaritalEl.textContent = `${item.age || 'N/A'} years old • Status: ${item.marital_status || 'Single'}`;
+              if (passEl) passEl.textContent = item.passport_number || 'Pending Submission';
+              if (expEl) expEl.textContent = item.experience_years || 'Experienced Candidate';
+              if (cvEl) cvEl.textContent = item.cv_filename || 'Candidate_Resume.pdf';
+              if (addrEl) addrEl.textContent = item.address || 'Address on record';
+              if (ipEl) ipEl.textContent = `IP: ${item.ip_address || '127.0.0.1'}`;
+              if (geoEl) geoEl.textContent = [item.city, item.country].filter(Boolean).join(', ') || 'Global';
+              if (notesEl) notesEl.value = item.admin_notes || '';
+
+              // Render communication timeline
+              if (commsList) {
+                const comms = item.communications || [];
+                if (comms.length === 0) {
+                  commsList.innerHTML = '<div class="text-slate-500 py-1">No official outbound notices logged for this candidate yet.</div>';
+                } else {
+                  commsList.innerHTML = comms.map(c => `
+                    <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-between">
+                      <div>
+                        <div class="text-white font-medium">${c.subject}</div>
+                        <div class="text-slate-500 text-[10px]">${new Date(c.sent_at).toLocaleString()} • ${c.to_email}</div>
+                      </div>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-950 text-emerald-300 border border-emerald-800">
+                        Dispatched
+                      </span>
+                    </div>
+                  `).join('');
+                }
+              }
+            } catch (err) {
+              console.error('Error opening modal:', err);
+              showToast('Error opening candidate record: ' + err.message, 'error');
+            }
+          };
+
+          // Copy Tracking ID
+          document.getElementById('btn-copy-tracking')?.addEventListener('click', () => {
+            if (currentSelectedEval?.tracking_id) {
+              navigator.clipboard.writeText(currentSelectedEval.tracking_id);
+              showToast(`Tracking ID copied: ${currentSelectedEval.tracking_id}`);
+            }
+          });
+
+          // Modal Status Selector Change
+          document.getElementById('modal-status-select')?.addEventListener('change', async (e) => {
+            if (!currentSelectedEval) return;
+            const newStatus = e.target.value;
+            try {
+              const res = await fetch('/api/admin/evaluations', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ trackingId: currentSelectedEval.tracking_id, status: newStatus })
+              });
+              const data = await res.json();
+              if (res.ok && data.success) {
+                currentSelectedEval.status = newStatus;
+                const statusBadge = document.getElementById('modal-badge-status');
+                if (statusBadge) {
+                  const conf = statusConfig[newStatus] || statusConfig.pending;
+                  statusBadge.textContent = conf.label;
+                  statusBadge.className = `px-2.5 py-0.5 rounded-full text-xs font-semibold border ${conf.bg}`;
+                }
+                showToast(`Status updated to ${newStatus}`);
+                loadEvaluations();
+                loadAnalytics();
+              } else {
+                showToast(data.error || 'Failed to update status', 'error');
+              }
+            } catch (err) {
+              showToast('Network error updating status', 'error');
+            }
+          });
+
+          // Save Admin Internal Notes
+          document.getElementById('btn-save-notes')?.addEventListener('click', async () => {
+            if (!currentSelectedEval) return;
+            const notes = document.getElementById('modal-admin-notes')?.value || '';
+            const statusLabel = document.getElementById('notes-save-status');
+            if (statusLabel) statusLabel.textContent = 'Saving...';
+
+            try {
+              const res = await fetch('/api/admin/evaluations', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ trackingId: currentSelectedEval.tracking_id, adminNotes: notes })
+              });
+              const data = await res.json();
+              if (res.ok && data.success) {
+                if (statusLabel) statusLabel.textContent = 'Saved!';
+                setTimeout(() => { if (statusLabel) statusLabel.textContent = ''; }, 2500);
+                showToast('Admissions notes saved successfully');
+              } else {
+                if (statusLabel) statusLabel.textContent = 'Failed';
+                showToast(data.error || 'Failed to save notes', 'error');
+              }
+            } catch (err) {
+              if (statusLabel) statusLabel.textContent = 'Error';
+              showToast('Error saving notes: ' + err.message, 'error');
+            }
+          });
+
+          // Inspect CV
+          document.getElementById('btn-view-cv')?.addEventListener('click', () => {
+            if (!currentSelectedEval) return;
+            alert(`Candidate Document Verified:\nFile: ${currentSelectedEval.cv_filename || 'Candidate_Resume.pdf'}\nCandidate: ${currentSelectedEval.full_name}\nTracking: ${currentSelectedEval.tracking_id}\n\nDossier is certified Schengen employment compliant.`);
+          });
+
+          // Modal Close
+          document.getElementById('btn-close-modal')?.addEventListener('click', () => {
+            document.getElementById('eval-modal')?.classList.add('hidden');
+            currentSelectedEval = null;
+          });
+
+          // Modal Delete
+          document.getElementById('modal-btn-delete')?.addEventListener('click', () => {
+            if (currentSelectedEval) {
+              deleteRecord(currentSelectedEval.tracking_id);
+              document.getElementById('eval-modal')?.classList.add('hidden');
+            }
+          });
+
+          // Modal Reply
+          document.getElementById('modal-btn-reply')?.addEventListener('click', () => {
+            if (currentSelectedEval) {
+              document.getElementById('eval-modal')?.classList.add('hidden');
+              quickReply(currentSelectedEval.email, currentSelectedEval.full_name, currentSelectedEval.tracking_id);
+            }
+          });
+
+          // Quick Reply (switches to Email tab and pre-fills)
+          window.quickReply = function(email, name, trackingId) {
+            switchTab('email');
+            const toEmailInput = document.getElementById('composer-to-email');
+            const toNameInput = document.getElementById('composer-to-name');
+            const trackingInput = document.getElementById('composer-tracking-id');
+            const subjectInput = document.getElementById('composer-subject');
+            const messageInput = document.getElementById('composer-message');
+
+            if (toEmailInput) toEmailInput.value = email;
+            if (toNameInput) toNameInput.value = decodeURIComponent(name || '');
+            if (trackingInput) trackingInput.value = trackingId || '';
+            if (subjectInput) subjectInput.value = `Official Update: MyGo Travel Relocation Application [${trackingId}]`;
+            if (messageInput) {
+              messageInput.value = `Dear ${decodeURIComponent(name || 'Applicant')},\n\nThank you for completing your relocation assessment with MyGo Travel.\n\nWe have successfully reviewed your candidate profile and matched documents for your European relocation program (Reference: ${trackingId}).\n\nOur legal and admissions desk is preparing your employer sponsorship docket. Please reply directly to confirm your readiness for the next consular phase.\n\nBest regards,\nMyGo Travel Admissions Directorate`;
+            }
+            messageInput?.focus();
+          };
+
+          // Delete Record
+          window.deleteRecord = async function(trackingId) {
+            if (!confirm(`Are you sure you want to delete evaluation ${trackingId}? This action cannot be undone.`)) {
+              return;
+            }
+
+            try {
+              const res = await fetch(`/api/admin/evaluations?id=${trackingId}`, {
+                method: 'DELETE'
+              });
+              const data = await res.json();
+              if (res.ok && data.success) {
+                showToast(`Evaluation ${trackingId} deleted.`);
+                loadEvaluations();
+                loadAnalytics();
+              } else {
+                showToast(data.error || 'Failed to delete evaluation.', 'error');
+              }
+            } catch (err) {
+              showToast('Error connecting to database: ' + err.message, 'error');
+            }
+          };
+
+          // Fetch Analytics & Geolocation Stats
+          async function loadAnalytics() {
+            try {
+              const res = await fetch('/api/admin/stats');
+              if (!res.ok) return;
+              const data = await res.json();
+
+              document.getElementById('kpi-evaluations').textContent = data.totals?.evaluations || 0;
+              document.getElementById('kpi-pageviews').textContent = data.totals?.pageViews || 0;
+              document.getElementById('kpi-unique-visitors').textContent = data.totals?.uniqueVisitors || 1;
+              document.getElementById('kpi-emails-sent').textContent = data.totals?.emailsSent || 0;
+
+              // Status Breakdown
+              const sMap = {};
+              (data.statusBreakdown || []).forEach(s => { sMap[s.status?.toLowerCase()] = parseInt(s.count, 10); });
+              if (document.getElementById('stat-status-pending')) document.getElementById('stat-status-pending').textContent = sMap['pending'] || 0;
+              if (document.getElementById('stat-status-reviewing')) document.getElementById('stat-status-reviewing').textContent = sMap['reviewing'] || 0;
+              if (document.getElementById('stat-status-approved')) document.getElementById('stat-status-approved').textContent = sMap['approved'] || 0;
+              if (document.getElementById('stat-status-docs')) document.getElementById('stat-status-docs').textContent = sMap['docs_requested'] || 0;
+              if (document.getElementById('stat-status-interview')) document.getElementById('stat-status-interview').textContent = sMap['interview'] || 0;
+              if (document.getElementById('stat-status-visa')) document.getElementById('stat-status-visa').textContent = sMap['visa_processing'] || 0;
+              if (document.getElementById('stat-status-rejected')) document.getElementById('stat-status-rejected').textContent = sMap['rejected'] || 0;
+
+              // Geo Table
+              const geoBody = document.getElementById('geo-breakdown-body');
+              if (geoBody) {
+                if (!data.geoBreakdown || data.geoBreakdown.length === 0) {
+                  geoBody.innerHTML = '<tr><td colspan="2" class="py-4 text-center text-slate-500">No geographic traffic logged yet.</td></tr>';
+                } else {
+                  geoBody.innerHTML = data.geoBreakdown.map(g => `
+                    <tr class="hover:bg-slate-800/30">
+                      <td class="py-2 text-white font-medium flex items-center gap-2">
+                        <span>${g.country}</span>
+                      </td>
+                      <td class="py-2 text-right font-mono text-brand-400 font-bold">${g.visitor_count}</td>
+                    </tr>
+                  `).join('');
+                }
+              }
+
+              // Pages Table
+              const pageBody = document.getElementById('page-breakdown-body');
+              if (pageBody) {
+                if (!data.pageBreakdown || data.pageBreakdown.length === 0) {
+                  pageBody.innerHTML = '<tr><td colspan="2" class="py-4 text-center text-slate-500">No page views recorded yet.</td></tr>';
+                } else {
+                  pageBody.innerHTML = data.pageBreakdown.map(p => `
+                    <tr class="hover:bg-slate-800/30">
+                      <td class="py-2 text-slate-300 font-mono text-xs">${p.path}</td>
+                      <td class="py-2 text-right font-mono text-emerald-400 font-bold">${p.views}</td>
+                    </tr>
+                  `).join('');
+                }
+              }
+
+              // Destination Breakdown
+              const destContainer = document.getElementById('destinations-distribution-container');
+              if (destContainer) {
+                const dests = data.destinationBreakdown || [];
+                if (dests.length === 0) {
+                  destContainer.innerHTML = '<div class="col-span-full text-center py-6 text-slate-500">No matched destinations recorded yet.</div>';
+                } else {
+                  const maxCount = Math.max(...dests.map(d => parseInt(d.applicant_count, 10)), 1);
+                  destContainer.innerHTML = dests.map(d => {
+                    const cnt = parseInt(d.applicant_count, 10);
+                    const pct = Math.round((cnt / maxCount) * 100);
+                    return `
+                      <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                        <div class="flex items-center justify-between text-xs">
+                          <span class="font-bold text-white">${d.destination}</span>
+                          <span class="font-mono text-brand-400 font-bold">${cnt}</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                          <div class="bg-brand-500 h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                        </div>
+                      </div>
+                    `;
+                  }).join('');
+                }
+              }
+            } catch (err) {
+              console.error('Analytics load error:', err);
+            }
+          }
+
+          // Fetch Sent Emails Log
+          async function loadSentEmails() {
+            const listEl = document.getElementById('sent-emails-list');
+            const badgeCount = document.getElementById('badge-email-count');
+            try {
+              const res = await fetch('/api/admin/sent-emails');
+              if (!res.ok) return;
+              const data = await res.json();
+              sentEmailsCache = data.emails || [];
+
+              if (badgeCount) badgeCount.textContent = sentEmailsCache.length;
+
+              renderSentEmails(sentEmailsCache);
+            } catch (err) {
+              console.error('Sent emails error:', err);
+            }
+          }
+
+          function renderSentEmails(emails) {
+            const listEl = document.getElementById('sent-emails-list');
+            if (!listEl) return;
+
+            if (emails.length === 0) {
+              listEl.innerHTML = '<div class="text-center py-8 text-slate-500">No emails dispatched yet.</div>';
+              return;
+            }
+
+            listEl.innerHTML = emails.map(e => `
+              <div onclick="openSentEmailDetail(${e.id})" class="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 transition cursor-pointer space-y-1">
+                <div class="flex items-center justify-between text-[11px]">
+                  <span class="font-bold text-white truncate max-w-[170px]">${e.to_email}</span>
+                  <span class="text-slate-500">${new Date(e.sent_at).toLocaleDateString()}</span>
+                </div>
+                <div class="font-medium text-slate-300 text-xs truncate">${e.subject}</div>
+                ${e.tracking_id ? `<div class="text-[10px] font-mono text-brand-400">Ref: ${e.tracking_id}</div>` : ''}
+                <div class="text-[11px] text-slate-400 line-clamp-2 pt-1 border-t border-slate-900">${e.body.replace(/<[^>]*>?/gm, '')}</div>
+              </div>
+            `).join('');
+          }
+
+          // Filter Sent Emails
+          document.getElementById('sent-email-search')?.addEventListener('input', (e) => {
+            const val = e.target.value.toLowerCase().trim();
+            if (!val) {
+              renderSentEmails(sentEmailsCache);
+              return;
+            }
+            const filtered = sentEmailsCache.filter(item => 
+              item.to_email?.toLowerCase().includes(val) ||
+              item.subject?.toLowerCase().includes(val) ||
+              item.tracking_id?.toLowerCase().includes(val)
+            );
+            renderSentEmails(filtered);
+          });
+
+          // Open Sent Email Modal
+          window.openSentEmailDetail = function(id) {
+            const email = sentEmailsCache.find(e => e.id === id);
+            if (!email) return;
+
+            document.getElementById('sent-modal-to').textContent = `${email.to_name ? email.to_name + ' ' : ''}<${email.to_email}>`;
+            document.getElementById('sent-modal-date').textContent = new Date(email.sent_at).toLocaleString();
+            document.getElementById('sent-modal-tracking').textContent = email.tracking_id || 'N/A';
+            document.getElementById('sent-modal-subject').textContent = email.subject;
+            document.getElementById('sent-modal-body').textContent = email.body.replace(/<[^>]*>?/gm, '');
+
+            document.getElementById('sent-email-modal')?.classList.remove('hidden');
+          };
+
+          document.getElementById('btn-close-sent-modal')?.addEventListener('click', () => {
+            document.getElementById('sent-email-modal')?.classList.add('hidden');
+          });
+
+          document.getElementById('btn-refresh-sent')?.addEventListener('click', () => {
+            loadSentEmails();
+            showToast('Sent emails log refreshed');
+          });
+
+          // Email Template Selection Handler
+          document.getElementById('composer-template-select')?.addEventListener('change', (e) => {
+            const val = e.target.value;
+            const name = document.getElementById('composer-to-name')?.value || 'Applicant';
+            const tracking = document.getElementById('composer-tracking-id')?.value || 'YOUR_TRACKING_ID';
+            const subject = document.getElementById('composer-subject');
+            const message = document.getElementById('composer-message');
+
+            if (val === 'congrats') {
+              if (subject) subject.value = `Official Confirmation: European Relocation Match Approved [${tracking}]`;
+              if (message) message.value = `Dear ${name},\n\nCongratulations! Your European job placement and relocation assessment (Reference: ${tracking}) has been approved by our partner employers.\n\nAccommodation and meals are officially confirmed in your relocation package. Our admissions directorate will now assist you with consular filing and biometric scheduling.\n\nPlease reply to this email with your current availability for an introductory orientation call.\n\nWarm regards,\nMyGo Travel European Relocation Directorate`;
+            } else if (val === 'docs') {
+              if (subject) subject.value = `Document Action Required: International Passport Bio-Data Page [${tracking}]`;
+              if (message) message.value = `Dear ${name},\n\nRegarding your European application dossier ${tracking}:\n\nTo ensure swift issuance of your work sponsorship certificate, our legal desk requires a clear, full-page digital copy of your International Passport Bio-Data page.\n\nPlease reply directly to this email attaching the document.\n\nSincerely,\nMyGo Travel Legal & Consular Operations`;
+            } else if (val === 'interview') {
+              if (subject) subject.value = `Sponsor Interview Notice: European Employment Placement [${tracking}]`;
+              if (message) message.value = `Dear ${name},\n\nWe are pleased to inform you that the European employer review board has requested a brief video interview regarding your application ${tracking}.\n\nPlease let us know your preferred time slot between 10:00 CET and 16:00 CET this week.\n\nBest regards,\nMyGo Travel Operations Team`;
+            } else if (val === 'work_permit') {
+              if (subject) subject.value = `Consular Clearance: European Work Permit Issued [${tracking}]`;
+              if (message) message.value = `Dear ${name},\n\nGreat news! Your European work permit and government labor clearance has been officially issued for reference ${tracking}.\n\nYour relocation package including guaranteed housing and daily meal provisions is locked in. Please contact your dedicated case manager to finalize travel arrangements and flight dates.\n\nCongratulations,\nMyGo Travel Admissions & Relocation Desk`;
+            }
+          });
+
+          // Dispatch Email Handler
+          document.getElementById('admin-composer-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const feedback = document.getElementById('email-feedback');
+            const sendBtn = document.getElementById('btn-send-dispatch');
+
+            const to = document.getElementById('composer-to-email')?.value;
+            const name = document.getElementById('composer-to-name')?.value;
+            const trackingId = document.getElementById('composer-tracking-id')?.value;
+            const subject = document.getElementById('composer-subject')?.value;
+            const message = document.getElementById('composer-message')?.value;
+
+            if (feedback) feedback.classList.add('hidden');
+            if (sendBtn) {
+              sendBtn.setAttribute('disabled', 'true');
+              sendBtn.innerHTML = 'Sending email...';
+            }
+
+            try {
+              const res = await fetch('/api/admin/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ to, name, trackingId, subject, message })
+              });
+              const data = await res.json();
+
+              if (res.ok && data.success) {
+                if (feedback) {
+                  feedback.textContent = data.message || `Email successfully dispatched to ${to}!`;
+                  feedback.className = 'mb-4 p-3 rounded-xl text-sm bg-emerald-500/10 border border-emerald-500/30 text-emerald-300';
+                  feedback.classList.remove('hidden');
+                }
+                showToast(`Email dispatched to ${to}`);
+                loadSentEmails();
+                loadAnalytics();
+              } else {
+                if (feedback) {
+                  feedback.textContent = data.error || 'Failed to dispatch email.';
+                  feedback.className = 'mb-4 p-3 rounded-xl text-sm bg-rose-500/10 border border-rose-500/30 text-rose-300';
+                  feedback.classList.remove('hidden');
+                }
+                showToast(data.error || 'Failed to dispatch email', 'error');
+              }
+            } catch (err) {
+              if (feedback) {
+                feedback.textContent = 'Network error: ' + err.message;
+                feedback.className = 'mb-4 p-3 rounded-xl text-sm bg-rose-500/10 border border-rose-500/30 text-rose-300';
+                feedback.classList.remove('hidden');
+              }
+              showToast('Network error: ' + err.message, 'error');
+            } finally {
+              if (sendBtn) {
+                sendBtn.removeAttribute('disabled');
+                sendBtn.innerHTML = `
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                  <span>Dispatch Email</span>
+                `;
+              }
+            }
+          });
+
+          document.getElementById('btn-clear-composer')?.addEventListener('click', () => {
+            (document.getElementById('admin-composer-form')).reset();
+            const feedback = document.getElementById('email-feedback');
+            if (feedback) feedback.classList.add('hidden');
+          });
+
+          // Initial Page Load
+          loadEvaluations();
+          loadAnalytics();
+          loadSentEmails();
+        </script>
+      </div>
+    )
+  }
+</Layout>

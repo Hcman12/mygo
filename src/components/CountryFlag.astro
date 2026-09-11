@@ -1,0 +1,126 @@
+---
+interface Props {
+  id?: string;
+  country?: string;
+  class?: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+}
+
+const { id = '', country = '', class: className = '', size = 'md' } = Astro.props;
+
+// Normalize key
+const key = id.toLowerCase().replace('-work', '').replace('-student', '');
+
+const sizeClasses: Record<string, string> = {
+  sm: 'w-6 h-4 text-xs',
+  md: 'w-9 h-6 text-sm',
+  lg: 'w-12 h-8 text-base',
+  xl: 'w-16 h-11 text-xl'
+};
+---
+
+<div class={`inline-block shrink-0 overflow-hidden rounded shadow-sm border border-slate-300/60 dark:border-navy-700/80 select-none ${sizeClasses[size]} ${className}`} title={country}>
+  {key === 'poland' && (
+    <svg viewBox="0 0 640 480" class="w-full h-full object-cover">
+      <path fill="#ffffff" d="M0 0h640v240H0z"/>
+      <path fill="#dc143c" d="M0 240h640v240H0z"/>
+    </svg>
+  )}
+  {key === 'slovakia' && (
+    <svg viewBox="0 0 640 480" class="w-full h-full object-cover">
+      <path fill="#ffffff" d="M0 0h640v160H0z"/>
+      <path fill="#0b4ea2" d="M0 160h640v160H0z"/>
+      <path fill="#ee1c25" d="M0 320h640v160H0z"/>
+      <path d="M120 100c50 0 100 20 100 90 0 90-100 130-100 130s-100-40-100-130c0-70 50-90 100-90z" fill="#ee1c25" stroke="#ffffff" stroke-width="8"/>
+      <path d="M70 260c15-20 30-25 50-25s35 5 50 25c-10-30-25-45-50-45s-40 15-50 45z" fill="#0b4ea2"/>
+      <path fill="#ffffff" d="M110 130h20v110h-20zm-30 35h80v20H80zm10 40h60v18H90z"/>
+    </svg>
+  )}
+  {key === 'czech-republic' && (
+    <svg viewBox="0 0 640 480" class="w-full h-full object-cover">
+      <path fill="#d7141a" d="M0 240h640v240H0z"/>
+      <path fill="#ffffff" d="M0 0h640v240H0z"/>
+      <path fill="#11457e" d="M360 240L0 0v480z"/>
+    </svg>
+  )}
+  {key === 'hungary' && (
+    <svg viewBox="0 0 640 480" class="w-full h-full object-cover">
+      <path fill="#ce2939" d="M0 0h640v160H0z"/>
+      <path fill="#ffffff" d="M0 160h640v160H0z"/>
+      <path fill="#477050" d="M0 320h640v160H0z"/>
+    </svg>
+  )}
+  {key === 'bulgaria' && (
+    <svg viewBox="0 0 640 480" class="w-full h-full object-cover">
+      <path fill="#ffffff" d="M0 0h640v160H0z"/>
+      <path fill="#00966e" d="M0 160h640v160H0z"/>
+      <path fill="#d62612" d="M0 320h640v160H0z"/>
+    </svg>
+  )}
+  {key === 'portugal' && (
+    <svg viewBox="0 0 640 480" class="w-full h-full object-cover">
+      <path fill="#ff0000" d="M240 0h400v480H240z"/>
+      <path fill="#006600" d="M0 0h240v480H0z"/>
+      <circle cx="240" cy="240" r="85" fill="#ffcc00"/>
+      <circle cx="240" cy="240" r="65" fill="#ffffff" stroke="#000" stroke-width="2"/>
+      <path d="M210 200h60v50c0 25-30 40-30 40s-30-15-30-40z" fill="#ff0000"/>
+      <path d="M225 210h30v30c0 15-15 25-15 25s-15-10-15-25z" fill="#ffffff"/>
+      <circle cx="240" cy="230" r="5" fill="#002b7f"/>
+    </svg>
+  )}
+  {key === 'latvia' && (
+    <svg viewBox="0 0 640 480" class="w-full h-full object-cover">
+      <path fill="#9e3039" d="M0 0h640v192H0zm0 288h640v192H0z"/>
+      <path fill="#ffffff" d="M0 192h640v96H0z"/>
+    </svg>
+  )}
+  {key === 'lithuania' && (
+    <svg viewBox="0 0 640 480" class="w-full h-full object-cover">
+      <path fill="#fdb913" d="M0 0h640v160H0z"/>
+      <path fill="#006a44" d="M0 160h640v160H0z"/>
+      <path fill="#c1272d" d="M0 320h640v160H0z"/>
+    </svg>
+  )}
+  {key === 'serbia' && (
+    <svg viewBox="0 0 640 480" class="w-full h-full object-cover">
+      <path fill="#c6363c" d="M0 0h640v160H0z"/>
+      <path fill="#0c4076" d="M0 160h640v160H0z"/>
+      <path fill="#ffffff" d="M0 320h640v160H0z"/>
+      <path d="M200 130c25 0 50 10 50 45 0 50-50 70-50 70s-50-20-50-70c0-35 25-45 50-45z" fill="#c6363c" stroke="#ffffff" stroke-width="4"/>
+      <path fill="#ffcc00" d="M190 105h20v25h-20zm-20 20h60v10h-60z"/>
+    </svg>
+  )}
+  {key === 'ukraine' && (
+    <svg viewBox="0 0 640 480" class="w-full h-full object-cover">
+      <path fill="#0057b7" d="M0 0h640v240H0z"/>
+      <path fill="#ffd700" d="M0 240h640v240H0z"/>
+    </svg>
+  )}
+  {key === 'north-macedonia' && (
+    <svg viewBox="0 0 640 480" class="w-full h-full object-cover">
+      <path fill="#d20000" d="M0 0h640v480H0z"/>
+      <path fill="#ffe600" d="M0 0l640 480M640 0L0 480M320 0v480M0 240h640" stroke="#ffe600" stroke-width="40"/>
+      <circle cx="320" cy="240" r="60" fill="#d20000" stroke="#ffe600" stroke-width="20"/>
+      <circle cx="320" cy="240" r="50" fill="#ffe600"/>
+    </svg>
+  )}
+  {(key === 'eu' || key === 'schengen') && (
+    <svg viewBox="0 0 640 480" class="w-full h-full object-cover">
+      <path fill="#003399" d="M0 0h640v480H0z"/>
+      <g fill="#ffcc00">
+        <circle cx="320" cy="90" r="14"/>
+        <circle cx="320" cy="390" r="14"/>
+        <circle cx="170" cy="240" r="14"/>
+        <circle cx="470" cy="240" r="14"/>
+        <circle cx="215" cy="135" r="14"/>
+        <circle cx="425" cy="135" r="14"/>
+        <circle cx="215" cy="345" r="14"/>
+        <circle cx="425" cy="345" r="14"/>
+        <circle cx="145" cy="180" r="14"/>
+        <circle cx="495" cy="180" r="14"/>
+        <circle cx="145" cy="300" r="14"/>
+        <circle cx="495" cy="300" r="14"/>
+      </g>
+    </svg>
+  )}
+</div>

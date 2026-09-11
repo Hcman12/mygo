@@ -1,0 +1,28 @@
+{
+  "name": "mygotravel-website",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^9.5.5",
+    "@astrojs/tailwind": "^5.1.5",
+    "astro": "^5.4.2",
+    "canvas-confetti": "^1.9.4",
+    "dotenv": "^17.4.2",
+    "html-to-image": "^1.11.11",
+    "nodemailer": "^10.0.3",
+    "pg": "^8.23.0",
+    "tailwindcss": "^3.4.17"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/nodemailer": "^8.0.1",
+    "@types/pg": "^8.23.1"
+  }
+}

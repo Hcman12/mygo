@@ -1,0 +1,78 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  hideHeaderFooter?: boolean;
+}
+
+const { 
+  title = "MyGo Travel · European Jobs with Accommodation & Meals", 
+  description = "Official European work visa and relocation programs. Guaranteed jobs in Poland, Slovakia, Czech Republic, Portugal and more with employer-provided accommodation and meals.",
+  hideHeaderFooter = false
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/Mygo_Travel_Icon.png" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- OpenGraph / Social Meta -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://mygotravel.eu/" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/Mygo_Travel_Logo.png" />
+
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Anti-flicker Dark Mode Script -->
+    <script is:inline>
+      const savedTheme = localStorage.getItem('theme');
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+
+    <!-- Site Traffic & Geolocation Analytics Beacon -->
+    <script is:inline>
+      (function() {
+        if (window.location.pathname.startsWith('/nicle')) return;
+        try {
+          fetch('/api/analytics/pageview', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              path: window.location.pathname,
+              title: document.title,
+              referrer: document.referrer || ''
+            }),
+            keepalive: true
+          }).catch(function() {});
+        } catch(e) {}
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col bg-slate-50 dark:bg-navy-950 text-slate-800 dark:text-slate-100 transition-colors duration-200">
+    {!hideHeaderFooter && <Header />}
+    <main class={`flex-grow ${hideHeaderFooter ? 'flex flex-col min-h-screen' : ''}`}>
+      <slot />
+    </main>
+    {!hideHeaderFooter && <Footer />}
+  </body>
+</html>

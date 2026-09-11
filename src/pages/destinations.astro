@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DestinationCard from '../components/DestinationCard.astro';
+import { destinations } from '../data/destinations';
+
+const schengenList = destinations.filter(d => d.category === 'schengen');
+const nonSchengenList = destinations.filter(d => d.category === 'non-schengen');
+const educationList = destinations.filter(d => d.category === 'education');
+---
+
+<Layout 
+  title="All Destinations & Relocation Programs 2026 · MyGo Travel"
+  description="Explore European destinations for work and study: Poland, Slovakia, Czech Republic, Portugal, Lithuania, Serbia, North Macedonia, and more. Free housing and meals."
+>
+  <div class="py-12 sm:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Page Header -->
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h1 class="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+          Europe Work & Relocation Programs
+        </h1>
+        <p class="text-slate-600 dark:text-slate-400 text-base mt-3">
+          Every employment contract includes guaranteed employer-provided accommodation, meal plans/stipends, and legal residence permit sponsorship.
+        </p>
+      </div>
+
+      <!-- Section 1: Schengen Destinations -->
+      <div class="mb-20">
+        <div class="flex items-center gap-3.5 mb-8 pb-3 border-b border-slate-200 dark:border-navy-800">
+          <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-15l1.09 2.22 2.45.36-1.77 1.73.42 2.44L12 10.6l-2.19 1.15.42-2.44-1.77-1.73 2.45-.36L12 5zm-5 4l1.09 2.22 2.45.36-1.77 1.73.42 2.44L7 14.6l-2.19 1.15.42-2.44-1.77-1.73 2.45-.36L7 9zm10 0l1.09 2.22 2.45.36-1.77 1.73.42 2.44L17 14.6l-2.19 1.15.42-2.44-1.77-1.73 2.45-.36L17 9z"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white">Schengen Zone Destinations</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Full freedom of travel across 29 European countries once resident</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {schengenList.map(destination => (
+            <DestinationCard destination={destination} />
+          ))}
+        </div>
+      </div>
+
+      <!-- Section 2: Non-Schengen Fast Entry -->
+      <div class="mb-20">
+        <div class="flex items-center gap-3.5 mb-8 pb-3 border-b border-slate-200 dark:border-navy-800">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white">Non-Schengen Europe — Fast Entry</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Quicker processing (1–2 months), with a route into the wider European job market</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {nonSchengenList.map(destination => (
+            <DestinationCard destination={destination} />
+          ))}
+        </div>
+      </div>
+
+      <!-- Section 3: Education Route (Student Visa) -->
+      <div class="mb-20">
+        <div class="flex items-center gap-3.5 mb-8 pb-3 border-b border-slate-200 dark:border-navy-800">
+          <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white">Education Route (Student Visa)</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Study in Europe with legal rights to work part-time during semester and full-time during breaks</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {educationList.map(destination => (
+            <DestinationCard destination={destination} />
+          ))}
+        </div>
+      </div>
+
+      <!-- Bottom Assessment Callout -->
+      <div class="p-8 sm:p-12 rounded-2xl bg-navy-900 text-white border border-slate-800 text-center space-y-4 shadow-xl">
+        <h3 class="text-2xl sm:text-3xl font-black">Not sure which country is your optimal match?</h3>
+        <p class="text-slate-300 text-sm max-w-xl mx-auto">
+          Submit your profile and trade background to our recruitment desk to discover which European destination offers the fastest visa issuance for your qualifications.
+        </p>
+        <div class="pt-2">
+          <a 
+            href="/assess" 
+            class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-sm text-white bg-brand-500 hover:bg-brand-600 shadow-md transition-all"
+          >
+            <span>Check Relocation Eligibility</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</Layout>

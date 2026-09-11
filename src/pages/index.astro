@@ -1,0 +1,348 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DestinationCard from '../components/DestinationCard.astro';
+import Testimonials from '../components/Testimonials.astro';
+import { destinations } from '../data/destinations';
+
+const schengenDestinations = destinations.filter(d => d.category === 'schengen');
+const nonSchengenDestinations = destinations.filter(d => d.category === 'non-schengen');
+const educationDestinations = destinations.filter(d => d.category === 'education');
+---
+
+<Layout 
+  title="MyGo Travel · European Jobs with Accommodation & Meals Included"
+  description="Relocate to Europe for guaranteed jobs with employer-provided accommodation and meals. Work in Poland, Slovakia, Czech Republic, Portugal, Lithuania, and more."
+>
+  
+  <!-- HERO SECTION -->
+  <section class="relative pt-12 pb-20 sm:pt-20 sm:pb-28 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      
+      <!-- Top Status Badge -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-100 dark:bg-navy-900 border border-slate-200 dark:border-navy-800 text-xs text-slate-700 dark:text-slate-300 font-semibold mb-8">
+        <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+        <span>Work & Relocation Programs 2026</span>
+        <span class="text-slate-300 dark:text-slate-700">|</span>
+        <span class="text-emerald-600 dark:text-emerald-400 font-medium">Accommodation & Meals Guaranteed</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.1] max-w-5xl mx-auto mb-6">
+        Relocate to Europe for Verified Jobs with 
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 via-amber-500 to-brand-600">
+          Housing & Meals Included.
+        </span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-base sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-10 leading-relaxed font-normal">
+        Your trusted visa and relocation agency for legal employment across Schengen and Fast-Track European nations. We secure your contract, visa permits, flights, and welcoming living arrangements.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto mb-14">
+        <a 
+          href="/assess" 
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-extrabold text-base text-white bg-brand-500 hover:bg-brand-600 shadow-md hover:shadow-lg transition-all duration-150 cursor-pointer"
+        >
+          <span>Start Relocation Evaluation</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </a>
+
+        <a 
+          href="#destinations" 
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-base text-slate-800 dark:text-slate-200 bg-slate-200/70 dark:bg-navy-800/80 hover:bg-slate-300 dark:hover:bg-navy-700 border border-slate-300 dark:border-navy-700 transition-all cursor-pointer"
+        >
+          <span>Explore Destinations</span>
+        </a>
+      </div>
+
+      <!-- Quick Trust Indicators -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-6 border-t border-slate-200 dark:border-navy-800/80">
+        <div class="p-3 text-center">
+          <span class="block text-2xl sm:text-3xl font-black text-brand-500">11+</span>
+          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">European Countries</span>
+        </div>
+        <div class="p-3 text-center">
+          <span class="block text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">Competitive</span>
+          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Monthly Pay Packages</span>
+        </div>
+        <div class="p-3 text-center">
+          <span class="block text-2xl sm:text-3xl font-black text-emerald-500">100% Free</span>
+          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Accommodation & Meals</span>
+        </div>
+        <div class="p-3 text-center">
+          <span class="block text-2xl sm:text-3xl font-black text-brand-500">1–2 Months</span>
+          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Fast-Track Entry Options</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- HOUSING & MEALS GUARANTEE HIGHLIGHT (`#benefits`) -->
+  <section id="benefits" class="py-16 bg-slate-100/70 dark:bg-navy-900/50 border-y border-slate-200 dark:border-navy-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+          Why Job Seekers Choose MyGo Travel
+        </h2>
+        <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-3">
+          Relocating overseas can be daunting. We eliminate your major living expenses so every euro earned can be saved or sent to your family.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Perk 1: Accommodation -->
+        <div class="bg-white dark:bg-navy-900 rounded-2xl p-8 border border-slate-200 dark:border-navy-800 shadow-sm relative group hover:border-brand-500 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/10 text-brand-500 flex items-center justify-center mb-6">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
+            Provided Accommodation
+          </h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Every work package includes fully furnished, clean housing (apartments, employee dormitories, or family units) provided directly or heavily subsidized by your employer.
+          </p>
+          <div class="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+            ✓ Zero rent stress on arrival
+          </div>
+        </div>
+
+        <!-- Perk 2: Meals -->
+        <div class="bg-white dark:bg-navy-900 rounded-2xl p-8 border border-slate-200 dark:border-navy-800 shadow-sm relative group hover:border-brand-500 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mb-6">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
+            Meals & Food Subsidies
+          </h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Employers provide hot canteen meals on shift, meal cards, or monthly tax-free food stipends so you never have to worry about dining costs.
+          </p>
+          <div class="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+            ✓ Canteen access or daily food stipends
+          </div>
+        </div>
+
+        <!-- Perk 3: Legal Visa & Schengen Access -->
+        <div class="bg-white dark:bg-navy-900 rounded-2xl p-8 border border-slate-200 dark:border-navy-800 shadow-sm relative group hover:border-brand-500 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-6">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
+            100% Legal Work Permits
+          </h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            All positions are certified by national labor ministries. We secure your official European work invitation, embassy booking, and residence permit.
+          </p>
+          <div class="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+            ✓ Genuine government work authorization
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- DESTINATIONS CATALOG SECTION (`#destinations`) -->
+  <section id="destinations" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div>
+          <h2 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+            Work & Relocation Destinations
+          </h2>
+          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2 max-w-xl">
+            Choose from Schengen Zone employment destinations, Fast-Track Non-Schengen programs, or European Student Work Routes.
+          </p>
+        </div>
+
+        <!-- Filter Tab Buttons -->
+        <div class="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-slate-200/80 dark:bg-navy-900 border border-slate-300/80 dark:border-navy-800" id="dest-filters">
+          <button class="filter-btn active px-4 py-2 rounded-xl text-xs font-bold text-white bg-brand-500 transition-all" data-filter="all">
+            All Programs ({destinations.length})
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-brand-500 transition-all" data-filter="schengen">
+            Schengen ({schengenDestinations.length})
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-brand-500 transition-all" data-filter="non-schengen">
+            Fast Entry Non-Schengen ({nonSchengenDestinations.length})
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-brand-500 transition-all" data-filter="education">
+            Education Route ({educationDestinations.length})
+          </button>
+        </div>
+      </div>
+
+      <!-- Destinations Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="destinations-grid">
+        {destinations.map((destination) => (
+          <div class="destination-item" data-category={destination.category}>
+            <DestinationCard destination={destination} />
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- CLIENT TESTIMONIALS SECTION -->
+  <Testimonials />
+
+
+  <!-- HOW IT WORKS SECTION (`#how-it-works`) -->
+  <section id="how-it-works" class="py-20 bg-slate-100/70 dark:bg-navy-900/40 border-y border-slate-200 dark:border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+          How Your European Journey Unfolds
+        </h2>
+        <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">
+          From your initial evaluation to collecting your apartment keys in Europe:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        
+        <!-- Step 1 -->
+        <div class="bg-white dark:bg-navy-900 rounded-xl p-6 border border-slate-200 dark:border-navy-800 shadow-sm relative text-center">
+          <div class="w-10 h-10 rounded-lg bg-brand-500 text-white font-bold text-sm flex items-center justify-center mx-auto mb-4">
+            1
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">Profile Intake</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            Fill out your profile, upload your resume and passport photo, and receive your verified MyGo Candidate ID.
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-white dark:bg-navy-900 rounded-xl p-6 border border-slate-200 dark:border-navy-800 shadow-sm relative text-center">
+          <div class="w-10 h-10 rounded-lg bg-amber-500 text-white font-bold text-sm flex items-center justify-center mx-auto mb-4">
+            2
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">Employer Matching</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            We match you with vetted European employers who issue your formal job contract guaranteeing housing and meal stipends.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-white dark:bg-navy-900 rounded-xl p-6 border border-slate-200 dark:border-navy-800 shadow-sm relative text-center">
+          <div class="w-10 h-10 rounded-lg bg-blue-500 text-white font-bold text-sm flex items-center justify-center mx-auto mb-4">
+            3
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">Visa & Work Permit</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            Our legal desk handles the European government work permit filing, apostilles, and prepares you for your embassy appointment.
+          </p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="bg-white dark:bg-navy-900 rounded-xl p-6 border border-slate-200 dark:border-navy-800 shadow-sm relative text-center">
+          <div class="w-10 h-10 rounded-lg bg-emerald-500 text-white font-bold text-sm flex items-center justify-center mx-auto mb-4">
+            4
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">Arrival & Move-In</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            Airport reception in Europe, check-in to your furnished accommodation, meal voucher orientation, and start your job!
+          </p>
+        </div>
+
+      </div>
+
+      <!-- CTA inside How it Works -->
+      <div class="text-center mt-12">
+        <a 
+          href="/assess" 
+          class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-sm text-white bg-brand-500 hover:bg-brand-600 shadow-md transition-all"
+        >
+          <span>Begin Relocation Assessment</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- CANDIDATE PASS TEASER BANNER -->
+  <section class="py-20">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="relative rounded-2xl p-8 sm:p-12 bg-navy-900 text-white border border-slate-800 shadow-xl overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+        
+        <div class="max-w-2xl space-y-4">
+          <h2 class="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
+            Get Your Digital European Relocation Pass Card
+          </h2>
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+            Complete your intake questionnaire with your background, trade preferences, and travel documents. Our advisors match your profile against current consular quotas and issue an official candidate pass you can submit directly on WhatsApp or NicerApp.
+          </p>
+        </div>
+
+        <div class="shrink-0">
+          <a 
+            href="/assess" 
+            class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-base text-white bg-brand-500 hover:bg-brand-600 shadow-md hover:shadow-lg transition-all whitespace-nowrap"
+          >
+            <span>Start Candidate Application</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<script>
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const destinationItems = document.querySelectorAll('.destination-item');
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove active from all
+      filterButtons.forEach(btn => {
+        btn.classList.remove('bg-brand-500', 'text-white');
+        btn.classList.add('text-slate-600', 'dark:text-slate-300');
+      });
+
+      // Set active
+      button.classList.add('bg-brand-500', 'text-white');
+      button.classList.remove('text-slate-600', 'dark:text-slate-300');
+
+      const filterValue = button.getAttribute('data-filter');
+
+      destinationItems.forEach(item => {
+        const category = item.getAttribute('data-category');
+        if (filterValue === 'all' || category === filterValue) {
+          (item as HTMLElement).style.display = 'block';
+        } else {
+          (item as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

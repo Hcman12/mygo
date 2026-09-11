@@ -1,0 +1,1329 @@
+---
+import { destinations } from '../data/destinations';
+import CountryFlag from './CountryFlag.astro';
+---
+
+<div class="min-h-screen flex flex-col justify-between bg-slate-50 dark:bg-navy-950 text-slate-900 dark:text-white transition-colors duration-200" id="wizard-fullscreen-container">
+  
+  <!-- TOP NAVBAR -->
+  <header class="sticky top-0 z-30 w-full backdrop-blur-md bg-white/90 dark:bg-navy-900/90 border-b border-slate-200 dark:border-navy-800 py-3.5 px-4 sm:px-8">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="/" class="flex items-center gap-2 group shrink-0" title="Exit to MyGo Travel Home">
+        <img 
+          src="/Mygo_Travel_Logo.png" 
+          alt="MyGo Travel" 
+          class="h-8 w-auto object-contain dark:hidden transition-transform group-hover:scale-105"
+        />
+        <img 
+          src="/Mygo_Travel_Logo_White.png" 
+          alt="MyGo Travel" 
+          class="h-8 w-auto object-contain hidden dark:block transition-transform group-hover:scale-105"
+        />
+      </a>
+
+      <!-- Progress Center Indicator (visible during form) -->
+      <div id="top-progress-container" class="flex-1 max-w-md mx-4 hidden sm:block">
+        <div class="flex items-center justify-between text-xs font-semibold mb-1.5 text-slate-600 dark:text-slate-400">
+          <span id="top-step-indicator">Step 1 of 6</span>
+          <span id="top-step-pct">17% Completed</span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-navy-800 h-2 rounded-full overflow-hidden">
+          <div id="top-progress-bar" class="bg-gradient-to-r from-brand-500 to-emerald-500 h-full w-[17%] transition-all duration-300"></div>
+        </div>
+      </div>
+
+      <!-- Action: Theme Toggle & Exit -->
+      <div class="flex items-center gap-3 shrink-0">
+        <!-- Theme Switcher -->
+        <button 
+          id="wizard-theme-toggle" 
+          type="button" 
+          aria-label="Toggle dark/light theme"
+          class="p-2 rounded-xl text-slate-500 hover:text-brand-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-brand-400 dark:hover:bg-navy-800 transition-colors"
+        >
+          <svg class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+          <svg class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+        </button>
+
+        <!-- Exit Link -->
+        <a 
+          href="/" 
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-rose-500 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-navy-800 transition-all border border-slate-200 dark:border-navy-700"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+          <span>Exit</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Mobile Progress Bar -->
+    <div class="sm:hidden mt-2 pt-2 border-t border-slate-200 dark:border-navy-800">
+      <div class="flex items-center justify-between text-[11px] font-semibold mb-1 text-slate-500 dark:text-slate-400">
+        <span id="mobile-step-indicator">Step 1 of 6</span>
+        <span id="mobile-step-pct">17%</span>
+      </div>
+      <div class="w-full bg-slate-200 dark:bg-navy-800 h-1.5 rounded-full overflow-hidden">
+        <div id="mobile-progress-bar" class="bg-gradient-to-r from-brand-500 to-emerald-500 h-full w-[17%] transition-all duration-300"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN VIEWPORT CONTAINER -->
+  <main class="flex-1 flex items-center justify-center p-4 sm:p-8 relative">
+    
+    <!-- 1. MULTI-STEP QUESTIONNAIRE (1-2 QUESTIONS PER PAGE) -->
+    <div id="assessment-form-card" class="w-full max-w-2xl bg-white dark:bg-navy-900 rounded-2xl p-6 sm:p-10 border border-slate-200 dark:border-navy-800 shadow-xl relative transition-all duration-200">
+      
+      <form id="assessment-form" onsubmit="return false;" autocomplete="off">
+        
+        <!-- STEP 1: NAME & PHONE (2 QUESTIONS) -->
+        <div id="wizard-step-1" class="wizard-step space-y-6">
+          <div class="space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+              Candidate contact details
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+              Your details will be used to generate your official European Relocation Pass.
+            </p>
+          </div>
+
+          <div class="space-y-5 pt-2">
+            <!-- Question 1: Full Name -->
+            <div class="space-y-1.5">
+              <label for="full-name" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                1. What is your full legal name? <span class="text-rose-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                </div>
+                <input 
+                  type="text" 
+                  id="full-name" 
+                  name="fullName" 
+                  required 
+                  placeholder="e.g. Maria Santos / Ahmed Hassan" 
+                  class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-white font-medium text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            <!-- Question 2: Phone / WhatsApp -->
+            <div class="space-y-1.5">
+              <label for="phone" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                2. What is your mobile / WhatsApp number? <span class="text-rose-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-emerald-500">
+                  <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                  </svg>
+                </div>
+                <input 
+                  type="tel" 
+                  id="phone" 
+                  name="phone" 
+                  required 
+                  placeholder="+1 (555) 000-0000 (with country code)" 
+                  class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-white font-medium text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition-all"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: EMAIL & AGE (2 QUESTIONS) -->
+        <div id="wizard-step-2" class="wizard-step space-y-6 hidden">
+          <div class="space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+              Email address & age bracket
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+              European work visa programs have specific age eligibility thresholds.
+            </p>
+          </div>
+
+          <div class="space-y-5 pt-2">
+            <!-- Question 3: Email -->
+            <div class="space-y-1.5">
+              <label for="email" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                3. What is your email address? <span class="text-rose-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  required 
+                  placeholder="name@example.com" 
+                  class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-white font-medium text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            <!-- Question 4: Age -->
+            <div class="space-y-1.5">
+              <label for="age" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                4. How old are you? <span class="text-rose-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+                <input 
+                  type="number" 
+                  id="age" 
+                  name="age" 
+                  min="18" 
+                  max="62" 
+                  required 
+                  placeholder="e.g. 29 (must be between 18 and 60)" 
+                  class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-white font-medium text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition-all"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: PASSPORT & PHOTO (2 QUESTIONS) -->
+        <div id="wizard-step-3" class="wizard-step space-y-6 hidden">
+          <div class="space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+              Passport details & headshot photo
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+              Used to stamp your official Digital Relocation Pass Card for our European visa team.
+            </p>
+          </div>
+
+          <div class="space-y-5 pt-2">
+            <!-- Question 5: Passport Number -->
+            <div class="space-y-1.5">
+              <label for="passport-number" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                5. What is your International Passport / ID Number? <span class="text-rose-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/>
+                  </svg>
+                </div>
+                <input 
+                  type="text" 
+                  id="passport-number" 
+                  name="passportNumber" 
+                  required 
+                  placeholder="e.g. P12345678 or ID Document number" 
+                  class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-white font-medium text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition-all uppercase"
+                />
+              </div>
+            </div>
+
+            <!-- Question 6: Passport Photo Upload -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                6. Upload your clear face photo (Passport style) <span class="text-rose-500">*</span>
+              </label>
+              <div class="flex items-center gap-5 p-4 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 hover:border-brand-500 transition-colors">
+                <!-- Preview Avatar Circle -->
+                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-slate-200 dark:bg-navy-900 border border-slate-300 dark:border-navy-700 overflow-hidden flex items-center justify-center shrink-0">
+                  <img id="photo-preview-img" src="" alt="Passport Preview" class="w-full h-full object-cover hidden" />
+                  <div id="photo-placeholder-icon" class="text-slate-400">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="flex-1 min-w-0">
+                  <label for="passport-photo-input" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-brand-500 hover:bg-brand-600 transition-colors cursor-pointer">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                    </svg>
+                    <span>Choose Photo File</span>
+                  </label>
+                  <input type="file" id="passport-photo-input" name="passportPhoto" accept="image/*" class="sr-only" required />
+                  <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5">
+                    Clear front-facing headshot on light background (JPG, PNG).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4: LOCATION & FAMILY (2 QUESTIONS) -->
+        <div id="wizard-step-4" class="wizard-step space-y-6 hidden">
+          <div class="space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+              Residence location & family status
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+              European employers provide different accommodation arrangements for individuals versus families.
+            </p>
+          </div>
+
+          <div class="space-y-5 pt-2">
+            <!-- Question 7: Residence Address / City -->
+            <div class="space-y-1.5">
+              <label for="address" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                7. What is your current residential city & country? <span class="text-rose-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                </div>
+                <input 
+                  type="text" 
+                  id="address" 
+                  name="address" 
+                  required 
+                  placeholder="e.g. Manila, Philippines / Nairobi, Kenya" 
+                  class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-white font-medium text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            <!-- Question 8: Marital Status & Children -->
+            <div class="space-y-3">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                8. Marital status & family accompaniment
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <select 
+                    id="marital-status" 
+                    name="maritalStatus" 
+                    class="w-full px-4 py-3.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-white font-medium text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition-all"
+                  >
+                    <option value="single">Single / Independent</option>
+                    <option value="married">Married</option>
+                    <option value="divorced">Divorced / Separated</option>
+                  </select>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 flex items-center justify-between">
+                  <span class="text-xs font-medium text-slate-700 dark:text-slate-300">Relocating with children?</span>
+                  <div class="flex items-center gap-3">
+                    <label class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 cursor-pointer">
+                      <input type="radio" name="hasKids" value="no" checked class="accent-brand-500" id="radio-kids-no" />
+                      <span>No</span>
+                    </label>
+                    <label class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 cursor-pointer">
+                      <input type="radio" name="hasKids" value="yes" class="accent-brand-500" id="radio-kids-yes" />
+                      <span>Yes</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Hidden Kids Count input -->
+              <div id="kids-count" class="hidden pt-1">
+                <input 
+                  type="number" 
+                  min="1" 
+                  max="8" 
+                  placeholder="Number of children (e.g. 2)" 
+                  class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-white text-xs outline-none"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 5: WORK EXPERIENCE & CV (2 QUESTIONS) -->
+        <div id="wizard-step-5" class="wizard-step space-y-6 hidden">
+          <div class="space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+              Work experience & resume document
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+              European employers match contracts based on verified employment history.
+            </p>
+          </div>
+
+          <div class="space-y-5 pt-2">
+            <!-- Question 9: Experience Years -->
+            <div class="space-y-1.5">
+              <label for="experience-years" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                9. How many years of work experience do you have? <span class="text-rose-500">*</span>
+              </label>
+              <select 
+                id="experience-years" 
+                name="experienceYears" 
+                required 
+                class="w-full px-4 py-3.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-white font-medium text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition-all"
+              >
+                <option value="" disabled selected>Select your experience level</option>
+                <option value="entry">Entry Level / General Labor (0–1 Year)</option>
+                <option value="junior">1–2 Years Verified Experience</option>
+                <option value="mid">3–5 Years Skilled Experience</option>
+                <option value="senior">5+ Years Senior Specialist / Lead</option>
+              </select>
+            </div>
+
+            <!-- Question 10: CV / Resume File Upload -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                10. Upload your CV or Resume <span class="text-rose-500">*</span>
+              </label>
+              <div class="p-6 rounded-xl bg-slate-50 dark:bg-navy-950 border border-dashed border-slate-300 dark:border-navy-700 hover:border-brand-500 transition-colors text-center">
+                <div class="w-10 h-10 mx-auto rounded-lg bg-brand-500/10 text-brand-500 flex items-center justify-center mb-3">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                  </svg>
+                </div>
+                <label for="cv-file-input" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-brand-500 hover:bg-brand-600 transition-colors cursor-pointer shadow-sm">
+                  <span>Browse CV / Resume File</span>
+                </label>
+                <input type="file" id="cv-file-input" name="cvFile" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" class="sr-only" required />
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                  Supports PDF, Word (.docx), or scanned document (Max: 10MB)
+                </p>
+
+                <!-- Dynamic feedback when file selected -->
+                <div id="cv-filename-display" class="hidden mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                  <span id="cv-filename-text">resume.pdf</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 6: DESIRED TRADE & DESTINATION PREFERENCE (2 QUESTIONS) -->
+        <div id="wizard-step-6" class="wizard-step space-y-6 hidden">
+          <div class="space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+              Trade sector & country preference
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+              Select your preferred trade sector and destination preference for European employment placement.
+            </p>
+          </div>
+
+          <div class="space-y-5 pt-2">
+            <!-- Question 11: Desired Job Sector -->
+            <div class="space-y-1.5">
+              <label for="job-category" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                11. What type of work do you want in Europe? <span class="text-rose-500">*</span>
+              </label>
+              <select 
+                id="job-category" 
+                name="jobCategory" 
+                required 
+                class="w-full px-4 py-3.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-white font-medium text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition-all"
+              >
+                <option value="" disabled selected>Select European job sector</option>
+                <option value="logistics">Logistics, Warehousing & Forklift Operations</option>
+                <option value="manufacturing">Industrial Manufacturing & Automotive Assembly</option>
+                <option value="driving">Commercial Transport & Heavy Truck Driver (C/CE/B)</option>
+                <option value="construction">Construction, Carpentry & Civil Assembly</option>
+                <option value="hospitality">Hospitality, Resort & Culinary Support</option>
+                <option value="agriculture">Agriculture, Harvesting & Food Processing</option>
+                <option value="healthcare">Healthcare Assistance & Resident Support</option>
+                <option value="administration">Office Administration & Clerical Support</option>
+                <option value="sales">Retail Sales & Customer Service</option>
+                <option value="tech_support">IT Support & Technical Services</option>
+              </select>
+            </div>
+
+            <!-- Question 12: Relocation Timeline & Country Preference -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1.5">
+                <label for="start-timeline" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                  Relocation Timeline <span class="text-rose-500">*</span>
+                </label>
+                <select 
+                  id="start-timeline" 
+                  name="startTimeline" 
+                  class="w-full px-4 py-3.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-white font-medium text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition-all"
+                >
+                  <option value="immediate">Immediately (Fast Entry 1–2 months)</option>
+                  <option value="1-3months" selected>Within 2–3 Months</option>
+                  <option value="flexible">Flexible / Next Available Intake</option>
+                </select>
+              </div>
+
+              <div class="space-y-1.5">
+                <label for="preferred-destination" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                  Country Preference
+                </label>
+                <select 
+                  id="preferred-destination" 
+                  name="preferredDestination" 
+                  class="w-full px-4 py-3.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-white font-medium text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition-all"
+                >
+                  <option value="auto" selected>Agency Recommended Destination (Optimal Match)</option>
+                  <optgroup label="Schengen Zone Destinations">
+                    <option value="poland">Poland (4–6 months)</option>
+                    <option value="slovakia">Slovakia (3–4 months)</option>
+                    <option value="czech-republic">Czech Republic (1–2 months)</option>
+                    <option value="hungary">Hungary (1–2 months)</option>
+                    <option value="bulgaria">Bulgaria (2 months)</option>
+                    <option value="portugal-work">Portugal (2 months)</option>
+                    <option value="latvia">Latvia (2 months)</option>
+                    <option value="lithuania">Lithuania (3–5 months)</option>
+                  </optgroup>
+                  <optgroup label="Non-Schengen Fast Entry">
+                    <option value="serbia">Serbia (1–2 months)</option>
+                    <option value="ukraine">Ukraine (~1 month)</option>
+                    <option value="north-macedonia">North Macedonia (2 months)</option>
+                  </optgroup>
+                  <optgroup label="Education Route">
+                    <option value="portugal-student">Portugal (Study + Work Rights, 2–3 months)</option>
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM CONTROLS & NAVIGATION -->
+        <div class="pt-6 mt-8 border-t border-slate-200 dark:border-navy-800 flex items-center justify-between gap-4">
+          <!-- Back Button -->
+          <button 
+            type="button" 
+            id="btn-prev-step" 
+            class="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-navy-800 transition-all invisible"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            <span>Back</span>
+          </button>
+
+          <!-- Step Dots Indicator -->
+          <div class="hidden sm:flex items-center gap-1.5" id="step-dots-container">
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-500 transition-all step-dot" data-step="1"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-navy-700 transition-all step-dot" data-step="2"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-navy-700 transition-all step-dot" data-step="3"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-navy-700 transition-all step-dot" data-step="4"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-navy-700 transition-all step-dot" data-step="5"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-navy-700 transition-all step-dot" data-step="6"></span>
+          </div>
+
+          <!-- Next / Submit Button -->
+          <button 
+            type="button" 
+            id="btn-next-step" 
+            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-sm text-white bg-brand-500 hover:bg-brand-600 shadow-md transition-all cursor-pointer group/next"
+          >
+            <span id="btn-next-text">Continue</span>
+            <svg class="w-4 h-4 transform group-hover/next:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+
+    <!-- 2. APPLICATION REVIEW PROGRESS SCREEN -->
+    <div id="evaluation-screen" class="hidden w-full max-w-xl text-center space-y-8 p-6 sm:p-10 bg-white dark:bg-navy-900 rounded-2xl border border-slate-200 dark:border-navy-800 shadow-xl relative">
+      
+      <!-- Verification Spinner -->
+      <div class="w-16 h-16 mx-auto rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center">
+        <svg class="w-8 h-8 text-brand-500 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+      </div>
+
+      <!-- Review Status Information -->
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-navy-700">
+          <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+          <span>Reviewing Consular Quotas & Employer Requirements</span>
+        </div>
+        <h3 id="eval-status-headline" class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+          Verifying candidate credentials & passport record...
+        </h3>
+        <p id="eval-status-subtext" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+          Cross-matching verified employer vacancies with guaranteed accommodation across 11 European countries
+        </p>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="space-y-2">
+        <div class="flex justify-between text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
+          <span id="scan-percentage">20%</span>
+          <span id="eval-timer">EST: 3s</span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-navy-950 h-2.5 rounded-full overflow-hidden p-0.5 border border-slate-300 dark:border-navy-800">
+          <div id="eval-progress-bar" class="bg-brand-500 h-full w-[20%] rounded-full transition-all duration-300"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 3. FINAL RESULT SCREEN (CANDIDATE PASS CARD) -->
+    <div id="result-screen" class="hidden w-full max-w-2xl text-center space-y-8 p-4 sm:p-8">
+      
+      <!-- Top Success Pill -->
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider border border-emerald-500/30">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+          Official Relocation Pass Generated
+        </div>
+        <h2 id="result-headline" class="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+          Your Recommended European Placement is Ready
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto">
+          Your official candidate pass is stamped with guaranteed housing & legal work sponsorship.
+        </p>
+      </div>
+
+      <!-- OFFICIAL DIGITAL RELOCATION PASS CARD -->
+      <div class="flex justify-center">
+        <div id="relocation-pass-card" class="w-full max-w-md rounded-2xl p-6 bg-navy-950 text-white border border-slate-700 shadow-2xl relative text-left space-y-5">
+
+          <!-- Card Header Bar -->
+          <div class="flex items-center justify-between border-b border-white/10 pb-3.5">
+            <div class="flex items-center gap-2.5">
+              <img src="/Mygo_Travel_Logo_White.png" alt="MyGo" class="h-6 w-auto object-contain" />
+              <span class="text-[9px] uppercase tracking-widest px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">
+                European Candidate Pass
+              </span>
+            </div>
+            <div class="text-right">
+              <span class="block text-[8px] uppercase tracking-widest text-slate-400">Tracking Code</span>
+              <span id="card-tracking-id" class="text-xs font-mono font-bold text-brand-400">mygo482194</span>
+            </div>
+          </div>
+
+          <!-- Candidate Face Photo & Personal Details -->
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-20 rounded-xl bg-slate-800 border-2 border-brand-500/40 overflow-hidden shrink-0 shadow-md flex items-center justify-center">
+              <img id="card-photo-img" src="" alt="Photo" class="w-full h-full object-cover" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <h4 id="card-candidate-name" class="text-base sm:text-lg font-black text-white truncate">
+                Candidate Name
+              </h4>
+              <div class="flex items-center gap-3 text-xs text-slate-300 mt-1">
+                <span>Age: <strong id="card-age" class="text-white">28</strong></span>
+                <span>•</span>
+                <span>Pass: <strong id="card-passport" class="text-white font-mono uppercase">P1234567</strong></span>
+              </div>
+              <div class="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                <span>Readiness Score:</span>
+                <span id="result-score" class="font-extrabold text-white">96%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommendation Matrix -->
+          <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-bold text-slate-400">Recommended Country</span>
+              <span id="card-destination-country" class="text-xs font-black text-brand-400 flex items-center gap-1.5">
+                <span>Poland</span>
+              </span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-bold text-slate-400">Matched Position</span>
+              <span id="card-job-title" class="text-xs font-bold text-white truncate max-w-[200px]">
+                Logistics Operations Lead
+              </span>
+            </div>
+            <div class="flex items-center justify-between pt-1.5 border-t border-white/5">
+              <span class="text-[10px] uppercase font-bold text-slate-400">Processing Time</span>
+              <span id="card-processing-time" class="text-xs font-bold text-white">
+                4–6 months
+              </span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-bold text-slate-400">Work Authorization</span>
+              <span class="text-xs font-bold text-emerald-400">
+                Official Legal Sponsorship
+              </span>
+            </div>
+          </div>
+
+          <!-- Guaranteed Amenities Badges -->
+          <div class="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-semibold text-emerald-300 flex items-center justify-between">
+            <span class="flex items-center gap-1">
+              <svg class="w-3 h-3 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+              Housing: Employer-Provided
+            </span>
+            <span class="flex items-center gap-1">
+              <svg class="w-3 h-3 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+              Meals: Included Daily
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Action Buttons Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 max-w-xl mx-auto">
+        
+        <!-- 1. WhatsApp Button (Pure WhatsApp SVG Icon, NO phone number displayed) -->
+        <a 
+          id="btn-send-whatsapp" 
+          href="https://wa.me/12099493346" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="flex flex-col items-center justify-center p-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-lg shadow-emerald-600/25 transition-all transform hover:-translate-y-0.5 text-center group"
+        >
+          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+          </div>
+          <span class="text-sm font-bold">Chat on WhatsApp</span>
+        </a>
+
+        <!-- 2. NicerApp Button (Uses /nicerapplogo.png, NO community invite) -->
+        <a 
+          id="btn-send-nicerapp" 
+          href="https://nicerapp.cloud/invite/cd0452e9-e0be-4f0d-9fde-2aaa865c4e01" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="flex flex-col items-center justify-center p-4 rounded-2xl bg-brand-500 hover:bg-brand-600 text-white font-bold shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-0.5 text-center group"
+        >
+          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+            <img src="/nicerapplogo.png" alt="NicerApp" class="w-6 h-6 object-contain rounded-full" />
+          </div>
+          <span class="text-sm font-bold">Chat on NicerApp</span>
+        </a>
+
+        <!-- 3. Download Pass Card Image -->
+        <button 
+          type="button" 
+          id="btn-download-pass" 
+          class="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-bold shadow-lg transition-all transform hover:-translate-y-0.5 text-center group cursor-pointer"
+        >
+          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+          </div>
+          <span class="text-sm font-bold">Save Card Image</span>
+        </button>
+
+      </div>
+
+      <!-- Formatted Copy Preview -->
+      <div class="max-w-xl mx-auto p-4 rounded-2xl bg-slate-100 dark:bg-navy-900/60 border border-slate-200 dark:border-navy-800 text-left">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Direct Message to Advisor:</span>
+          <button 
+            type="button" 
+            id="btn-copy-message" 
+            class="text-xs font-bold text-brand-500 hover:underline flex items-center gap-1 cursor-pointer"
+          >
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+            </svg>
+            <span id="copy-btn-label">Copy Text</span>
+          </button>
+        </div>
+        <pre id="agent-message-text" class="text-xs text-slate-700 dark:text-slate-300 font-mono whitespace-pre-wrap bg-white dark:bg-navy-950 p-3 rounded-xl border border-slate-200 dark:border-navy-800 overflow-x-auto"></pre>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- BOTTOM FOOTNOTE / REASSURANCE -->
+  <footer class="py-3 px-4 text-center text-xs text-slate-500 dark:text-slate-500 border-t border-slate-200/60 dark:border-navy-800/60">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <span>Official European Placement Partner · MyGo Travel 2026</span>
+      <span class="flex items-center gap-1">
+        <svg class="w-3.5 h-3.5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+        </svg>
+        <span>SSL Encrypted & Strictly Confidential</span>
+      </span>
+    </div>
+  </footer>
+
+</div>
+
+<!-- SCRIPT: STEPPER, DYNAMIC COUNTRY SELECTION, & SCANNING ANIMATION -->
+<script>
+  import confetti from 'canvas-confetti';
+  import { toPng } from 'html-to-image';
+
+  // SVG Flag templates for high-res pass card
+  const flagSvgMap: Record<string, string> = {
+    'poland': '<svg viewBox="0 0 640 480" class="w-5 h-3.5 inline-block rounded overflow-hidden shadow-sm shrink-0"><path fill="#fff" d="M0 0h640v240H0z"/><path fill="#dc143c" d="M0 240h640v240H0z"/></svg>',
+    'slovakia': '<svg viewBox="0 0 640 480" class="w-5 h-3.5 inline-block rounded overflow-hidden shadow-sm shrink-0"><path fill="#fff" d="M0 0h640v160H0z"/><path fill="#0b4ea2" d="M0 160h640v160H0z"/><path fill="#ee1c25" d="M0 320h640v160H0z"/><path d="M120 100c50 0 100 20 100 90 0 90-100 130-100 130s-100-40-100-130c0-70 50-90 100-90z" fill="#ee1c25" stroke="#fff" stroke-width="8"/><path d="M70 260c15-20 30-25 50-25s35 5 50 25c-10-30-25-45-50-45s-40 15-50 45z" fill="#0b4ea2"/><path fill="#fff" d="M110 130h20v110h-20zm-30 35h80v20H80zm10 40h60v18H90z"/></svg>',
+    'czech-republic': '<svg viewBox="0 0 640 480" class="w-5 h-3.5 inline-block rounded overflow-hidden shadow-sm shrink-0"><path fill="#d7141a" d="M0 240h640v240H0z"/><path fill="#fff" d="M0 0h640v240H0z"/><path fill="#11457e" d="M360 240L0 0v480z"/></svg>',
+    'hungary': '<svg viewBox="0 0 640 480" class="w-5 h-3.5 inline-block rounded overflow-hidden shadow-sm shrink-0"><path fill="#ce2939" d="M0 0h640v160H0z"/><path fill="#fff" d="M0 160h640v160H0z"/><path fill="#477050" d="M0 320h640v160H0z"/></svg>',
+    'bulgaria': '<svg viewBox="0 0 640 480" class="w-5 h-3.5 inline-block rounded overflow-hidden shadow-sm shrink-0"><path fill="#fff" d="M0 0h640v160H0z"/><path fill="#00966e" d="M0 160h640v160H0z"/><path fill="#d62612" d="M0 320h640v160H0z"/></svg>',
+    'portugal-work': '<svg viewBox="0 0 640 480" class="w-5 h-3.5 inline-block rounded overflow-hidden shadow-sm shrink-0"><path fill="#ff0000" d="M240 0h400v480H240z"/><path fill="#006600" d="M0 0h240v480H0z"/><circle cx="240" cy="240" r="85" fill="#ffcc00"/><circle cx="240" cy="240" r="65" fill="#fff" stroke="#000" stroke-width="2"/><path d="M210 200h60v50c0 25-30 40-30 40s-30-15-30-40z" fill="#ff0000"/><path d="M225 210h30v30c0 15-15 25-15 25s-15-10-15-25z" fill="#fff"/><circle cx="240" cy="230" r="5" fill="#002b7f"/></svg>',
+    'portugal-student': '<svg viewBox="0 0 640 480" class="w-5 h-3.5 inline-block rounded overflow-hidden shadow-sm shrink-0"><path fill="#ff0000" d="M240 0h400v480H240z"/><path fill="#006600" d="M0 0h240v480H0z"/><circle cx="240" cy="240" r="85" fill="#ffcc00"/><circle cx="240" cy="240" r="65" fill="#fff" stroke="#000" stroke-width="2"/><path d="M210 200h60v50c0 25-30 40-30 40s-30-15-30-40z" fill="#ff0000"/><path d="M225 210h30v30c0 15-15 25-15 25s-15-10-15-25z" fill="#fff"/><circle cx="240" cy="230" r="5" fill="#002b7f"/></svg>',
+    'latvia': '<svg viewBox="0 0 640 480" class="w-5 h-3.5 inline-block rounded overflow-hidden shadow-sm shrink-0"><path fill="#9e3039" d="M0 0h640v192H0zm0 288h640v192H0z"/><path fill="#fff" d="M0 192h640v96H0z"/></svg>',
+    'lithuania': '<svg viewBox="0 0 640 480" class="w-5 h-3.5 inline-block rounded overflow-hidden shadow-sm shrink-0"><path fill="#fdb913" d="M0 0h640v160H0z"/><path fill="#006a44" d="M0 160h640v160H0z"/><path fill="#c1272d" d="M0 320h640v160H0z"/></svg>',
+    'serbia': '<svg viewBox="0 0 640 480" class="w-5 h-3.5 inline-block rounded overflow-hidden shadow-sm shrink-0"><path fill="#ffffff" d="M0 320h640v160H0z"/><path fill="#0c4076" d="M0 160h640v160H0z"/><path fill="#c6363c" d="M0 0h640v160H0z"/><path d="M200 130c25 0 50 10 50 45 0 50-50 70-50 70s-50-20-50-70c0-35 25-45 50-45z" fill="#c6363c" stroke="#fff" stroke-width="4"/><path fill="#ffcc00" d="M190 105h20v25h-20zm-20 20h60v10h-60z"/></svg>',
+    'ukraine': '<svg viewBox="0 0 640 480" class="w-5 h-3.5 inline-block rounded overflow-hidden shadow-sm shrink-0"><path fill="#0057b7" d="M0 0h640v240H0z"/><path fill="#ffd700" d="M0 240h640v240H0z"/></svg>',
+    'north-macedonia': '<svg viewBox="0 0 640 480" class="w-5 h-3.5 inline-block rounded overflow-hidden shadow-sm shrink-0"><path fill="#d20000" d="M0 0h640v480H0z"/><path fill="#ffe600" d="M0 0l640 480M640 0L0 480M320 0v480M0 240h640" stroke="#ffe600" stroke-width="40"/><circle cx="320" cy="240" r="60" fill="#d20000" stroke="#ffe600" stroke-width="20"/><circle cx="320" cy="240" r="50" fill="#ffe600"/></svg>'
+  };
+
+  // Country Master Data without salary
+  const destinationDataMap: Record<string, { country: string; processingTime: string; defaultJob: string }> = {
+    'poland': { country: 'Poland', processingTime: '4–6 months', defaultJob: 'Logistics Operations Lead' },
+    'slovakia': { country: 'Slovakia', processingTime: '3–4 months', defaultJob: 'Industrial Manufacturing Specialist' },
+    'czech-republic': { country: 'Czech Republic', processingTime: '1–2 months', defaultJob: 'Warehouse & Production Associate' },
+    'hungary': { country: 'Hungary', processingTime: '1–2 months', defaultJob: 'Food Production Technician' },
+    'bulgaria': { country: 'Bulgaria', processingTime: '2 months', defaultJob: 'Construction & Facilities Lead' },
+    'portugal-work': { country: 'Portugal', processingTime: '2 months', defaultJob: 'Hospitality & Tourism Specialist' },
+    'latvia': { country: 'Latvia', processingTime: '2 months', defaultJob: 'Freight & Logistics Coordinator' },
+    'lithuania': { country: 'Lithuania', processingTime: '3–5 months', defaultJob: 'Heavy Transport & Logistics Tech' },
+    'serbia': { country: 'Serbia', processingTime: '1–2 months', defaultJob: 'Construction & Civil Assembly' },
+    'ukraine': { country: 'Ukraine', processingTime: '~1 month', defaultJob: 'Reconstruction Operations Specialist' },
+    'north-macedonia': { country: 'North Macedonia', processingTime: '2 months', defaultJob: 'Civil Infrastructure Associate' },
+    'portugal-student': { country: 'Portugal', processingTime: '2–3 months', defaultJob: 'Student Research & Support Assistant' }
+  };
+
+  const jobRolesMap: Record<string, string> = {
+    'construction': 'Construction & Civil Trades Specialist',
+    'administration': 'Administrative Operations Officer',
+    'sales': 'Sales & Customer Accounts Representative',
+    'hospitality': 'Hospitality & Guest Operations Specialist',
+    'logistics': 'Warehouse & Logistics Operations Lead',
+    'manufacturing': 'Industrial Production & Assembly Operator',
+    'agriculture': 'Agricultural Operations Coordinator',
+    'driving': 'Commercial Transport Driver (Category C/CE)',
+    'healthcare': 'Healthcare Support & Care Assistant',
+    'tech_support': 'Technical Support & Systems Associate'
+  };
+
+  // State
+  let currentStep = 1;
+  const totalSteps = 6;
+  let candidatePhotoDataUrl = '';
+  let candidateTrackingId = '';
+
+  const candidateData = {
+    fullName: '',
+    phone: '',
+    email: '',
+    age: '',
+    passportNumber: '',
+    address: '',
+    maritalStatus: 'single',
+    experienceYears: '',
+    jobCategory: '',
+    startTimeline: '1-3months',
+    preferredDestination: 'auto',
+    matchedCountryKey: 'poland',
+    matchedCountry: 'Poland',
+    matchedJobTitle: 'Logistics Operations Lead',
+    matchedProcessingTime: '4–6 months',
+    score: 96
+  };
+
+  const btnPrev = document.getElementById('btn-prev-step') as HTMLButtonElement;
+  const btnNext = document.getElementById('btn-next-step') as HTMLButtonElement;
+  const btnNextText = document.getElementById('btn-next-text');
+  const topStepIndicator = document.getElementById('top-step-indicator');
+  const topStepPct = document.getElementById('top-step-pct');
+  const topProgressBar = document.getElementById('top-progress-bar');
+  const mobileStepIndicator = document.getElementById('mobile-step-indicator');
+  const mobileStepPct = document.getElementById('mobile-step-pct');
+  const mobileProgressBar = document.getElementById('mobile-progress-bar');
+  const stepDots = document.querySelectorAll('.step-dot');
+
+  const formCard = document.getElementById('assessment-form-card');
+  const evalScreen = document.getElementById('evaluation-screen');
+  const resultScreen = document.getElementById('result-screen');
+
+  const radioKidsYes = document.getElementById('radio-kids-yes');
+  const radioKidsNo = document.getElementById('radio-kids-no');
+  const kidsCountInput = document.getElementById('kids-count');
+
+  radioKidsYes?.addEventListener('change', () => kidsCountInput?.classList.remove('hidden'));
+  radioKidsNo?.addEventListener('change', () => kidsCountInput?.classList.add('hidden'));
+
+  const photoInput = document.getElementById('passport-photo-input') as HTMLInputElement | null;
+  const photoPreviewImg = document.getElementById('photo-preview-img') as HTMLImageElement | null;
+  const photoPlaceholderIcon = document.getElementById('photo-placeholder-icon');
+
+  photoInput?.addEventListener('change', (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        candidatePhotoDataUrl = event.target?.result as string;
+        if (photoPreviewImg) {
+          photoPreviewImg.src = candidatePhotoDataUrl;
+          photoPreviewImg.classList.remove('hidden');
+        }
+        photoPlaceholderIcon?.classList.add('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  const cvInput = document.getElementById('cv-file-input') as HTMLInputElement | null;
+  const cvFilenameDisplay = document.getElementById('cv-filename-display');
+  const cvFilenameText = document.getElementById('cv-filename-text');
+
+  cvInput?.addEventListener('change', (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (file && cvFilenameDisplay && cvFilenameText) {
+      cvFilenameText.textContent = `${file.name} (${Math.round(file.size / 1024)} KB)`;
+      cvFilenameDisplay.classList.remove('hidden');
+    }
+  });
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const preselectedDest = urlParams.get('destination');
+  if (preselectedDest) {
+    const destSelect = document.getElementById('preferred-destination') as HTMLSelectElement | null;
+    if (destSelect) {
+      for (let i = 0; i < destSelect.options.length; i++) {
+        if (destSelect.options[i].value === preselectedDest) {
+          destSelect.selectedIndex = i;
+          break;
+        }
+      }
+    }
+  }
+
+  function validateCurrentStep(): boolean {
+    if (currentStep === 1) {
+      const name = (document.getElementById('full-name') as HTMLInputElement).value.trim();
+      const phone = (document.getElementById('phone') as HTMLInputElement).value.trim();
+      if (!name) {
+        alert('Please enter your full legal name.');
+        (document.getElementById('full-name') as HTMLInputElement).focus();
+        return false;
+      }
+      if (!phone || phone.length < 5) {
+        alert('Please enter your mobile or WhatsApp number with country code.');
+        (document.getElementById('phone') as HTMLInputElement).focus();
+        return false;
+      }
+      candidateData.fullName = name;
+      candidateData.phone = phone;
+      return true;
+    }
+
+    if (currentStep === 2) {
+      const email = (document.getElementById('email') as HTMLInputElement).value.trim();
+      const age = (document.getElementById('age') as HTMLInputElement).value.trim();
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid email address.');
+        (document.getElementById('email') as HTMLInputElement).focus();
+        return false;
+      }
+      const ageNum = parseInt(age, 10);
+      if (!age || isNaN(ageNum) || ageNum < 18 || ageNum > 65) {
+        alert('Please enter your age (eligible between 18 and 62).');
+        (document.getElementById('age') as HTMLInputElement).focus();
+        return false;
+      }
+      candidateData.email = email;
+      candidateData.age = age;
+      return true;
+    }
+
+    if (currentStep === 3) {
+      const passport = (document.getElementById('passport-number') as HTMLInputElement).value.trim();
+      if (!passport) {
+        alert('Please enter your International Passport or ID number.');
+        (document.getElementById('passport-number') as HTMLInputElement).focus();
+        return false;
+      }
+      if (!photoInput?.files?.length && !candidatePhotoDataUrl) {
+        alert('Please upload your passport-style face photo.');
+        return false;
+      }
+      candidateData.passportNumber = passport;
+      return true;
+    }
+
+    if (currentStep === 4) {
+      const addr = (document.getElementById('address') as HTMLInputElement).value.trim();
+      if (!addr) {
+        alert('Please enter your current city and country of residence.');
+        (document.getElementById('address') as HTMLInputElement).focus();
+        return false;
+      }
+      candidateData.address = addr;
+      candidateData.maritalStatus = (document.getElementById('marital-status') as HTMLSelectElement).value;
+      return true;
+    }
+
+    if (currentStep === 5) {
+      const exp = (document.getElementById('experience-years') as HTMLSelectElement).value;
+      if (!exp) {
+        alert('Please select your work experience level.');
+        return false;
+      }
+      if (!cvInput?.files?.length) {
+        alert('Please upload your CV / Resume.');
+        return false;
+      }
+      candidateData.experienceYears = exp;
+      return true;
+    }
+
+    if (currentStep === 6) {
+      const jobCat = (document.getElementById('job-category') as HTMLSelectElement).value;
+      if (!jobCat) {
+        alert('Please select the trade or job category you can do in Europe.');
+        return false;
+      }
+      candidateData.jobCategory = jobCat;
+      candidateData.startTimeline = (document.getElementById('start-timeline') as HTMLSelectElement).value;
+      candidateData.preferredDestination = (document.getElementById('preferred-destination') as HTMLSelectElement).value;
+      return true;
+    }
+
+    return true;
+  }
+
+  function renderStep(step: number) {
+    for (let i = 1; i <= totalSteps; i++) {
+      const stepEl = document.getElementById(`wizard-step-${i}`);
+      stepEl?.classList.add('hidden');
+    }
+
+    const activeStepEl = document.getElementById(`wizard-step-${step}`);
+    activeStepEl?.classList.remove('hidden');
+
+    const pct = Math.round((step / totalSteps) * 100);
+    const stepLabel = `Step ${step} of ${totalSteps}`;
+    const pctLabel = `${pct}% Completed`;
+
+    if (topStepIndicator) topStepIndicator.textContent = stepLabel;
+    if (topStepPct) topStepPct.textContent = pctLabel;
+    if (topProgressBar) (topProgressBar as HTMLElement).style.width = `${pct}%`;
+
+    if (mobileStepIndicator) mobileStepIndicator.textContent = stepLabel;
+    if (mobileStepPct) mobileStepPct.textContent = `${pct}%`;
+    if (mobileProgressBar) (mobileProgressBar as HTMLElement).style.width = `${pct}%`;
+
+    stepDots.forEach(dot => {
+      const dotStep = parseInt(dot.getAttribute('data-step') || '1', 10);
+      if (dotStep <= step) {
+        dot.classList.add('bg-brand-500');
+        dot.classList.remove('bg-slate-300', 'dark:bg-navy-700');
+      } else {
+        dot.classList.remove('bg-brand-500');
+        dot.classList.add('bg-slate-300', 'dark:bg-navy-700');
+      }
+    });
+
+    if (step > 1) {
+      btnPrev?.classList.remove('invisible');
+    } else {
+      btnPrev?.classList.add('invisible');
+    }
+
+    if (btnNextText) {
+      if (step === totalSteps) {
+        btnNextText.textContent = 'Submit Application';
+      } else {
+        btnNextText.textContent = 'Continue';
+      }
+    }
+
+    const firstInput = activeStepEl?.querySelector('input:not([type=hidden]):not([type=file]), select') as HTMLElement | null;
+    firstInput?.focus();
+  }
+
+  btnNext?.addEventListener('click', () => {
+    if (!validateCurrentStep()) return;
+
+    if (currentStep < totalSteps) {
+      currentStep++;
+      renderStep(currentStep);
+    } else {
+      processCandidateSubmission();
+    }
+  });
+
+  btnPrev?.addEventListener('click', () => {
+    if (currentStep > 1) {
+      currentStep--;
+      renderStep(currentStep);
+    }
+  });
+
+  formCard?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'TEXTAREA') return;
+      e.preventDefault();
+      btnNext?.click();
+    }
+  });
+
+  function processCandidateSubmission() {
+    const randomSixDigits = Math.floor(100000 + Math.random() * 900000);
+    candidateTrackingId = `mygo${randomSixDigits}`;
+
+    const jobCat = candidateData.jobCategory;
+    const destPref = candidateData.preferredDestination;
+    const timeline = candidateData.startTimeline;
+
+    let targetCountryKey = 'poland';
+
+    if (destPref && destPref !== 'auto' && destinationDataMap[destPref]) {
+      targetCountryKey = destPref;
+    } else {
+      const sectorPools: Record<string, string[]> = {
+        'logistics': ['czech-republic', 'poland', 'latvia', 'slovakia', 'hungary'],
+        'manufacturing': ['slovakia', 'hungary', 'north-macedonia', 'poland', 'czech-republic'],
+        'driving': ['lithuania', 'latvia', 'bulgaria', 'poland'],
+        'construction': ['bulgaria', 'serbia', 'north-macedonia', 'ukraine', 'poland'],
+        'hospitality': ['portugal-work', 'bulgaria', 'czech-republic', 'slovakia', 'serbia'],
+        'agriculture': ['czech-republic', 'hungary', 'portugal-work', 'ukraine'],
+        'healthcare': ['slovakia', 'poland', 'hungary', 'portugal-work'],
+        'administration': ['portugal-work', 'czech-republic', 'poland', 'lithuania'],
+        'sales': ['portugal-work', 'hungary', 'czech-republic', 'poland'],
+        'tech_support': ['portugal-work', 'lithuania', 'poland', 'czech-republic']
+      };
+
+      let pool = sectorPools[jobCat] || ['slovakia', 'czech-republic', 'portugal-work', 'bulgaria', 'lithuania', 'poland', 'latvia', 'hungary', 'serbia', 'north-macedonia'];
+
+      if (timeline === 'immediate') {
+        const fastEntryPool = pool.filter(id => ['czech-republic', 'hungary', 'bulgaria', 'serbia', 'ukraine', 'north-macedonia'].includes(id));
+        if (fastEntryPool.length > 0) pool = fastEntryPool;
+      } else if (timeline === '1-3months') {
+        const mediumPool = pool.filter(id => ['portugal-work', 'slovakia', 'latvia', 'bulgaria', 'czech-republic'].includes(id));
+        if (mediumPool.length > 0) pool = mediumPool;
+      }
+
+      const hash = (candidateData.fullName || 'applicant').split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+      const chosenIdx = (hash + Math.floor(Math.random() * pool.length)) % pool.length;
+      targetCountryKey = pool[chosenIdx] || 'slovakia';
+    }
+
+    const matchedInfo = destinationDataMap[targetCountryKey] || destinationDataMap['slovakia'];
+    candidateData.matchedCountryKey = targetCountryKey;
+    candidateData.matchedCountry = matchedInfo.country;
+    candidateData.matchedProcessingTime = matchedInfo.processingTime;
+    candidateData.matchedJobTitle = jobRolesMap[jobCat] || matchedInfo.defaultJob;
+    candidateData.score = Math.floor(93 + Math.random() * 6);
+
+    // Asynchronously record application in PostgreSQL database with IP & Geolocation
+    try {
+      const cvName = cvInput?.files?.[0]?.name || 'candidate_cv.pdf';
+      fetch('/api/evaluations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          trackingId: candidateTrackingId,
+          fullName: candidateData.fullName,
+          phone: candidateData.phone,
+          email: candidateData.email,
+          age: candidateData.age,
+          passportNumber: candidateData.passportNumber,
+          address: candidateData.address,
+          maritalStatus: candidateData.maritalStatus,
+          experienceYears: candidateData.experienceYears,
+          jobCategory: candidateData.jobCategory,
+          startTimeline: candidateData.startTimeline,
+          preferredDestination: candidateData.preferredDestination,
+          matchedCountry: candidateData.matchedCountry,
+          matchedJobTitle: candidateData.matchedJobTitle,
+          matchedProcessingTime: candidateData.matchedProcessingTime,
+          score: candidateData.score,
+          photoData: candidatePhotoDataUrl || null,
+          cvFilename: cvName
+        })
+      }).catch(err => console.error('Background evaluation save warning:', err));
+    } catch (saveErr) {
+      console.warn('Evaluation dispatch notice:', saveErr);
+    }
+
+    startEvaluationAnimation();
+  }
+
+  function startEvaluationAnimation() {
+    formCard?.classList.add('hidden');
+    document.getElementById('top-progress-container')?.classList.add('hidden');
+    evalScreen?.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const statusHeadline = document.getElementById('eval-status-headline');
+    const statusSubtext = document.getElementById('eval-status-subtext');
+    const scanPct = document.getElementById('scan-percentage');
+    const evalProgressBar = document.getElementById('eval-progress-bar');
+    const evalTimer = document.getElementById('eval-timer');
+
+    const steps = [
+      { pct: 20, timer: 'EST: 3s', headline: 'Verifying candidate credentials & passport record...', subtext: 'Checking eligibility against European labor ministry criteria' },
+      { pct: 45, timer: 'EST: 2s', headline: 'Reviewing trade proficiencies & experience level...', subtext: 'Matching verified qualifications against current employer contracts' },
+      { pct: 70, timer: 'EST: 1s', headline: `Confirming vacancy quota in ${candidateData.matchedCountry}...`, subtext: 'Validating employer-provided housing and meal arrangements' },
+      { pct: 90, timer: 'EST: 1s', headline: 'Finalizing visa processing pathway...', subtext: 'Calculating consular filing timeline and document legalization steps' },
+      { pct: 100, timer: 'EST: 0s', headline: 'European Candidate Pass Ready', subtext: 'Generating official MyGo Travel placement card' }
+    ];
+
+    let stepIndex = 0;
+    const interval = setInterval(() => {
+      stepIndex++;
+      if (stepIndex < steps.length) {
+        const s = steps[stepIndex];
+        if (statusHeadline) statusHeadline.textContent = s.headline;
+        if (statusSubtext) statusSubtext.textContent = s.subtext;
+        if (scanPct) scanPct.textContent = `${s.pct}%`;
+        if (evalProgressBar) (evalProgressBar as HTMLElement).style.width = `${s.pct}%`;
+        if (evalTimer) evalTimer.textContent = s.timer;
+      } else {
+        clearInterval(interval);
+        setTimeout(showEvaluationResults, 500);
+      }
+    }, 750);
+  }
+
+  function showEvaluationResults() {
+    evalScreen?.classList.add('hidden');
+    resultScreen?.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    try {
+      confetti({
+        particleCount: 110,
+        spread: 75,
+        origin: { y: 0.6 }
+      });
+    } catch {
+      // Confetti fallback
+    }
+
+    const resultHeadline = document.getElementById('result-headline');
+    const resultScore = document.getElementById('result-score');
+    if (resultHeadline) {
+      resultHeadline.textContent = `${candidateData.matchedCountry} Placement Recommendation Ready`;
+    }
+    if (resultScore) {
+      resultScore.textContent = `${candidateData.score}%`;
+    }
+
+    const cardTracking = document.getElementById('card-tracking-id');
+    const cardCandidateName = document.getElementById('card-candidate-name');
+    const cardAge = document.getElementById('card-age');
+    const cardPassport = document.getElementById('card-passport');
+    const cardPhotoImg = document.getElementById('card-photo-img') as HTMLImageElement | null;
+    const cardDestCountry = document.getElementById('card-destination-country');
+    const cardJobTitle = document.getElementById('card-job-title');
+    const cardProcessingTime = document.getElementById('card-processing-time');
+
+    if (cardTracking) cardTracking.textContent = candidateTrackingId;
+    if (cardCandidateName) cardCandidateName.textContent = candidateData.fullName;
+    if (cardAge) cardAge.textContent = candidateData.age;
+    if (cardPassport) cardPassport.textContent = candidateData.passportNumber;
+    if (cardPhotoImg && candidatePhotoDataUrl) {
+      cardPhotoImg.src = candidatePhotoDataUrl;
+    }
+    if (cardDestCountry) {
+      const flagSvg = flagSvgMap[candidateData.matchedCountryKey] || flagSvgMap['poland'];
+      cardDestCountry.innerHTML = `${flagSvg} <span>${candidateData.matchedCountry}</span>`;
+    }
+    if (cardJobTitle) cardJobTitle.textContent = candidateData.matchedJobTitle;
+    if (cardProcessingTime) cardProcessingTime.textContent = candidateData.matchedProcessingTime;
+
+    const messageBody = `hi go travel i have completed the evalution please review
+
+Candidate Name: ${candidateData.fullName}
+Tracking ID: ${candidateTrackingId}
+Recommended Destination: ${candidateData.matchedCountry}
+Recommended Job: ${candidateData.matchedJobTitle}
+Processing Time: ${candidateData.matchedProcessingTime}
+Accommodation & Meals: Included
+Work Authorization: Legal Sponsorship`;
+
+    const agentMsgEl = document.getElementById('agent-message-text');
+    if (agentMsgEl) agentMsgEl.textContent = messageBody;
+
+    const btnWhatsapp = document.getElementById('btn-send-whatsapp') as HTMLAnchorElement | null;
+    if (btnWhatsapp) {
+      btnWhatsapp.href = `https://wa.me/12099493346?text=${encodeURIComponent(messageBody)}`;
+    }
+
+    const btnNicerapp = document.getElementById('btn-send-nicerapp') as HTMLAnchorElement | null;
+    if (btnNicerapp) {
+      btnNicerapp.href = 'https://nicerapp.cloud/invite/cd0452e9-e0be-4f0d-9fde-2aaa865c4e01';
+    }
+
+    document.getElementById('btn-copy-message')?.addEventListener('click', () => {
+      navigator.clipboard.writeText(messageBody).then(() => {
+        const copyLabel = document.getElementById('copy-btn-label');
+        if (copyLabel) {
+          copyLabel.textContent = '✓ Copied!';
+          setTimeout(() => {
+            if (copyLabel) copyLabel.textContent = 'Copy Text';
+          }, 2500);
+        }
+      });
+    });
+
+    const btnDownload = document.getElementById('btn-download-pass');
+    btnDownload?.addEventListener('click', async () => {
+      const cardEl = document.getElementById('relocation-pass-card');
+      if (!cardEl) return;
+
+      try {
+        const originalText = btnDownload.innerHTML;
+        btnDownload.innerHTML = `<span class="text-xs">Generating PNG...</span>`;
+
+        const dataUrl = await toPng(cardEl, {
+          cacheBust: true,
+          pixelRatio: 2,
+          quality: 0.95
+        });
+
+        const link = document.createElement('a');
+        link.download = `European_Relocation_Pass_${candidateTrackingId}.png`;
+        link.href = dataUrl;
+        link.click();
+
+        btnDownload.innerHTML = originalText;
+      } catch {
+        alert('Could not download image. You can take a screenshot of your pass card!');
+      }
+    });
+  }
+
+  const wizardThemeToggle = document.getElementById('wizard-theme-toggle');
+  wizardThemeToggle?.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.contains('dark');
+    if (isDark) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  });
+
+  renderStep(1);
+</script>

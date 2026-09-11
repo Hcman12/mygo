@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+  
+  body {
+    @apply bg-slate-50 text-slate-900 transition-colors duration-200 antialiased dark:bg-navy-950 dark:text-slate-100;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+.dark ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+::-webkit-scrollbar-thumb {
+  background: #FF5B26;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #e54512;
+}
+
+/* Structured card utility */
+.glass-card {
+  @apply bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-800 shadow-sm transition-all;
+}
+
+.glass-card-dark {
+  @apply bg-navy-900 border border-navy-800 shadow-lg;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-amber-500;
+}
+
+.text-gradient-navy {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-navy-800 to-brand-600 dark:from-white dark:to-brand-400;
+}
+
+/* Hologram candidate pass styling */
+.pass-hologram {
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,91,38,0.1) 50%, rgba(255,255,255,0.05) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.pass-hologram::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(255, 91, 38, 0.08) 50%,
+    transparent 55%
+  );
+  animation: shine 6s infinite linear;
+  pointer-events: none;
+}
+
+@keyframes shine {
+  0% { transform: translate(-30%, -30%) rotate(0deg); }
+  100% { transform: translate(30%, 30%) rotate(360deg); }
+}
