@@ -102,8 +102,8 @@ const educationDestinations = destinations.filter(d => d.category === 'education
             <div class="relative rounded-3xl overflow-hidden border-4 border-white dark:border-navy-800 shadow-2xl bg-slate-200 dark:bg-navy-800 aspect-[4/5]">
               <img 
                 id="hero-candidate-img"
-                src="/images/avatars/david.jpg" 
-                alt="Relocated Candidate" 
+                src="/images/waleed.jpg" 
+                alt="Waleed from Egypt" 
                 class="w-full h-full object-cover transition-all duration-500 filter contrast-105"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none"></div>
@@ -112,12 +112,12 @@ const educationDestinations = destinations.filter(d => d.category === 'education
             <!-- Floating Testimonial Quote Card (Matching Screenshot 1) -->
             <div class="absolute -bottom-6 -left-3 sm:-bottom-8 sm:-left-6 right-3 sm:right-auto z-20 bg-white/95 dark:bg-navy-900/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-navy-800 shadow-2xl max-w-sm sm:max-w-md text-left">
               <p id="hero-candidate-quote" class="text-xs sm:text-sm font-serif italic text-slate-800 dark:text-slate-100 leading-relaxed">
-                “ People who choose MyGo Travel to relocate witness integrity, legal precision, and true professionalism.”
+                “ Having clean housing arranged before my flight took all the fear out of moving to Europe.”
               </p>
               <div class="mt-3.5 flex items-center justify-between gap-2">
                 <div>
-                  <div id="hero-candidate-name" class="text-xs sm:text-sm font-bold text-amber-500">Nyathi from Zimbabwe</div>
-                  <div id="hero-candidate-dest" class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">Relocated to Slovakia · Hotel Logistics</div>
+                  <div id="hero-candidate-name" class="text-xs sm:text-sm font-bold text-amber-500">Waleed from Egypt</div>
+                  <div id="hero-candidate-dest" class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">Relocated to Czech Republic · Automotive Assembler</div>
                 </div>
                 <button 
                   type="button" 
@@ -130,11 +130,12 @@ const educationDestinations = destinations.filter(d => d.category === 'education
               </div>
             </div>
 
-            <!-- Slider Dots underneath -->
-            <div class="flex items-center justify-center gap-2 mt-12">
-              <button class="hero-dot w-2.5 h-2.5 rounded-full bg-tealbrand-600 transition-all cursor-pointer" data-idx="0" aria-label="Story 1"></button>
-              <button class="hero-dot w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-navy-700 transition-all cursor-pointer" data-idx="1" aria-label="Story 2"></button>
-              <button class="hero-dot w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-navy-700 transition-all cursor-pointer" data-idx="2" aria-label="Story 3"></button>
+            <!-- Verified Relocation Trust Badge underneath -->
+            <div class="flex items-center justify-center gap-2 mt-10 pt-2">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                Verified Candidate Placement
+              </span>
             </div>
 
           </div>
@@ -386,31 +387,31 @@ const educationDestinations = destinations.filter(d => d.category === 'education
       </button>
 
       <div class="flex items-center gap-4 mb-5">
-        <img id="modal-candidate-avatar" src="/images/avatars/david.jpg" alt="" class="w-16 h-16 rounded-2xl object-cover border border-amber-400" />
+        <img id="modal-candidate-avatar" src="/images/waleed.jpg" alt="Waleed from Egypt" class="w-16 h-16 rounded-2xl object-cover border border-amber-400" />
         <div>
           <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 mb-1">
             Verified Candidate Placement
           </span>
-          <h3 id="modal-candidate-name" class="text-lg font-black text-slate-900 dark:text-white">Nyathi from Zimbabwe</h3>
-          <p id="modal-candidate-role" class="text-xs text-slate-500 dark:text-slate-400">Hotel Logistics &amp; Hospitality · Slovakia</p>
+          <h3 id="modal-candidate-name" class="text-lg font-black text-slate-900 dark:text-white">Waleed from Egypt</h3>
+          <p id="modal-candidate-role" class="text-xs text-slate-500 dark:text-slate-400">Relocated to Czech Republic · Automotive Assembler</p>
         </div>
       </div>
 
       <div class="space-y-3.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 border-t border-slate-100 dark:border-navy-800 pt-4">
         <div class="p-3.5 rounded-2xl bg-[#FAF8F0] dark:bg-navy-950 border border-amber-300/40">
           <p id="modal-candidate-fullstory" class="italic font-serif leading-relaxed text-slate-800 dark:text-slate-100">
-            "I arrived in Bratislava in November. My company apartment was fully furnished with heating, hot water, and kitchen appliances. My hot meals on shift are completely covered by the employer, which allows me to remit over €900 every month back home."
+            "Arriving in Prague with airport reception and a dedicated MyGo case officer welcoming me directly into employer housing made all the difference. The meals on shift are great and my contract is guaranteed for 2 years."
           </p>
         </div>
 
         <div class="grid grid-cols-2 gap-3 text-center">
           <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800">
             <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Relocation Route</span>
-            <span id="modal-candidate-route" class="text-xs font-bold text-tealbrand-600">Slovakia (Fast-Track)</span>
+            <span id="modal-candidate-route" class="text-xs font-bold text-tealbrand-600">Czech Republic (Employee Card)</span>
           </div>
           <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800">
             <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Monthly Savings</span>
-            <span class="text-xs font-bold text-emerald-600">€900+ / month</span>
+            <span class="text-xs font-bold text-emerald-600">€1,100+ / month</span>
           </div>
         </div>
       </div>
@@ -429,73 +430,15 @@ const educationDestinations = destinations.filter(d => d.category === 'education
 </Layout>
 
 <script is:inline>
-  // Candidate Stories Carousel
+  // Candidate Story Spotlight & Modal
   (() => {
-    const stories = [
-      {
-        img: '/images/avatars/david.jpg',
-        quote: '“ People who choose MyGo Travel to relocate witness integrity, legal precision, and true professionalism.”',
-        name: 'Nyathi from Zimbabwe',
-        dest: 'Relocated to Slovakia · Hotel Logistics',
-        fullStory: 'I arrived in Bratislava in November. My company apartment was fully furnished with heating, hot water, and kitchen appliances. My hot meals on shift are completely covered by the employer, which allows me to remit over €900 every month back home.',
-        route: 'Slovakia (Fast-Track)'
-      },
-      {
-        img: '/images/avatars/elena.jpg',
-        quote: '“ My Schengen consular work permit was approved in less than 7 weeks with zero stress.”',
-        name: 'Elena from Moldova',
-        dest: 'Relocated to Poland · E-Commerce Logistics',
-        fullStory: 'The legal desk reviewed my documents, scheduled my embassy appointment in Chisinau, and I received my Schengen D-Visa on the first attempt without any delays or hidden legal fees.',
-        route: 'Poland (Schengen Permit)'
-      },
-      {
-        img: '/images/avatars/waleed.jpg',
-        quote: '“ Having clean housing arranged before my flight took all the fear out of moving to Europe.”',
-        name: 'Waleed from Egypt',
-        dest: 'Relocated to Czech Republic · Automotive Assembler',
-        fullStory: 'Arriving in Prague with airport reception and a dedicated MyGo case officer welcoming me directly into employer housing made all the difference. The meals on shift are great and my contract is guaranteed for 2 years.',
-        route: 'Czech Republic (Employee Card)'
-      }
-    ];
-
-    let activeIdx = 0;
-    const imgEl = document.getElementById('hero-candidate-img');
-    const quoteEl = document.getElementById('hero-candidate-quote');
-    const nameEl = document.getElementById('hero-candidate-name');
-    const destEl = document.getElementById('hero-candidate-dest');
-    const dots = document.querySelectorAll('.hero-dot');
-
-    function updateStory(idx) {
-      activeIdx = idx;
-      const s = stories[idx];
-      if (imgEl && quoteEl && nameEl && destEl) {
-        imgEl.src = s.img;
-        quoteEl.textContent = s.quote;
-        nameEl.textContent = s.name;
-        destEl.textContent = s.dest;
-      }
-
-      dots.forEach((d, i) => {
-        if (i === idx) {
-          d.className = 'hero-dot w-2.5 h-2.5 rounded-full bg-tealbrand-600 transition-all cursor-pointer';
-        } else {
-          d.className = 'hero-dot w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-navy-700 transition-all cursor-pointer';
-        }
-      });
-    }
-
-    dots.forEach((d) => {
-      d.addEventListener('click', () => {
-        const idx = parseInt(d.getAttribute('data-idx') || '0', 10);
-        updateStory(idx);
-      });
-    });
-
-    // Auto rotate every 6 seconds
-    setInterval(() => {
-      activeIdx = (activeIdx + 1) % stories.length;
-      updateStory(activeIdx);
-    }, 6000);
+    const story = {
+      img: '/images/waleed.jpg',
+      name: 'Waleed from Egypt',
+      role: 'Relocated to Czech Republic · Automotive Assembler',
+      fullStory: 'Arriving in Prague with airport reception and a dedicated MyGo case officer welcoming me directly into employer housing made all the difference. The meals on shift are great and my contract is guaranteed for 2 years.',
+      route: 'Czech Republic (Employee Card)'
+    };
 
     // Modal Handling
     const modal = document.getElementById('candidate-story-modal');
@@ -509,12 +452,11 @@ const educationDestinations = destinations.filter(d => d.category === 'education
 
     openBtn?.addEventListener('click', () => {
       if (!modal) return;
-      const s = stories[activeIdx];
-      if (modalAvatar) modalAvatar.src = s.img;
-      if (modalName) modalName.textContent = s.name;
-      if (modalRole) modalRole.textContent = s.dest;
-      if (modalFullStory) modalFullStory.textContent = `"${s.fullStory}"`;
-      if (modalRoute) modalRoute.textContent = s.route;
+      if (modalAvatar) modalAvatar.src = story.img;
+      if (modalName) modalName.textContent = story.name;
+      if (modalRole) modalRole.textContent = story.role;
+      if (modalFullStory) modalFullStory.textContent = `"${story.fullStory}"`;
+      if (modalRoute) modalRoute.textContent = story.route;
 
       modal.classList.remove('hidden');
       modal.classList.add('flex');
