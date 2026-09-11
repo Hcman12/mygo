@@ -3,6 +3,10 @@ import Layout from '../layouts/Layout.astro';
 import DestinationCard from '../components/DestinationCard.astro';
 import Testimonials from '../components/Testimonials.astro';
 import TeamSlider from '../components/TeamSlider.astro';
+import StepperPath from '../components/StepperPath.astro';
+import JobSearchFilter from '../components/JobSearchFilter.astro';
+import RequirementsChecklist from '../components/RequirementsChecklist.astro';
+import ConsultationBox from '../components/ConsultationBox.astro';
 import { destinations } from '../data/destinations';
 
 const schengenDestinations = destinations.filter(d => d.category === 'schengen');
@@ -11,73 +15,190 @@ const educationDestinations = destinations.filter(d => d.category === 'education
 ---
 
 <Layout 
-  title="MyGo Travel · European Jobs with Accommodation & Meals Included"
-  description="Relocate to Europe for guaranteed jobs with employer-provided accommodation and meals. Work in Poland, Slovakia, Czech Republic, Portugal, Lithuania, and more."
+  title="MyGo Travel · European Relocation & Jobs with Accommodation and Meals Included"
+  description="Official European work visa and relocation programs. Verified employers, embassy-ready documents, visa interview support, and guaranteed housing and meal stipends."
 >
   
-  <!-- HERO SECTION -->
-  <section class="relative pt-12 pb-20 sm:pt-20 sm:pb-28 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+  <!-- HERO SECTION (Inspired by Reference Screenshot 1) -->
+  <section class="relative pt-10 pb-16 sm:pt-16 sm:pb-24 bg-[#FAF8F0] dark:bg-navy-950 border-b border-slate-200/80 dark:border-navy-800 transition-colors overflow-hidden">
+    <!-- Ambient glows -->
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-tealbrand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+        
+        <!-- Left Column: Primary Copy -->
+        <div class="lg:col-span-7 text-center lg:text-left">
+          
+          <!-- Google 5-Star Rating & Founder Trust Pill (Matching Screenshot 1) -->
+          <div class="inline-flex items-center gap-3 bg-white dark:bg-navy-900 p-1.5 sm:p-2 pr-4 rounded-full border border-slate-200/80 dark:border-navy-800 shadow-sm mb-6">
+            <img 
+              src="/headshot/team-1.jpg" 
+              alt="Marcus Sterling" 
+              class="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover border border-amber-400 shrink-0" 
+            />
+            <div class="text-left">
+              <div class="flex items-center gap-1 text-[11px] font-black text-slate-900 dark:text-white">
+                <span class="text-[#4285F4] font-bold">G</span><span class="text-[#EA4335] font-bold">o</span><span class="text-[#FBBC05] font-bold">o</span><span class="text-[#4285F4] font-bold">g</span><span class="text-[#34A853] font-bold">l</span><span class="text-[#EA4335] font-bold">e</span>
+                <span class="text-amber-400 ml-1">★★★★★</span>
+              </div>
+              <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">based on 340+ verified candidate reviews</span>
+            </div>
+          </div>
+
+          <!-- Main Serif Headline (Matching Screenshot 1) -->
+          <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black font-serif tracking-tight text-slate-900 dark:text-white leading-[1.08] mb-6">
+            Immigrate to <br/>
+            <span class="text-tealbrand-600">Europe Legally</span>
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed font-normal">
+            Verified employers, embassy-ready documents, visa interview support from the #1 expert — with employer-guaranteed furnished housing and meal stipends.
+          </p>
+
+          <!-- Primary Action Buttons -->
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-10">
+            <a 
+              href="/assess" 
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-9 py-4 rounded-full font-black text-sm sm:text-base text-white bg-tealbrand-600 hover:bg-tealbrand-700 shadow-md hover:shadow-lg transition-all duration-150 transform hover:-translate-y-0.5 cursor-pointer"
+            >
+              <span>Apply Now</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+
+            <a 
+              href="#jobs" 
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-sm sm:text-base text-slate-700 dark:text-slate-200 bg-white dark:bg-navy-900 hover:bg-slate-50 dark:hover:bg-navy-800 border border-slate-200 dark:border-navy-800 shadow-sm transition cursor-pointer"
+            >
+              <span>Select Best Fit Jobs</span>
+            </a>
+          </div>
+
+          <!-- Fast Highlights -->
+          <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-200/80 dark:border-navy-800/80 max-w-lg mx-auto lg:mx-0 text-center lg:text-left">
+            <div>
+              <span class="block text-xl sm:text-2xl font-black text-tealbrand-600">8+ Years</span>
+              <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Immigration Leadership</span>
+            </div>
+            <div>
+              <span class="block text-xl sm:text-2xl font-black text-amber-500">100% Free</span>
+              <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Housing &amp; Meals</span>
+            </div>
+            <div>
+              <span class="block text-xl sm:text-2xl font-black text-slate-900 dark:text-white">9,000+</span>
+              <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Workers Relocated</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Candidate Success Story Spotlight (Matching Screenshot 1) -->
+        <div class="lg:col-span-5 relative flex justify-center">
+          <div class="relative w-full max-w-md">
+            
+            <!-- Main Candidate Portrait Photo -->
+            <div class="relative rounded-3xl overflow-hidden border-4 border-white dark:border-navy-800 shadow-2xl bg-slate-200 dark:bg-navy-800 aspect-[4/5]">
+              <img 
+                id="hero-candidate-img"
+                src="/images/avatars/david.jpg" 
+                alt="Relocated Candidate" 
+                class="w-full h-full object-cover transition-all duration-500 filter contrast-105"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none"></div>
+            </div>
+
+            <!-- Floating Testimonial Quote Card (Matching Screenshot 1) -->
+            <div class="absolute -bottom-6 -left-3 sm:-bottom-8 sm:-left-6 right-3 sm:right-auto z-20 bg-white/95 dark:bg-navy-900/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-navy-800 shadow-2xl max-w-sm sm:max-w-md text-left">
+              <p id="hero-candidate-quote" class="text-xs sm:text-sm font-serif italic text-slate-800 dark:text-slate-100 leading-relaxed">
+                “ People who choose MyGo Travel to relocate witness integrity, legal precision, and true professionalism.”
+              </p>
+              <div class="mt-3.5 flex items-center justify-between gap-2">
+                <div>
+                  <div id="hero-candidate-name" class="text-xs sm:text-sm font-bold text-amber-500">Nyathi from Zimbabwe</div>
+                  <div id="hero-candidate-dest" class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">Relocated to Slovakia · Hotel Logistics</div>
+                </div>
+                <button 
+                  type="button" 
+                  id="btn-hero-video"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-bold bg-amber-400 text-slate-950 hover:bg-amber-300 shadow-sm transition shrink-0 cursor-pointer"
+                >
+                  <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  <span>Watch Story</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Slider Dots underneath -->
+            <div class="flex items-center justify-center gap-2 mt-12">
+              <button class="hero-dot w-2.5 h-2.5 rounded-full bg-tealbrand-600 transition-all cursor-pointer" data-idx="0" aria-label="Story 1"></button>
+              <button class="hero-dot w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-navy-700 transition-all cursor-pointer" data-idx="1" aria-label="Story 2"></button>
+              <button class="hero-dot w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-navy-700 transition-all cursor-pointer" data-idx="2" aria-label="Story 3"></button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- 4-STEP PATH TIMELINE (Inspired by Screenshot 2) -->
+  <StepperPath />
+
+
+  <!-- SELECT BEST FIT WITH EMPLOYER IN EUROPE (Inspired by Screenshot 2) -->
+  <JobSearchFilter />
+
+
+  <!-- BEFORE YOU START: ESSENTIAL REQUIREMENTS (Inspired by Screenshot 2) -->
+  <RequirementsChecklist />
+
+
+  <!-- DESTINATIONS CATALOG SECTION (`#destinations`) -->
+  <section id="destinations" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <!-- Top Status Badge -->
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-100 dark:bg-navy-900 border border-slate-200 dark:border-navy-800 text-xs text-slate-700 dark:text-slate-300 font-semibold mb-8">
-        <span class="w-2 h-2 rounded-full bg-brand-500"></span>
-        <span>Work & Relocation Programs 2026</span>
-        <span class="text-slate-300 dark:text-slate-700">|</span>
-        <span class="text-emerald-600 dark:text-emerald-400 font-medium">Accommodation & Meals Guaranteed</span>
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tealbrand-500/10 border border-tealbrand-500/20 text-tealbrand-700 dark:text-tealbrand-400 text-xs font-bold mb-3">
+            <span>Official European Quotas</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-black font-serif text-slate-900 dark:text-white tracking-tight">
+            Work &amp; Relocation Destinations
+          </h2>
+          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2 max-w-xl">
+            Choose from Schengen Zone employment destinations, Fast-Track Non-Schengen programs, or European Student Work Routes.
+          </p>
+        </div>
+
+        <!-- Filter Tab Buttons -->
+        <div class="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-slate-200/80 dark:bg-navy-900 border border-slate-300/80 dark:border-navy-800" id="dest-filters">
+          <button class="filter-btn active px-4 py-2 rounded-xl text-xs font-bold text-white bg-tealbrand-600 transition-all cursor-pointer" data-filter="all">
+            All Programs ({destinations.length})
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-tealbrand-600 transition-all cursor-pointer" data-filter="schengen">
+            Schengen ({schengenDestinations.length})
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-tealbrand-600 transition-all cursor-pointer" data-filter="non-schengen">
+            Fast Entry Non-Schengen ({nonSchengenDestinations.length})
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-tealbrand-600 transition-all cursor-pointer" data-filter="education">
+            Education Route ({educationDestinations.length})
+          </button>
+        </div>
       </div>
 
-      <!-- Main Headline -->
-      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.1] max-w-5xl mx-auto mb-6">
-        Relocate to Europe for Verified Jobs with 
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 via-amber-500 to-brand-600">
-          Housing & Meals Included.
-        </span>
-      </h1>
-
-      <!-- Subtitle -->
-      <p class="text-base sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-10 leading-relaxed font-normal">
-        Your trusted visa and relocation agency for legal employment across Schengen and Fast-Track European nations. We secure your contract, visa permits, flights, and welcoming living arrangements.
-      </p>
-
-      <!-- CTA Buttons -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto mb-14">
-        <a 
-          href="/assess" 
-          class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-extrabold text-base text-white bg-brand-500 hover:bg-brand-600 shadow-md hover:shadow-lg transition-all duration-150 cursor-pointer"
-        >
-          <span>Start Relocation Evaluation</span>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-          </svg>
-        </a>
-
-        <a 
-          href="#destinations" 
-          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-base text-slate-800 dark:text-slate-200 bg-slate-200/70 dark:bg-navy-800/80 hover:bg-slate-300 dark:hover:bg-navy-700 border border-slate-300 dark:border-navy-700 transition-all cursor-pointer"
-        >
-          <span>Explore Destinations</span>
-        </a>
-      </div>
-
-      <!-- Quick Trust Indicators -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-6 border-t border-slate-200 dark:border-navy-800/80">
-        <div class="p-3 text-center">
-          <span class="block text-2xl sm:text-3xl font-black text-brand-500">11+</span>
-          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">European Countries</span>
-        </div>
-        <div class="p-3 text-center">
-          <span class="block text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">Competitive</span>
-          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Monthly Pay Packages</span>
-        </div>
-        <div class="p-3 text-center">
-          <span class="block text-2xl sm:text-3xl font-black text-emerald-500">100% Free</span>
-          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Accommodation & Meals</span>
-        </div>
-        <div class="p-3 text-center">
-          <span class="block text-2xl sm:text-3xl font-black text-brand-500">1–2 Months</span>
-          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Fast-Track Entry Options</span>
-        </div>
+      <!-- Destinations Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="destinations-grid">
+        {destinations.map((destination) => (
+          <div class="destination-item" data-category={destination.category}>
+            <DestinationCard destination={destination} />
+          </div>
+        ))}
       </div>
 
     </div>
@@ -89,7 +210,7 @@ const educationDestinations = destinations.filter(d => d.category === 'education
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-3xl mx-auto mb-12">
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+        <h2 class="text-3xl sm:text-4xl font-extrabold font-serif text-slate-900 dark:text-white">
           Why Job Seekers Choose MyGo Travel
         </h2>
         <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-3">
@@ -100,8 +221,8 @@ const educationDestinations = destinations.filter(d => d.category === 'education
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         
         <!-- Perk 1: Accommodation -->
-        <div class="bg-white dark:bg-navy-900 rounded-2xl p-8 border border-slate-200 dark:border-navy-800 shadow-sm relative group hover:border-brand-500 transition-all">
-          <div class="w-12 h-12 rounded-xl bg-brand-500/10 text-brand-500 flex items-center justify-center mb-6">
+        <div class="bg-white dark:bg-navy-900 rounded-2xl p-8 border border-slate-200 dark:border-navy-800 shadow-sm relative group hover:border-tealbrand-500 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-tealbrand-500/10 text-tealbrand-600 flex items-center justify-center mb-6">
             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
             </svg>
@@ -118,14 +239,14 @@ const educationDestinations = destinations.filter(d => d.category === 'education
         </div>
 
         <!-- Perk 2: Meals -->
-        <div class="bg-white dark:bg-navy-900 rounded-2xl p-8 border border-slate-200 dark:border-navy-800 shadow-sm relative group hover:border-brand-500 transition-all">
+        <div class="bg-white dark:bg-navy-900 rounded-2xl p-8 border border-slate-200 dark:border-navy-800 shadow-sm relative group hover:border-amber-500 transition-all">
           <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mb-6">
             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
             </svg>
           </div>
           <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
-            Meals & Food Subsidies
+            Meals &amp; Food Subsidies
           </h3>
           <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
             Employers provide hot canteen meals on shift, meal cards, or monthly tax-free food stipends so you never have to worry about dining costs.
@@ -136,8 +257,8 @@ const educationDestinations = destinations.filter(d => d.category === 'education
         </div>
 
         <!-- Perk 3: Legal Visa & Schengen Access -->
-        <div class="bg-white dark:bg-navy-900 rounded-2xl p-8 border border-slate-200 dark:border-navy-800 shadow-sm relative group hover:border-brand-500 transition-all">
-          <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-6">
+        <div class="bg-white dark:bg-navy-900 rounded-2xl p-8 border border-slate-200 dark:border-navy-800 shadow-sm relative group hover:border-tealbrand-500 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-tealbrand-500/10 text-tealbrand-600 flex items-center justify-center mb-6">
             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
             </svg>
@@ -159,134 +280,16 @@ const educationDestinations = destinations.filter(d => d.category === 'education
   </section>
 
 
-  <!-- DESTINATIONS CATALOG SECTION (`#destinations`) -->
-  <section id="destinations" class="py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <!-- Section Header -->
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-        <div>
-          <h2 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-            Work & Relocation Destinations
-          </h2>
-          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2 max-w-xl">
-            Choose from Schengen Zone employment destinations, Fast-Track Non-Schengen programs, or European Student Work Routes.
-          </p>
-        </div>
-
-        <!-- Filter Tab Buttons -->
-        <div class="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-slate-200/80 dark:bg-navy-900 border border-slate-300/80 dark:border-navy-800" id="dest-filters">
-          <button class="filter-btn active px-4 py-2 rounded-xl text-xs font-bold text-white bg-brand-500 transition-all" data-filter="all">
-            All Programs ({destinations.length})
-          </button>
-          <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-brand-500 transition-all" data-filter="schengen">
-            Schengen ({schengenDestinations.length})
-          </button>
-          <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-brand-500 transition-all" data-filter="non-schengen">
-            Fast Entry Non-Schengen ({nonSchengenDestinations.length})
-          </button>
-          <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-brand-500 transition-all" data-filter="education">
-            Education Route ({educationDestinations.length})
-          </button>
-        </div>
-      </div>
-
-      <!-- Destinations Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="destinations-grid">
-        {destinations.map((destination) => (
-          <div class="destination-item" data-category={destination.category}>
-            <DestinationCard destination={destination} />
-          </div>
-        ))}
-      </div>
-
-    </div>
-  </section>
-
-
   <!-- CLIENT TESTIMONIALS SECTION -->
   <Testimonials />
 
-  <!-- MEET OUR TEAM SLIDER SECTION -->
+
+  <!-- MEET OUR TEAM SLIDER SECTION (Matching Screenshots) -->
   <TeamSlider />
 
 
-  <!-- HOW IT WORKS SECTION (`#how-it-works`) -->
-  <section id="how-it-works" class="py-20 bg-slate-100/70 dark:bg-navy-900/40 border-y border-slate-200 dark:border-navy-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
-          How Your European Journey Unfolds
-        </h2>
-        <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">
-          From your initial evaluation to collecting your apartment keys in Europe:
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        
-        <!-- Step 1 -->
-        <div class="bg-white dark:bg-navy-900 rounded-xl p-6 border border-slate-200 dark:border-navy-800 shadow-sm relative text-center">
-          <div class="w-10 h-10 rounded-lg bg-brand-500 text-white font-bold text-sm flex items-center justify-center mx-auto mb-4">
-            1
-          </div>
-          <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">Profile Intake</h3>
-          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            Fill out your profile, upload your resume and passport photo, and receive your verified MyGo Candidate ID.
-          </p>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="bg-white dark:bg-navy-900 rounded-xl p-6 border border-slate-200 dark:border-navy-800 shadow-sm relative text-center">
-          <div class="w-10 h-10 rounded-lg bg-amber-500 text-white font-bold text-sm flex items-center justify-center mx-auto mb-4">
-            2
-          </div>
-          <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">Employer Matching</h3>
-          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            We match you with vetted European employers who issue your formal job contract guaranteeing housing and meal stipends.
-          </p>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="bg-white dark:bg-navy-900 rounded-xl p-6 border border-slate-200 dark:border-navy-800 shadow-sm relative text-center">
-          <div class="w-10 h-10 rounded-lg bg-blue-500 text-white font-bold text-sm flex items-center justify-center mx-auto mb-4">
-            3
-          </div>
-          <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">Visa & Work Permit</h3>
-          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            Our legal desk handles the European government work permit filing, apostilles, and prepares you for your embassy appointment.
-          </p>
-        </div>
-
-        <!-- Step 4 -->
-        <div class="bg-white dark:bg-navy-900 rounded-xl p-6 border border-slate-200 dark:border-navy-800 shadow-sm relative text-center">
-          <div class="w-10 h-10 rounded-lg bg-emerald-500 text-white font-bold text-sm flex items-center justify-center mx-auto mb-4">
-            4
-          </div>
-          <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">Arrival & Move-In</h3>
-          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            Airport reception in Europe, check-in to your furnished accommodation, meal voucher orientation, and start your job!
-          </p>
-        </div>
-
-      </div>
-
-      <!-- CTA inside How it Works -->
-      <div class="text-center mt-12">
-        <a 
-          href="/assess" 
-          class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-sm text-white bg-brand-500 hover:bg-brand-600 shadow-md transition-all"
-        >
-          <span>Begin Relocation Assessment</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-          </svg>
-        </a>
-      </div>
-
-    </div>
-  </section>
+  <!-- QUICK CONSULTATION LEAD CAPTURE SECTION (Matching Screenshot 1) -->
+  <ConsultationBox />
 
 
   <!-- DEDICATED SUPPORT & HELP DESK HIGHLIGHT (`#contact`) -->
@@ -294,15 +297,15 @@ const educationDestinations = destinations.filter(d => d.category === 'education
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="bg-white dark:bg-navy-900 rounded-3xl p-8 sm:p-12 border border-slate-200 dark:border-navy-800 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-8">
         <div class="max-w-2xl space-y-4 text-center lg:text-left">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-600 dark:text-brand-400 text-xs font-bold">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tealbrand-500/10 border border-tealbrand-500/20 text-tealbrand-700 dark:text-tealbrand-400 text-xs font-bold">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
             <span>Dedicated Admissions Support Desk</span>
           </div>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h2 class="text-3xl sm:text-4xl font-extrabold font-serif text-slate-900 dark:text-white tracking-tight">
             Have Questions About Relocation or Your Application?
           </h2>
           <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-            Our official admissions directorate provides 24/7 assistance for visa requirements, housing verifications, and candidate tracking. Contact us directly at <a href="mailto:support@mygotravel.eu" class="font-bold text-brand-500 hover:underline">support@mygotravel.eu</a> or access our dedicated Help Desk.
+            Our official admissions directorate provides 24/7 assistance for visa requirements, housing verifications, and candidate tracking. Contact us directly at <a href="mailto:support@mygotravel.eu" class="font-bold text-tealbrand-600 hover:underline">support@mygotravel.eu</a> or access our dedicated Help Desk.
           </p>
           <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2 text-xs text-slate-500 dark:text-slate-400">
             <span class="flex items-center gap-1.5 font-medium">
@@ -319,7 +322,7 @@ const educationDestinations = destinations.filter(d => d.category === 'education
         <div class="flex flex-col sm:flex-row lg:flex-col gap-3.5 shrink-0 w-full sm:w-auto">
           <a 
             href="/support" 
-            class="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl font-extrabold text-sm sm:text-base text-white bg-brand-500 hover:bg-brand-600 shadow-md hover:shadow-lg transition duration-150 cursor-pointer text-center"
+            class="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl font-extrabold text-sm sm:text-base text-white bg-tealbrand-600 hover:bg-tealbrand-700 shadow-md hover:shadow-lg transition duration-150 cursor-pointer text-center"
           >
             <span>Open Support &amp; Help Desk</span>
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -328,7 +331,7 @@ const educationDestinations = destinations.filter(d => d.category === 'education
             href="mailto:support@mygotravel.eu" 
             class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-bold text-sm text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-navy-800 hover:bg-slate-200 dark:hover:bg-navy-700 border border-slate-200 dark:border-navy-700 transition cursor-pointer text-center"
           >
-            <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <svg class="w-4 h-4 text-tealbrand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             <span>Email support@mygotravel.eu</span>
           </a>
         </div>
@@ -336,13 +339,14 @@ const educationDestinations = destinations.filter(d => d.category === 'education
     </div>
   </section>
 
+
   <!-- CANDIDATE PASS TEASER BANNER -->
   <section class="py-20">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="relative rounded-2xl p-8 sm:p-12 bg-navy-900 text-white border border-slate-800 shadow-xl overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+      <div class="relative rounded-3xl p-8 sm:p-12 bg-navy-900 text-white border border-slate-800 shadow-2xl overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
         
         <div class="max-w-2xl space-y-4">
-          <h2 class="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
+          <h2 class="text-3xl sm:text-4xl font-black font-serif tracking-tight leading-tight">
             Get Your Digital European Relocation Pass Card
           </h2>
           <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
@@ -353,7 +357,7 @@ const educationDestinations = destinations.filter(d => d.category === 'education
         <div class="shrink-0">
           <a 
             href="/assess" 
-            class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-base text-white bg-brand-500 hover:bg-brand-600 shadow-md hover:shadow-lg transition-all whitespace-nowrap"
+            class="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-base text-white bg-amber-500 hover:bg-amber-600 shadow-md hover:shadow-lg transition-all whitespace-nowrap cursor-pointer"
           >
             <span>Start Candidate Application</span>
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -366,34 +370,193 @@ const educationDestinations = destinations.filter(d => d.category === 'education
     </div>
   </section>
 
+  <!-- CANDIDATE SUCCESS STORY MODAL -->
+  <div 
+    id="candidate-story-modal" 
+    class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity"
+  >
+    <div class="bg-white dark:bg-navy-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 border border-slate-200 dark:border-navy-800 shadow-2xl relative">
+      <button 
+        id="candidate-story-close" 
+        type="button" 
+        class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 dark:bg-navy-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition-colors"
+        aria-label="Close story"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <div class="flex items-center gap-4 mb-5">
+        <img id="modal-candidate-avatar" src="/images/avatars/david.jpg" alt="" class="w-16 h-16 rounded-2xl object-cover border border-amber-400" />
+        <div>
+          <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 mb-1">
+            Verified Candidate Placement
+          </span>
+          <h3 id="modal-candidate-name" class="text-lg font-black text-slate-900 dark:text-white">Nyathi from Zimbabwe</h3>
+          <p id="modal-candidate-role" class="text-xs text-slate-500 dark:text-slate-400">Hotel Logistics &amp; Hospitality · Slovakia</p>
+        </div>
+      </div>
+
+      <div class="space-y-3.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 border-t border-slate-100 dark:border-navy-800 pt-4">
+        <div class="p-3.5 rounded-2xl bg-[#FAF8F0] dark:bg-navy-950 border border-amber-300/40">
+          <p id="modal-candidate-fullstory" class="italic font-serif leading-relaxed text-slate-800 dark:text-slate-100">
+            "I arrived in Bratislava in November. My company apartment was fully furnished with heating, hot water, and kitchen appliances. My hot meals on shift are completely covered by the employer, which allows me to remit over €900 every month back home."
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-center">
+          <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800">
+            <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Relocation Route</span>
+            <span id="modal-candidate-route" class="text-xs font-bold text-tealbrand-600">Slovakia (Fast-Track)</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800">
+            <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Monthly Savings</span>
+            <span class="text-xs font-bold text-emerald-600">€900+ / month</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-slate-100 dark:border-navy-800 flex gap-3">
+        <a 
+          href="/assess" 
+          class="flex-1 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-center text-white bg-tealbrand-600 hover:bg-tealbrand-700 shadow-sm transition"
+        >
+          Begin Free Evaluation
+        </a>
+      </div>
+    </div>
+  </div>
+
 </Layout>
 
-<script>
-  const filterButtons = document.querySelectorAll('.filter-btn');
-  const destinationItems = document.querySelectorAll('.destination-item');
+<script is:inline>
+  // Candidate Stories Carousel
+  (() => {
+    const stories = [
+      {
+        img: '/images/avatars/david.jpg',
+        quote: '“ People who choose MyGo Travel to relocate witness integrity, legal precision, and true professionalism.”',
+        name: 'Nyathi from Zimbabwe',
+        dest: 'Relocated to Slovakia · Hotel Logistics',
+        fullStory: 'I arrived in Bratislava in November. My company apartment was fully furnished with heating, hot water, and kitchen appliances. My hot meals on shift are completely covered by the employer, which allows me to remit over €900 every month back home.',
+        route: 'Slovakia (Fast-Track)'
+      },
+      {
+        img: '/images/avatars/elena.jpg',
+        quote: '“ My Schengen consular work permit was approved in less than 7 weeks with zero stress.”',
+        name: 'Elena from Moldova',
+        dest: 'Relocated to Poland · E-Commerce Logistics',
+        fullStory: 'The legal desk reviewed my documents, scheduled my embassy appointment in Chisinau, and I received my Schengen D-Visa on the first attempt without any delays or hidden legal fees.',
+        route: 'Poland (Schengen Permit)'
+      },
+      {
+        img: '/images/avatars/waleed.jpg',
+        quote: '“ Having clean housing arranged before my flight took all the fear out of moving to Europe.”',
+        name: 'Waleed from Egypt',
+        dest: 'Relocated to Czech Republic · Automotive Assembler',
+        fullStory: 'Arriving in Prague with airport reception and a dedicated MyGo case officer welcoming me directly into employer housing made all the difference. The meals on shift are great and my contract is guaranteed for 2 years.',
+        route: 'Czech Republic (Employee Card)'
+      }
+    ];
 
-  filterButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      // Remove active from all
-      filterButtons.forEach(btn => {
-        btn.classList.remove('bg-brand-500', 'text-white');
-        btn.classList.add('text-slate-600', 'dark:text-slate-300');
-      });
+    let activeIdx = 0;
+    const imgEl = document.getElementById('hero-candidate-img');
+    const quoteEl = document.getElementById('hero-candidate-quote');
+    const nameEl = document.getElementById('hero-candidate-name');
+    const destEl = document.getElementById('hero-candidate-dest');
+    const dots = document.querySelectorAll('.hero-dot');
 
-      // Set active
-      button.classList.add('bg-brand-500', 'text-white');
-      button.classList.remove('text-slate-600', 'dark:text-slate-300');
+    function updateStory(idx) {
+      activeIdx = idx;
+      const s = stories[idx];
+      if (imgEl && quoteEl && nameEl && destEl) {
+        imgEl.src = s.img;
+        quoteEl.textContent = s.quote;
+        nameEl.textContent = s.name;
+        destEl.textContent = s.dest;
+      }
 
-      const filterValue = button.getAttribute('data-filter');
-
-      destinationItems.forEach(item => {
-        const category = item.getAttribute('data-category');
-        if (filterValue === 'all' || category === filterValue) {
-          (item as HTMLElement).style.display = 'block';
+      dots.forEach((d, i) => {
+        if (i === idx) {
+          d.className = 'hero-dot w-2.5 h-2.5 rounded-full bg-tealbrand-600 transition-all cursor-pointer';
         } else {
-          (item as HTMLElement).style.display = 'none';
+          d.className = 'hero-dot w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-navy-700 transition-all cursor-pointer';
         }
       });
+    }
+
+    dots.forEach((d) => {
+      d.addEventListener('click', () => {
+        const idx = parseInt(d.getAttribute('data-idx') || '0', 10);
+        updateStory(idx);
+      });
     });
-  });
+
+    // Auto rotate every 6 seconds
+    setInterval(() => {
+      activeIdx = (activeIdx + 1) % stories.length;
+      updateStory(activeIdx);
+    }, 6000);
+
+    // Modal Handling
+    const modal = document.getElementById('candidate-story-modal');
+    const openBtn = document.getElementById('btn-hero-video');
+    const closeBtn = document.getElementById('candidate-story-close');
+    const modalAvatar = document.getElementById('modal-candidate-avatar');
+    const modalName = document.getElementById('modal-candidate-name');
+    const modalRole = document.getElementById('modal-candidate-role');
+    const modalFullStory = document.getElementById('modal-candidate-fullstory');
+    const modalRoute = document.getElementById('modal-candidate-route');
+
+    openBtn?.addEventListener('click', () => {
+      if (!modal) return;
+      const s = stories[activeIdx];
+      if (modalAvatar) modalAvatar.src = s.img;
+      if (modalName) modalName.textContent = s.name;
+      if (modalRole) modalRole.textContent = s.dest;
+      if (modalFullStory) modalFullStory.textContent = `"${s.fullStory}"`;
+      if (modalRoute) modalRoute.textContent = s.route;
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    });
+
+    closeBtn?.addEventListener('click', () => {
+      modal?.classList.add('hidden');
+      modal?.classList.remove('flex');
+    });
+
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    });
+
+    // Filter Destination items
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const destinationItems = document.querySelectorAll('.destination-item');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        filterButtons.forEach(btn => {
+          btn.classList.remove('bg-tealbrand-600', 'text-white');
+          btn.classList.add('text-slate-600', 'dark:text-slate-300');
+        });
+
+        button.classList.add('bg-tealbrand-600', 'text-white');
+        button.classList.remove('text-slate-600', 'dark:text-slate-300');
+
+        const filterValue = button.getAttribute('data-filter');
+
+        destinationItems.forEach(item => {
+          const category = item.getAttribute('data-category');
+          if (filterValue === 'all' || category === filterValue) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  })();
 </script>

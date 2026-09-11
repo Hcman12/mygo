@@ -1,0 +1,94 @@
+---
+const requirements = [
+  {
+    num: '01',
+    title: 'Valid International Passport',
+    desc: 'Minimum validity of 1.5 to 2 years remaining on your biometric passport, with at least 2 consecutive blank visa pages.',
+    tag: 'Documentary Requirement'
+  },
+  {
+    num: '02',
+    title: 'Clean Police Conduct Certificate',
+    desc: 'Clean criminal record check issued by your home country national police or state authority within the last 6 months.',
+    tag: 'Security Clearance'
+  },
+  {
+    num: '03',
+    title: 'Medical Fitness for Employment',
+    desc: 'Good physical health to perform your chosen trade (basic standard health screening provided during consular filing).',
+    tag: 'Occupational Health'
+  },
+  {
+    num: '04',
+    title: 'Readiness to Travel in 2–4 Months',
+    desc: 'Flexibility to relocate upon European government work permit issuance and embassy consular visa stamping.',
+    tag: 'Mobility Commitment'
+  }
+];
+---
+
+<section class="py-16 sm:py-24 bg-white dark:bg-navy-900 border-b border-slate-200/80 dark:border-navy-800 transition-colors">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Heading matching Screenshot 2 -->
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <h2 class="text-3xl sm:text-5xl font-black font-serif tracking-tight leading-tight">
+        <span class="text-tealbrand-600 block sm:inline">Before You Start:</span>
+        <span class="text-slate-900 dark:text-white block sm:inline">Do You Meet the Essential Requirements?</span>
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium mt-3">
+        Review these four fundamental criteria before starting your candidate assessment dossier.
+      </p>
+    </div>
+
+    <!-- 4 Requirements Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      {requirements.map((req) => (
+        <div class="bg-slate-50 dark:bg-navy-950 rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-navy-800 flex flex-col justify-between hover:border-amber-400 dark:hover:border-amber-500/40 transition-all shadow-sm">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="w-10 h-10 rounded-2xl bg-tealbrand-500/10 text-tealbrand-600 dark:text-tealbrand-400 font-black text-sm flex items-center justify-center border border-tealbrand-500/20">
+                {req.num}
+              </span>
+              <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-200/70 dark:bg-navy-800 text-slate-600 dark:text-slate-300">
+                {req.tag}
+              </span>
+            </div>
+
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-2">
+              {req.title}
+            </h3>
+
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              {req.desc}
+            </p>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-200/60 dark:border-navy-800 flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            <span>Standard Pre-Requisite</span>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Reassurance Banner -->
+    <div class="max-w-4xl mx-auto rounded-2xl bg-[#FAF8F0] dark:bg-navy-950 p-6 border border-amber-300/60 dark:border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <div>
+        <h4 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+          Do you meet these conditions?
+        </h4>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-0.5">
+          Your profile is ready for employer contract matching with guaranteed accommodation and meal plans.
+        </p>
+      </div>
+      <a 
+        href="/assess" 
+        class="shrink-0 px-8 py-3.5 rounded-full font-bold text-xs sm:text-sm text-white bg-amber-500 hover:bg-amber-600 shadow-md transition"
+      >
+        Verify Eligibility (2 Mins)
+      </a>
+    </div>
+
+  </div>
+</section>

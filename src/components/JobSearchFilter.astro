@@ -1,0 +1,250 @@
+---
+const initialJobs = [
+  {
+    country: 'Slovakia',
+    flag: '🇸🇰',
+    role: 'Hotel Staff Assistant & Hospitality Support',
+    salary: '1,100 – 1,650 EUR',
+    category: 'hospitality',
+    type: 'Full-Time Contract · Accommodation & Meals Provided',
+    spots: '14 Vacancies Available'
+  },
+  {
+    country: 'Poland',
+    flag: '🇵🇱',
+    role: 'E-Commerce Logistics & Warehouse Picker',
+    salary: '1,200 – 1,750 EUR',
+    category: 'logistics',
+    type: 'Schengen Work Permit · Company Apartment & Shift Meals',
+    spots: '22 Vacancies Available'
+  },
+  {
+    country: 'Czech Republic',
+    flag: '🇨🇿',
+    role: 'Automotive Component Assembler',
+    salary: '1,350 – 1,900 EUR',
+    category: 'manufacturing',
+    type: '2-Year Employee Card · Subsidized Housing & Hot Meals',
+    spots: '18 Vacancies Available'
+  },
+  {
+    country: 'Lithuania',
+    flag: '🇱🇹',
+    role: 'Food Processing & Production Operative',
+    salary: '1,150 – 1,600 EUR',
+    category: 'food',
+    type: 'EU Residence Permit · Furnished Room & Daily Food Allowance',
+    spots: '9 Vacancies Available'
+  },
+  {
+    country: 'Portugal',
+    flag: '🇵🇹',
+    role: 'Agricultural Logistics & Packing Technician',
+    salary: '1,000 – 1,500 EUR',
+    category: 'agriculture',
+    type: 'Article 88/89 Relocation · On-Site Living Quarters Included',
+    spots: '12 Vacancies Available'
+  },
+  {
+    country: 'Serbia',
+    flag: '🇷🇸',
+    role: 'Infrastructure & Commercial Construction Specialist',
+    salary: '1,400 – 2,100 EUR',
+    category: 'construction',
+    type: 'Fast-Track 1-Month Corridor · Full Board & Lodging Covered',
+    spots: '15 Vacancies Available'
+  }
+];
+---
+
+<section id="jobs" class="py-16 sm:py-24 bg-[#FAF8F0] dark:bg-navy-950 border-b border-slate-200/80 dark:border-navy-800 transition-colors">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Title (Matching Screenshot 2) -->
+    <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+      <h2 class="text-3xl sm:text-5xl font-black font-serif tracking-tight leading-tight">
+        <span class="text-tealbrand-600 block sm:inline">Select Best Fit</span>
+        <span class="text-slate-900 dark:text-white block sm:inline">with Employer in Europe</span>
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium mt-3">
+        Filter through 100+ active bilateral European employer vacancies with guaranteed housing and meal allowances.
+      </p>
+    </div>
+
+    <!-- Filter Bar Card (Matching Screenshot 2) -->
+    <div class="max-w-5xl mx-auto mb-12">
+      <div class="bg-white dark:bg-navy-900 p-4 sm:p-6 rounded-3xl border border-slate-200 dark:border-navy-800 shadow-lg">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+          
+          <!-- Dropdown 1: Country -->
+          <div class="relative">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 ml-1">
+              Destination Country
+            </label>
+            <div class="relative">
+              <select 
+                id="filter-country" 
+                class="w-full appearance-none bg-slate-50 dark:bg-navy-950 border-2 border-tealbrand-500/40 hover:border-tealbrand-500 focus:border-tealbrand-600 rounded-2xl px-4 py-3.5 text-sm font-semibold text-slate-800 dark:text-slate-100 focus:outline-none transition cursor-pointer"
+              >
+                <option value="all">All European Countries</option>
+                <option value="Slovakia">Slovakia (Schengen)</option>
+                <option value="Poland">Poland (Schengen)</option>
+                <option value="Czech Republic">Czech Republic (Schengen)</option>
+                <option value="Lithuania">Lithuania (Schengen)</option>
+                <option value="Portugal">Portugal (Schengen)</option>
+                <option value="Serbia">Serbia (Fast-Track 1–2 mo)</option>
+                <option value="North Macedonia">North Macedonia (Fast-Track)</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-tealbrand-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dropdown 2: Job Role -->
+          <div class="relative">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 ml-1">
+              Job Position / Trade
+            </label>
+            <div class="relative">
+              <select 
+                id="filter-role" 
+                class="w-full appearance-none bg-slate-50 dark:bg-navy-950 border-2 border-tealbrand-500/40 hover:border-tealbrand-500 focus:border-tealbrand-600 rounded-2xl px-4 py-3.5 text-sm font-semibold text-slate-800 dark:text-slate-100 focus:outline-none transition cursor-pointer"
+              >
+                <option value="all">All Available Trades</option>
+                <option value="hospitality">Hotel Staff Assistant &amp; Service</option>
+                <option value="logistics">Warehouse Operative &amp; Order Picker</option>
+                <option value="manufacturing">Automotive Assembly &amp; Production</option>
+                <option value="food">Food Processing &amp; Packaging</option>
+                <option value="agriculture">Agricultural Logistics &amp; Farming</option>
+                <option value="construction">Construction &amp; Technical Trades</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-tealbrand-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dropdown 3: Salary -->
+          <div class="relative">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 ml-1">
+              Salary Expectation
+            </label>
+            <div class="relative">
+              <select 
+                id="filter-salary" 
+                class="w-full appearance-none bg-slate-50 dark:bg-navy-950 border-2 border-tealbrand-500/40 hover:border-tealbrand-500 focus:border-tealbrand-600 rounded-2xl px-4 py-3.5 text-sm font-semibold text-slate-800 dark:text-slate-100 focus:outline-none transition cursor-pointer"
+              >
+                <option value="all">Any Monthly Remuneration</option>
+                <option value="1000-1650">1,000 – 1,650 EUR / month</option>
+                <option value="1300-2000">1,300 – 2,000 EUR / month</option>
+                <option value="1500+">1,500+ EUR / month</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-tealbrand-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Button matching Screenshot 2 -->
+        <div class="text-center pt-2">
+          <button 
+            type="button" 
+            id="btn-apply-job-filter" 
+            class="inline-flex items-center justify-center gap-2 px-10 py-3.5 rounded-full font-bold text-sm sm:text-base text-white bg-amber-400 hover:bg-amber-500 shadow-md hover:shadow-lg transition-all duration-150 transform hover:-translate-y-0.5 cursor-pointer"
+          >
+            <span>See Jobs</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Job Vacancies Results Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="job-cards-container">
+      {initialJobs.map((job) => (
+        <div 
+          class="job-card bg-white dark:bg-navy-900 rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-navy-800 shadow-sm hover:shadow-xl hover:border-tealbrand-500/40 transition-all flex flex-col justify-between"
+          data-country={job.country}
+          data-role={job.category}
+        >
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-navy-950 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-navy-800">
+                <span>{job.flag}</span>
+                <span>{job.country}</span>
+              </span>
+              <span class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                {job.spots}
+              </span>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-snug mb-2">
+              {job.role}
+            </h3>
+
+            <div class="text-xl font-black text-amber-500 mb-3">
+              {job.salary}
+            </div>
+
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-5 leading-relaxed">
+              {job.type}
+            </p>
+
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                ✓ Housing Included
+              </span>
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-brand-500/10 text-brand-700 dark:text-brand-400 border border-brand-500/20">
+                ✓ Meals Covered
+              </span>
+            </div>
+          </div>
+
+          <a 
+            href="/assess" 
+            class="w-full py-3 rounded-xl font-bold text-xs sm:text-sm text-center text-white bg-tealbrand-600 hover:bg-tealbrand-700 shadow-sm transition"
+          >
+            Apply for {job.country} Vacancy
+          </a>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const countrySelect = document.getElementById('filter-country');
+    const roleSelect = document.getElementById('filter-role');
+    const filterBtn = document.getElementById('btn-apply-job-filter');
+    const cards = document.querySelectorAll('.job-card');
+
+    function applyFilter() {
+      const selectedCountry = countrySelect?.value || 'all';
+      const selectedRole = roleSelect?.value || 'all';
+
+      cards.forEach((card) => {
+        const cardCountry = card.getAttribute('data-country');
+        const cardRole = card.getAttribute('data-role');
+
+        const matchCountry = selectedCountry === 'all' || cardCountry === selectedCountry;
+        const matchRole = selectedRole === 'all' || cardRole === selectedRole;
+
+        if (matchCountry && matchRole) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    filterBtn?.addEventListener('click', applyFilter);
+    countrySelect?.addEventListener('change', applyFilter);
+    roleSelect?.addEventListener('change', applyFilter);
+  })();
+</script>

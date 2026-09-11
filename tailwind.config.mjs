@@ -30,10 +30,26 @@ export default {
           800: '#0D233A', // Main brand deep navy from logo
           900: '#0B1A2C', // Deep dark mode background
           950: '#060f1c',
+        },
+        warm: {
+          50: '#FCFBF7',
+          100: '#FAF8F0',
+          200: '#F5EFE0',
+          300: '#EDE4CD',
+          900: '#181614',
+        },
+        tealbrand: {
+          50: '#f0fdfa',
+          100: '#ccfbf1',
+          500: '#14b8a6',
+          600: '#169B88', // Emerald/teal headline color from inspiration
+          700: '#0f766e',
+          800: '#0d5d57',
         }
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        serif: ['"Playfair Display"', 'Merriweather', 'Georgia', 'serif'],
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',

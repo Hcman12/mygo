@@ -2,7 +2,29 @@
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="sticky top-0 z-40 w-full backdrop-blur-lg bg-white/90 dark:bg-navy-900/90 border-b border-slate-200/80 dark:border-navy-800 transition-colors duration-200">
+<header class="sticky top-0 z-40 w-full backdrop-blur-lg bg-white/95 dark:bg-navy-900/95 border-b border-slate-200/80 dark:border-navy-800 transition-colors duration-200">
+  <!-- TOP CREDIBILITY TRUST BAR (Inspired by reference screenshots) -->
+  <div class="w-full bg-[#FAF8F0] dark:bg-navy-950 border-b border-slate-200/70 dark:border-navy-800/80 py-1.5 sm:py-2 px-4 sm:px-6 lg:px-8 text-xs transition-colors">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-2 text-center sm:text-left">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span class="font-extrabold text-slate-900 dark:text-white tracking-tight uppercase text-[11px]">
+          #1 Immigration solutions provider in Europe
+        </span>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3 font-semibold text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300">
+        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          8 years of experience in work immigration
+        </span>
+        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          9,000+ workers placed for jobs in Europe
+        </span>
+      </div>
+    </div>
+  </div>
+
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
       
