@@ -1,58 +1,160 @@
 ---
-const initialJobs = [
+const allJobs = [
   {
     country: 'Slovakia',
     flag: '🇸🇰',
     role: 'Hotel Staff Assistant & Hospitality Support',
-    salary: '1,100 – 1,650 EUR',
     category: 'hospitality',
+    salary: '1,100 – 1,650 EUR',
+    salaryMin: 1100,
     type: 'Full-Time Contract · Accommodation & Meals Provided',
-    spots: '14 Vacancies Available'
+    spots: '14 Vacancies Available',
+    contract: '2-Year Renewable Permit',
+    docketId: 'sk-hosp-401'
+  },
+  {
+    country: 'Slovakia',
+    flag: '🇸🇰',
+    role: 'Central European Distribution Warehouse Picker',
+    category: 'logistics',
+    salary: '1,250 – 1,700 EUR',
+    salaryMin: 1250,
+    type: 'Schengen Work Permit · Company Dormitory & Shift Meals',
+    spots: '19 Vacancies Available',
+    contract: '2-Year Renewable Permit',
+    docketId: 'sk-log-402'
   },
   {
     country: 'Poland',
     flag: '🇵🇱',
-    role: 'E-Commerce Logistics & Warehouse Picker',
-    salary: '1,200 – 1,750 EUR',
+    role: 'E-Commerce Logistics & Warehouse Operative',
     category: 'logistics',
+    salary: '1,200 – 1,750 EUR',
+    salaryMin: 1200,
     type: 'Schengen Work Permit · Company Apartment & Shift Meals',
-    spots: '22 Vacancies Available'
+    spots: '22 Vacancies Available',
+    contract: '1-to-3 Year Visa Type D',
+    docketId: 'pl-log-501'
+  },
+  {
+    country: 'Poland',
+    flag: '🇵🇱',
+    role: 'Food Packaging & Confectionery Processing',
+    category: 'food',
+    salary: '1,150 – 1,550 EUR',
+    salaryMin: 1150,
+    type: 'EU Labor Certification · Free Furnished Housing',
+    spots: '16 Vacancies Available',
+    contract: '1-to-3 Year Visa Type D',
+    docketId: 'pl-food-502'
   },
   {
     country: 'Czech Republic',
     flag: '🇨🇿',
-    role: 'Automotive Component Assembler',
-    salary: '1,350 – 1,900 EUR',
+    role: 'Automotive Component Assembler & Line Worker',
     category: 'manufacturing',
+    salary: '1,350 – 1,900 EUR',
+    salaryMin: 1350,
     type: '2-Year Employee Card · Subsidized Housing & Hot Meals',
-    spots: '18 Vacancies Available'
+    spots: '18 Vacancies Available',
+    contract: 'Employee Card (Zaměstnanecká karta)',
+    docketId: 'cz-auto-601'
+  },
+  {
+    country: 'Czech Republic',
+    flag: '🇨🇿',
+    role: 'Mechanical & Assembly Workshop Technician',
+    category: 'construction',
+    salary: '1,500 – 2,200 EUR',
+    salaryMin: 1500,
+    type: 'Ministry of Industry Fast-Track · Accommodation Included',
+    spots: '11 Vacancies Available',
+    contract: 'Employee Card (Zaměstnanecká karta)',
+    docketId: 'cz-mech-602'
   },
   {
     country: 'Lithuania',
     flag: '🇱🇹',
     role: 'Food Processing & Production Operative',
-    salary: '1,150 – 1,600 EUR',
     category: 'food',
+    salary: '1,150 – 1,600 EUR',
+    salaryMin: 1150,
     type: 'EU Residence Permit · Furnished Room & Daily Food Allowance',
-    spots: '9 Vacancies Available'
+    spots: '9 Vacancies Available',
+    contract: 'National D Visa & TRP',
+    docketId: 'lt-food-701'
+  },
+  {
+    country: 'Lithuania',
+    flag: '🇱🇹',
+    role: 'International Freight & Heavy Commercial Driver',
+    category: 'construction',
+    salary: '1,800 – 2,600 EUR',
+    salaryMin: 1800,
+    type: 'Code 95 Training Provided · European Long-Haul Trips',
+    spots: '14 Vacancies Available',
+    contract: 'National D Visa & TRP',
+    docketId: 'lt-drv-702'
   },
   {
     country: 'Portugal',
     flag: '🇵🇹',
-    role: 'Agricultural Logistics & Packing Technician',
-    salary: '1,000 – 1,500 EUR',
+    role: 'Agricultural Logistics & Modern Greenhouse Specialist',
     category: 'agriculture',
+    salary: '1,000 – 1,500 EUR',
+    salaryMin: 1000,
     type: 'Article 88/89 Relocation · On-Site Living Quarters Included',
-    spots: '12 Vacancies Available'
+    spots: '12 Vacancies Available',
+    contract: 'Temporary Residence Permit',
+    docketId: 'pt-agri-801'
+  },
+  {
+    country: 'Portugal',
+    flag: '🇵🇹',
+    role: 'Coastal Resort Hospitality Assistant',
+    category: 'hospitality',
+    salary: '1,100 – 1,600 EUR',
+    salaryMin: 1100,
+    type: 'Seasonal & Long-Term Contract · Full Board Living',
+    spots: '8 Vacancies Available',
+    contract: 'Temporary Residence Permit',
+    docketId: 'pt-hosp-802'
   },
   {
     country: 'Serbia',
     flag: '🇷🇸',
-    role: 'Infrastructure & Commercial Construction Specialist',
-    salary: '1,400 – 2,100 EUR',
+    role: 'Commercial Infrastructure & Construction Worker',
     category: 'construction',
+    salary: '1,400 – 2,100 EUR',
+    salaryMin: 1400,
     type: 'Fast-Track 1-Month Corridor · Full Board & Lodging Covered',
-    spots: '15 Vacancies Available'
+    spots: '15 Vacancies Available',
+    contract: 'Single Work & Residence Permit',
+    docketId: 'rs-const-901'
+  },
+  {
+    country: 'Montenegro',
+    flag: '🇲🇪',
+    role: 'Adriatic Coast Hotel & Guest Services Assistant',
+    category: 'hospitality',
+    salary: '1,000 – 1,650 EUR',
+    salaryMin: 1000,
+    type: 'Adriatic Work Permit · Free Seaside Accommodation & Meals',
+    spots: '13 Vacancies Available',
+    contract: 'Seasonal & Annual Residence Permit',
+    docketId: 'me-hosp-101'
+  },
+  {
+    country: 'North Macedonia',
+    flag: '🇲🇰',
+    role: 'Automotive Cable & Electronics Assembly Operative',
+    category: 'manufacturing',
+    salary: '1,100 – 1,500 EUR',
+    salaryMin: 1100,
+    type: 'Fast-Track 2-Month Processing · Employer Apartment Provided',
+    spots: '10 Vacancies Available',
+    contract: 'National Work Permit',
+    docketId: 'mk-auto-201'
   }
 ];
 ---
@@ -67,12 +169,12 @@ const initialJobs = [
         <span class="text-slate-900 dark:text-white block sm:inline">with Employer in Europe</span>
       </h2>
       <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium mt-3">
-        Filter through 100+ active bilateral European employer vacancies with guaranteed housing and meal allowances.
+        Filter through active bilateral European employer quotas with guaranteed accommodation and meal plans.
       </p>
     </div>
 
     <!-- Filter Bar Card (Matching Screenshot 2) -->
-    <div class="max-w-5xl mx-auto mb-12">
+    <div class="max-w-5xl mx-auto">
       <div class="bg-white dark:bg-navy-900 p-4 sm:p-6 rounded-3xl border border-slate-200 dark:border-navy-800 shadow-lg">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
           
@@ -87,6 +189,7 @@ const initialJobs = [
                 class="w-full appearance-none bg-slate-50 dark:bg-navy-950 border-2 border-tealbrand-500/40 hover:border-tealbrand-500 focus:border-tealbrand-600 rounded-2xl px-4 py-3.5 text-sm font-semibold text-slate-800 dark:text-slate-100 focus:outline-none transition cursor-pointer"
               >
                 <option value="all">All European Countries</option>
+                <option value="Montenegro">Montenegro</option>
                 <option value="Slovakia">Slovakia (Schengen)</option>
                 <option value="Poland">Poland (Schengen)</option>
                 <option value="Czech Republic">Czech Republic (Schengen)</option>
@@ -148,11 +251,11 @@ const initialJobs = [
 
         </div>
 
-        <!-- Button matching Screenshot 2 -->
+        <!-- Button matching Screenshot 2: Triggers Popup Modal -->
         <div class="text-center pt-2">
           <button 
             type="button" 
-            id="btn-apply-job-filter" 
+            id="btn-open-jobs-modal" 
             class="inline-flex items-center justify-center gap-2 px-10 py-3.5 rounded-full font-bold text-sm sm:text-base text-white bg-amber-400 hover:bg-amber-500 shadow-md hover:shadow-lg transition-all duration-150 transform hover:-translate-y-0.5 cursor-pointer"
           >
             <span>See Jobs</span>
@@ -162,89 +265,189 @@ const initialJobs = [
       </div>
     </div>
 
-    <!-- Live Job Vacancies Results Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="job-cards-container">
-      {initialJobs.map((job) => (
-        <div 
-          class="job-card bg-white dark:bg-navy-900 rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-navy-800 shadow-sm hover:shadow-xl hover:border-tealbrand-500/40 transition-all flex flex-col justify-between"
-          data-country={job.country}
-          data-role={job.category}
-        >
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-navy-950 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-navy-800">
-                <span>{job.flag}</span>
-                <span>{job.country}</span>
-              </span>
-              <span class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                {job.spots}
-              </span>
-            </div>
+  </div>
 
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-snug mb-2">
-              {job.role}
-            </h3>
+  <!-- POPUP MODAL FOR JOBS RESULTS (Matching User Request) -->
+  <div 
+    id="jobs-result-modal" 
+    class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity"
+  >
+    <div class="bg-white dark:bg-navy-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-slate-200 dark:border-navy-800 shadow-2xl relative max-h-[88vh] flex flex-col transform transition-all">
+      
+      <!-- Close Button -->
+      <button 
+        id="jobs-modal-close" 
+        type="button" 
+        class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 dark:bg-navy-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+        aria-label="Close jobs modal"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
 
-            <div class="text-xl font-black text-amber-500 mb-3">
-              {job.salary}
-            </div>
-
-            <p class="text-xs text-slate-500 dark:text-slate-400 mb-5 leading-relaxed">
-              {job.type}
-            </p>
-
-            <div class="flex flex-wrap gap-2 mb-6">
-              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
-                ✓ Housing Included
-              </span>
-              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-brand-500/10 text-brand-700 dark:text-brand-400 border border-brand-500/20">
-                ✓ Meals Covered
-              </span>
-            </div>
-          </div>
-
-          <a 
-            href="/assess" 
-            class="w-full py-3 rounded-xl font-bold text-xs sm:text-sm text-center text-white bg-tealbrand-600 hover:bg-tealbrand-700 shadow-sm transition"
-          >
-            Apply for {job.country} Vacancy
-          </a>
+      <!-- Modal Header -->
+      <div class="mb-4 pr-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs font-bold mb-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Verified European Employer Contracts</span>
         </div>
-      ))}
-    </div>
+        <h3 id="modal-jobs-title" class="text-xl sm:text-2xl font-black font-serif text-slate-900 dark:text-white">
+          Matched European Vacancies
+        </h3>
+        <p id="modal-jobs-subtitle" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          Showing active positions with employer-provided accommodation and meal plans.
+        </p>
+      </div>
 
+      <!-- Scrollable Results Container -->
+      <div id="modal-jobs-list" class="overflow-y-auto space-y-3.5 pr-1.5 flex-1 my-2">
+        <!-- Javascript dynamically inserts filtered cards here -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-4 mt-3 border-t border-slate-100 dark:border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-tealbrand-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          <span>All packages include verified work permits &amp; housing</span>
+        </div>
+        <a 
+          href="/assess" 
+          class="w-full sm:w-auto px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-tealbrand-600 hover:bg-tealbrand-700 shadow-md transition text-center"
+        >
+          Begin Candidate Assessment
+        </a>
+      </div>
+
+    </div>
   </div>
 </section>
 
-<script is:inline>
+<script is:inline define:vars={{ allJobs }}>
   (() => {
     const countrySelect = document.getElementById('filter-country');
     const roleSelect = document.getElementById('filter-role');
-    const filterBtn = document.getElementById('btn-apply-job-filter');
-    const cards = document.querySelectorAll('.job-card');
+    const salarySelect = document.getElementById('filter-salary');
+    const openBtn = document.getElementById('btn-open-jobs-modal');
 
-    function applyFilter() {
+    const modal = document.getElementById('jobs-result-modal');
+    const closeBtn = document.getElementById('jobs-modal-close');
+    const modalTitle = document.getElementById('modal-jobs-title');
+    const modalSubtitle = document.getElementById('modal-jobs-subtitle');
+    const modalList = document.getElementById('modal-jobs-list');
+
+    function filterAndShowJobs() {
+      if (!modal || !modalList) return;
+
       const selectedCountry = countrySelect?.value || 'all';
       const selectedRole = roleSelect?.value || 'all';
+      const selectedSalary = salarySelect?.value || 'all';
 
-      cards.forEach((card) => {
-        const cardCountry = card.getAttribute('data-country');
-        const cardRole = card.getAttribute('data-role');
+      const filtered = allJobs.filter((job) => {
+        const matchCountry = selectedCountry === 'all' || job.country.toLowerCase() === selectedCountry.toLowerCase();
+        const matchRole = selectedRole === 'all' || job.category.toLowerCase() === selectedRole.toLowerCase();
+        let matchSalary = true;
+        if (selectedSalary === '1000-1650') matchSalary = job.salaryMin <= 1300;
+        if (selectedSalary === '1300-2000') matchSalary = job.salaryMin >= 1200;
+        if (selectedSalary === '1500+') matchSalary = job.salaryMin >= 1400;
 
-        const matchCountry = selectedCountry === 'all' || cardCountry === selectedCountry;
-        const matchRole = selectedRole === 'all' || cardRole === selectedRole;
-
-        if (matchCountry && matchRole) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
+        return matchCountry && matchRole && matchSalary;
       });
+
+      // Update titles
+      const countryLabel = selectedCountry === 'all' ? 'All European Corridors' : selectedCountry;
+      if (modalTitle) modalTitle.textContent = `Active Vacancies: ${countryLabel}`;
+      if (modalSubtitle) modalSubtitle.textContent = `Found ${filtered.length} positions with employer-guaranteed accommodation & meals.`;
+
+      // Render cards into modal
+      modalList.innerHTML = '';
+
+      if (filtered.length === 0) {
+        modalList.innerHTML = `
+          <div class="p-8 text-center bg-slate-50 dark:bg-navy-950 rounded-2xl border border-slate-200 dark:border-navy-800">
+            <div class="w-12 h-12 rounded-full bg-amber-500/10 text-amber-500 mx-auto flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h4 class="font-bold text-slate-900 dark:text-white text-base mb-1">Custom Allocation Available</h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-4">
+              We frequently open new employer quotas for ${countryLabel}. Start your evaluation and an admissions counselor will match your profile directly.
+            </p>
+            <a href="/assess" class="inline-flex px-6 py-2.5 rounded-xl font-bold text-xs text-white bg-amber-500 hover:bg-amber-600 transition">
+              Submit Direct Application
+            </a>
+          </div>
+        `;
+      } else {
+        filtered.forEach((job) => {
+          const cardEl = document.createElement('div');
+          cardEl.className = 'p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-tealbrand-500/50 transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm';
+          cardEl.innerHTML = `
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-800 text-slate-800 dark:text-slate-200">
+                  <span>${job.flag}</span>
+                  <span>${job.country}</span>
+                </span>
+                <span class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  ${job.spots}
+                </span>
+              </div>
+              <h4 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug">
+                ${job.role}
+              </h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                ${job.type} · <strong class="text-slate-700 dark:text-slate-300 font-semibold">${job.contract}</strong>
+              </p>
+              <div class="flex flex-wrap gap-1.5 mt-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
+                  ✓ Housing Covered
+                </span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400">
+                  ✓ Meals Included
+                </span>
+              </div>
+            </div>
+
+            <div class="shrink-0 text-left sm:text-right w-full sm:w-auto flex sm:flex-col items-center sm:items-end justify-between gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-200 dark:border-navy-800">
+              <div class="text-base sm:text-lg font-black text-amber-500">
+                ${job.salary}
+              </div>
+              <a 
+                href="/assess" 
+                class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-tealbrand-600 hover:bg-tealbrand-700 transition inline-flex items-center gap-1"
+              >
+                <span>Apply</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </a>
+            </div>
+          `;
+          modalList.appendChild(cardEl);
+        });
+      }
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
     }
 
-    filterBtn?.addEventListener('click', applyFilter);
-    countrySelect?.addEventListener('change', applyFilter);
-    roleSelect?.addEventListener('change', applyFilter);
+    openBtn?.addEventListener('click', filterAndShowJobs);
+
+    closeBtn?.addEventListener('click', () => {
+      modal?.classList.add('hidden');
+      modal?.classList.remove('flex');
+    });
+
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    });
+
+    // Close on Escape key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    });
   })();
 </script>
