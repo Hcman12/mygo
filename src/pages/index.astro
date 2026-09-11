@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import DestinationCard from '../components/DestinationCard.astro';
 import Testimonials from '../components/Testimonials.astro';
+import TeamSlider from '../components/TeamSlider.astro';
 import { destinations } from '../data/destinations';
 
 const schengenDestinations = destinations.filter(d => d.category === 'schengen');
@@ -205,6 +206,9 @@ const educationDestinations = destinations.filter(d => d.category === 'education
 
   <!-- CLIENT TESTIMONIALS SECTION -->
   <Testimonials />
+
+  <!-- MEET OUR TEAM SLIDER SECTION -->
+  <TeamSlider />
 
 
   <!-- HOW IT WORKS SECTION (`#how-it-works`) -->
