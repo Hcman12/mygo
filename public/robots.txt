@@ -1,4 +1,27 @@
+# Robots.txt for MyGo Travel Europe (https://mygotravel.eu)
 User-agent: *
 Allow: /
+Allow: /destinations
+Allow: /assess
+Allow: /team
+Allow: /support
+Allow: /images/
+Allow: /headshot/
 
-Sitemap: https://mygotravel.eu/sitemap-index.xml
+# Disallow private administrative directories and APIs
+Disallow: /nicle
+Disallow: /api/admin/
+
+# Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+Disallow: /nicle
+Disallow: /api/admin/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /nicle
+Disallow: /api/admin/
+
+# XML Sitemap
+Sitemap: https://mygotravel.eu/sitemap.xml

@@ -7,7 +7,7 @@ export const prerender = false;
 const authenticated = isAuthenticated(Astro.cookies);
 ---
 
-<Layout title="MyGo Management Portal · Relocation Admissions Directorate" hideHeaderFooter={true}>
+<Layout title="MyGo Management Portal · Relocation Admissions Directorate" hideHeaderFooter={true} noindex={true}>
   {
     !authenticated ? (
       /* ================= LOGIN SCREEN ================= */

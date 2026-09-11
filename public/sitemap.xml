@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Homepage: European Legal Relocation, Work Permits & Job Placements -->
+  <url>
+    <loc>https://mygotravel.eu/</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://mygotravel.eu/images/og-share-cover.jpg</image:loc>
+      <image:title>MyGo Travel European Relocation &amp; Work Visa Assistance</image:title>
+      <image:caption>Verified jobs in Europe with accommodation and meals</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://mygotravel.eu/images/waleed.jpg</image:loc>
+      <image:title>Waleed from Egypt - European Relocation Success Story</image:title>
+      <image:caption>Automotive Assembler relocated to Czech Republic with employer housing</image:caption>
+    </image:image>
+  </url>
+
+  <!-- European Destinations & Job Directory -->
+  <url>
+    <loc>https://mygotravel.eu/destinations</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://mygotravel.eu/images/destinations/poland.jpg</image:loc>
+      <image:title>Work in Poland - Logistics &amp; Manufacturing</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://mygotravel.eu/images/destinations/czech-republic.jpg</image:loc>
+      <image:title>Work in Czech Republic - Automotive &amp; Engineering</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://mygotravel.eu/images/destinations/slovakia.jpg</image:loc>
+      <image:title>Work in Slovakia - Electronics &amp; Hospitality</image:title>
+    </image:image>
+  </url>
+
+  <!-- Free Candidate Eligibility Assessment & Visa Calculator -->
+  <url>
+    <loc>https://mygotravel.eu/assess</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Meet Our Team & Certified European Immigration Specialists -->
+  <url>
+    <loc>https://mygotravel.eu/team</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Relocation Support Desk & Official Contact Channels -->
+  <url>
+    <loc>https://mygotravel.eu/support</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+</urlset>

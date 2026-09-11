@@ -7,6 +7,7 @@ import StepperPath from '../components/StepperPath.astro';
 import JobSearchFilter from '../components/JobSearchFilter.astro';
 import RequirementsChecklist from '../components/RequirementsChecklist.astro';
 import ConsultationBox from '../components/ConsultationBox.astro';
+import HomeFAQ from '../components/HomeFAQ.astro';
 import { destinations } from '../data/destinations';
 
 const schengenDestinations = destinations.filter(d => d.category === 'schengen');
@@ -15,8 +16,10 @@ const educationDestinations = destinations.filter(d => d.category === 'education
 ---
 
 <Layout 
-  title="MyGo Travel · European Relocation & Jobs with Accommodation and Meals Included"
-  description="Official European work visa and relocation programs. Verified employers, embassy-ready documents, visa interview support, and guaranteed housing and meal stipends."
+  title="MyGo Travel · European Jobs with Accommodation & Work Visa Relocation | Official Legal Programs"
+  description="Official European work visa, legal relocation, and verified workforce placement agency. Guaranteed jobs in Poland, Czech Republic, Slovakia, Portugal & Germany with employer-provided housing and meals. 9,000+ placed workers. Fast-track 1–3 months."
+  keywords="work in europe, live and study in europe reviews, live and work in europe, jobs in europe with housing, jobs in europe with accommodation, easiest eu country to get a job, eures european jobs, eures alternative, schengen work visa, czech republic employee card, poland work visa, slovakia work permit, jobs abroad for foreigners no language required, live and study in europe fake or real, legal european relocation, eu blue card network"
+  ogImage="/images/og-share-cover.jpg"
 >
   
   <!-- HERO SECTION (Inspired by Reference Screenshot 1) -->
@@ -291,6 +294,10 @@ const educationDestinations = destinations.filter(d => d.category === 'education
 
   <!-- QUICK CONSULTATION LEAD CAPTURE SECTION (Matching Screenshot 1) -->
   <ConsultationBox />
+
+
+  <!-- FREQUENTLY ASKED QUESTIONS & EUROPEAN WORK GUIDE (Beating EURES & Live and Study) -->
+  <HomeFAQ />
 
 
   <!-- DEDICATED SUPPORT & HELP DESK HIGHLIGHT (`#contact`) -->
