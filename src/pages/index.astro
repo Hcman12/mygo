@@ -101,35 +101,120 @@ const educationDestinations = destinations.filter(d => d.category === 'education
         <div class="lg:col-span-5 relative flex justify-center">
           <div class="relative w-full max-w-md">
             
-            <!-- Main Candidate Portrait Photo -->
-            <div class="relative rounded-3xl overflow-hidden border-4 border-white dark:border-navy-800 shadow-2xl bg-slate-200 dark:bg-navy-800 aspect-[4/5]">
-              <img 
-                id="hero-candidate-img"
-                src="/images/waleed.jpg" 
-                alt="Waleed from Egypt" 
-                class="w-full h-full object-cover transition-all duration-500 filter contrast-105"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none"></div>
+            <!-- Main Candidate Portrait Photo Carousel / Auto Swipe -->
+            <div 
+              id="hero-slider-container" 
+              class="relative rounded-3xl overflow-hidden border-4 border-white dark:border-navy-800 shadow-2xl bg-slate-200 dark:bg-navy-800 aspect-[4/5] select-none group cursor-grab active:cursor-grabbing touch-pan-y"
+              tabindex="0"
+              aria-label="Candidate stories slider"
+              role="region"
+            >
+              <!-- Sliding Track -->
+              <div 
+                id="hero-slider-track" 
+                class="flex w-full h-full will-change-transform"
+                style="transform: translateX(0%); transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);"
+              >
+                <!-- Slide 0: Waleed -->
+                <div class="w-full h-full shrink-0 relative">
+                  <img 
+                    src="/images/waleed.jpg" 
+                    alt="Waleed from Egypt - Placed in Czech Republic" 
+                    class="w-full h-full object-cover filter contrast-105 pointer-events-none"
+                    loading="eager"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none"></div>
+                </div>
+
+                <!-- Slide 1: Amara -->
+                <div class="w-full h-full shrink-0 relative">
+                  <img 
+                    src="/headshot/workers/images.jpg" 
+                    alt="Amara from Nigeria - Placed in Poland" 
+                    class="w-full h-full object-cover filter contrast-105 pointer-events-none"
+                    loading="lazy"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none"></div>
+                </div>
+
+                <!-- Slide 2: Elena -->
+                <div class="w-full h-full shrink-0 relative">
+                  <img 
+                    src="/headshot/workers/images%20(1).jpg" 
+                    alt="Elena from Moldova - Placed in Slovakia" 
+                    class="w-full h-full object-cover filter contrast-105 pointer-events-none"
+                    loading="lazy"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none"></div>
+                </div>
+
+                <!-- Slide 3: David -->
+                <div class="w-full h-full shrink-0 relative">
+                  <img 
+                    src="/headshot/workers/images%20(14).jpg" 
+                    alt="David from Nigeria - Placed in Czech Republic" 
+                    class="w-full h-full object-cover filter contrast-105 pointer-events-none"
+                    loading="lazy"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none"></div>
+                </div>
+              </div>
+
+              <!-- Top Floating Controls: Status Pill + Indicator Dots -->
+              <div class="absolute top-4 left-4 right-4 flex items-center justify-between z-20 pointer-events-none">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-slate-950/65 backdrop-blur-md text-white border border-white/15 shadow-sm">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span id="hero-slider-badge">Verified Story 1 of 4</span>
+                </span>
+                
+                <!-- Dot navigation with active pill animation -->
+                <div class="flex items-center gap-1.5 pointer-events-auto bg-slate-950/50 backdrop-blur-md px-2.5 py-1.5 rounded-full border border-white/15 shadow-sm" id="hero-slider-dots">
+                  <button type="button" class="hero-dot w-6 h-1.5 rounded-full bg-amber-400 transition-all duration-300 cursor-pointer" data-index="0" aria-label="Go to slide 1"></button>
+                  <button type="button" class="hero-dot w-2 h-1.5 rounded-full bg-white/40 hover:bg-white/80 transition-all duration-300 cursor-pointer" data-index="1" aria-label="Go to slide 2"></button>
+                  <button type="button" class="hero-dot w-2 h-1.5 rounded-full bg-white/40 hover:bg-white/80 transition-all duration-300 cursor-pointer" data-index="2" aria-label="Go to slide 3"></button>
+                  <button type="button" class="hero-dot w-2 h-1.5 rounded-full bg-white/40 hover:bg-white/80 transition-all duration-300 cursor-pointer" data-index="3" aria-label="Go to slide 4"></button>
+                </div>
+              </div>
+
+              <!-- Prev / Next Navigation Arrows -->
+              <button 
+                type="button" 
+                id="hero-slider-prev"
+                class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-slate-950/60 hover:bg-slate-950/90 active:scale-90 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 border border-white/20 shadow-lg cursor-pointer transform -translate-x-1 group-hover:translate-x-0"
+                aria-label="Previous worker"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+              </button>
+              <button 
+                type="button" 
+                id="hero-slider-next"
+                class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-slate-950/60 hover:bg-slate-950/90 active:scale-90 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 border border-white/20 shadow-lg cursor-pointer transform translate-x-1 group-hover:translate-x-0"
+                aria-label="Next worker"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+              </button>
             </div>
 
             <!-- Floating Testimonial Quote Card (Matching Screenshot 1) -->
-            <div class="absolute -bottom-6 -left-3 sm:-bottom-8 sm:-left-6 right-3 sm:right-auto z-20 bg-white/95 dark:bg-navy-900/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-navy-800 shadow-2xl max-w-sm sm:max-w-md text-left">
-              <p id="hero-candidate-quote" class="text-xs sm:text-sm font-serif italic text-slate-800 dark:text-slate-100 leading-relaxed">
-                “ Having clean housing arranged before my flight took all the fear out of moving to Europe.”
-              </p>
-              <div class="mt-3.5 flex items-center justify-between gap-2">
-                <div>
-                  <div id="hero-candidate-name" class="text-xs sm:text-sm font-bold text-amber-500">Waleed from Egypt</div>
-                  <div id="hero-candidate-dest" class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">Relocated to Czech Republic · Automotive Assembler</div>
+            <div id="hero-quote-card" class="absolute -bottom-6 -left-3 sm:-bottom-8 sm:-left-6 right-3 sm:right-auto z-20 bg-white/95 dark:bg-navy-900/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-navy-800 shadow-2xl max-w-sm sm:max-w-md text-left transition-all duration-300">
+              <div id="hero-candidate-content" class="transition-opacity duration-300">
+                <p id="hero-candidate-quote" class="text-xs sm:text-sm font-serif italic text-slate-800 dark:text-slate-100 leading-relaxed min-h-[40px] flex items-center">
+                  “ Having clean housing arranged before my flight took all the fear out of moving to Europe.”
+                </p>
+                <div class="mt-3.5 flex items-center justify-between gap-2">
+                  <div>
+                    <div id="hero-candidate-name" class="text-xs sm:text-sm font-bold text-amber-500">Waleed from Egypt</div>
+                    <div id="hero-candidate-dest" class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">Relocated to Czech Republic · Automotive Assembler</div>
+                  </div>
+                  <button 
+                    type="button" 
+                    id="btn-hero-video"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-bold bg-amber-400 text-slate-950 hover:bg-amber-300 shadow-sm transition shrink-0 cursor-pointer active:scale-95"
+                  >
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <span>Watch Story</span>
+                  </button>
                 </div>
-                <button 
-                  type="button" 
-                  id="btn-hero-video"
-                  class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-bold bg-amber-400 text-slate-950 hover:bg-amber-300 shadow-sm transition shrink-0 cursor-pointer"
-                >
-                  <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                  <span>Watch Story</span>
-                </button>
               </div>
             </div>
 
@@ -418,7 +503,7 @@ const educationDestinations = destinations.filter(d => d.category === 'education
           </div>
           <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800">
             <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Monthly Savings</span>
-            <span class="text-xs font-bold text-emerald-600">€1,100+ / month</span>
+            <span id="modal-candidate-savings" class="text-xs font-bold text-emerald-600">€1,100+ / month</span>
           </div>
         </div>
       </div>
@@ -437,17 +522,205 @@ const educationDestinations = destinations.filter(d => d.category === 'education
 </Layout>
 
 <script is:inline>
-  // Candidate Story Spotlight & Modal
+  // Candidate Story Spotlight Auto-Swipe & Modal
   (() => {
-    const story = {
-      img: '/images/waleed.jpg',
-      name: 'Waleed from Egypt',
-      role: 'Relocated to Czech Republic · Automotive Assembler',
-      fullStory: 'Arriving in Prague with airport reception and a dedicated MyGo case officer welcoming me directly into employer housing made all the difference. The meals on shift are great and my contract is guaranteed for 2 years.',
-      route: 'Czech Republic (Employee Card)'
-    };
+    const candidates = [
+      {
+        img: '/images/waleed.jpg',
+        name: 'Waleed from Egypt',
+        role: 'Relocated to Czech Republic · Automotive Assembler',
+        quote: '“ Having clean housing arranged before my flight took all the fear out of moving to Europe.”',
+        fullStory: 'Arriving in Prague with airport reception and a dedicated MyGo case officer welcoming me directly into employer housing made all the difference. The meals on shift are great and my contract is guaranteed for 2 years.',
+        route: 'Czech Republic (Employee Card)',
+        savings: '€1,100+ / month'
+      },
+      {
+        img: '/headshot/workers/images.jpg',
+        name: 'Amara from Nigeria',
+        role: 'Relocated to Poland · Logistics & Inventory Coordinator',
+        quote: '“ Employer-provided accommodation was ready when I landed in Warsaw. Everything promised in my contract was honored.”',
+        fullStory: 'Poland logistics placement was approved within the stated timeline. Accommodation was ready upon arrival with warm bedding and close to the warehouse depot. My salary and meal allowance have been paid on the exact dates.',
+        route: 'Poland (National Type D Work Visa)',
+        savings: '€1,250+ / month'
+      },
+      {
+        img: '/headshot/workers/images%20(1).jpg',
+        name: 'Elena from Moldova',
+        role: 'Relocated to Slovakia · Warehouse & Production Specialist',
+        quote: '“ Transparent process from day one. Shift meals and company housing let me save over €1,000 every single month.”',
+        fullStory: 'Securing my manufacturing work permit for Slovakia was handled with absolute precision. Transparent from consultation to permit collection. The dorm accommodation and shift canteen meal vouchers are exactly as promised in the contract.',
+        route: 'Slovakia (Single Work Permit)',
+        savings: '€1,050+ / month'
+      },
+      {
+        img: '/headshot/workers/images%20(14).jpg',
+        name: 'David from Nigeria',
+        role: 'Relocated to Czech Republic · Industrial Assembly Operator',
+        quote: '“ My work permit arrived right on schedule and the on-site supervisor helped me settle into our apartment immediately.”',
+        fullStory: 'Good morning and have a wonderful day at work. My experience with the MyGo relocation team was amazing. Thanks MyGo for making this relocation dream a reality. The work permit arrived without delay and my housing was completely organized.',
+        route: 'Czech Republic (Industrial Work Permit)',
+        savings: '€1,300+ / month'
+      }
+    ];
 
-    // Modal Handling
+    let currentIndex = 0;
+    let autoTimer = null;
+    const intervalTime = 4500; // 4.5 seconds auto swipe
+
+    const container = document.getElementById('hero-slider-container');
+    const track = document.getElementById('hero-slider-track');
+    const badge = document.getElementById('hero-slider-badge');
+    const dots = document.querySelectorAll('.hero-dot');
+    const prevBtn = document.getElementById('hero-slider-prev');
+    const nextBtn = document.getElementById('hero-slider-next');
+    const cardContent = document.getElementById('hero-candidate-content');
+    const quoteEl = document.getElementById('hero-candidate-quote');
+    const nameEl = document.getElementById('hero-candidate-name');
+    const destEl = document.getElementById('hero-candidate-dest');
+    const quoteCard = document.getElementById('hero-quote-card');
+
+    function updateSlide(index) {
+      if (!track) return;
+      if (index < 0) index = candidates.length - 1;
+      if (index >= candidates.length) index = 0;
+      currentIndex = index;
+
+      // Smooth slide transform
+      track.style.transition = 'transform 600ms cubic-bezier(0.22, 1, 0.36, 1)';
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+      // Update badge
+      if (badge) {
+        badge.textContent = `Verified Story ${currentIndex + 1} of ${candidates.length}`;
+      }
+
+      // Update dots
+      dots.forEach((dot, idx) => {
+        if (idx === currentIndex) {
+          dot.className = 'hero-dot w-6 h-1.5 rounded-full bg-amber-400 transition-all duration-300 cursor-pointer';
+        } else {
+          dot.className = 'hero-dot w-2 h-1.5 rounded-full bg-white/40 hover:bg-white/80 transition-all duration-300 cursor-pointer';
+        }
+      });
+
+      // Synchronize floating card text with smooth crossfade
+      if (cardContent) {
+        cardContent.style.opacity = '0';
+        setTimeout(() => {
+          const c = candidates[currentIndex];
+          if (quoteEl) quoteEl.textContent = c.quote;
+          if (nameEl) nameEl.textContent = c.name;
+          if (destEl) destEl.textContent = c.role;
+          cardContent.style.opacity = '1';
+        }, 180);
+      }
+    }
+
+    function startAutoSwipe() {
+      stopAutoSwipe();
+      autoTimer = setInterval(() => {
+        updateSlide(currentIndex + 1);
+      }, intervalTime);
+    }
+
+    function stopAutoSwipe() {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+      }
+    }
+
+    // Arrows navigation
+    prevBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      updateSlide(currentIndex - 1);
+      startAutoSwipe();
+    });
+
+    nextBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      updateSlide(currentIndex + 1);
+      startAutoSwipe();
+    });
+
+    // Dot indicators navigation
+    dots.forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(dot.getAttribute('data-index') || '0', 10);
+        updateSlide(idx);
+        startAutoSwipe();
+      });
+    });
+
+    // Pause on hover
+    container?.addEventListener('mouseenter', stopAutoSwipe);
+    container?.addEventListener('mouseleave', startAutoSwipe);
+    quoteCard?.addEventListener('mouseenter', stopAutoSwipe);
+    quoteCard?.addEventListener('mouseleave', startAutoSwipe);
+
+    // Touch swipe support (Mobile & Tablets)
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    container?.addEventListener('touchstart', (e) => {
+      stopAutoSwipe();
+      touchStartX = e.touches[0].clientX;
+      touchEndX = touchStartX;
+    }, { passive: true });
+
+    container?.addEventListener('touchmove', (e) => {
+      touchEndX = e.touches[0].clientX;
+    }, { passive: true });
+
+    container?.addEventListener('touchend', () => {
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 45) {
+        if (diff > 0) {
+          updateSlide(currentIndex + 1);
+        } else {
+          updateSlide(currentIndex - 1);
+        }
+      }
+      startAutoSwipe();
+    });
+
+    // Mouse drag swipe support (Desktop)
+    let isMouseDown = false;
+    let mouseStartX = 0;
+    let mouseEndX = 0;
+
+    container?.addEventListener('mousedown', (e) => {
+      if (e.target.closest('button')) return;
+      isMouseDown = true;
+      mouseStartX = e.clientX;
+      mouseEndX = mouseStartX;
+      stopAutoSwipe();
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isMouseDown) return;
+      mouseEndX = e.clientX;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isMouseDown) return;
+      isMouseDown = false;
+      const diff = mouseStartX - mouseEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          updateSlide(currentIndex + 1);
+        } else {
+          updateSlide(currentIndex - 1);
+        }
+      }
+      startAutoSwipe();
+    });
+
+    // Start auto swiping on page load
+    startAutoSwipe();
+
+    // Modal Handling with active candidate story
     const modal = document.getElementById('candidate-story-modal');
     const openBtn = document.getElementById('btn-hero-video');
     const closeBtn = document.getElementById('candidate-story-close');
@@ -456,14 +729,20 @@ const educationDestinations = destinations.filter(d => d.category === 'education
     const modalRole = document.getElementById('modal-candidate-role');
     const modalFullStory = document.getElementById('modal-candidate-fullstory');
     const modalRoute = document.getElementById('modal-candidate-route');
+    const modalSavings = document.getElementById('modal-candidate-savings');
 
-    openBtn?.addEventListener('click', () => {
+    openBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
       if (!modal) return;
+      stopAutoSwipe();
+
+      const story = candidates[currentIndex];
       if (modalAvatar) modalAvatar.src = story.img;
       if (modalName) modalName.textContent = story.name;
       if (modalRole) modalRole.textContent = story.role;
       if (modalFullStory) modalFullStory.textContent = `"${story.fullStory}"`;
       if (modalRoute) modalRoute.textContent = story.route;
+      if (modalSavings) modalSavings.textContent = story.savings;
 
       modal.classList.remove('hidden');
       modal.classList.add('flex');
@@ -472,12 +751,14 @@ const educationDestinations = destinations.filter(d => d.category === 'education
     closeBtn?.addEventListener('click', () => {
       modal?.classList.add('hidden');
       modal?.classList.remove('flex');
+      startAutoSwipe();
     });
 
     modal?.addEventListener('click', (e) => {
       if (e.target === modal) {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+        startAutoSwipe();
       }
     });
 
