@@ -1,6 +1,7 @@
 # Build and runtime outputs
 dist/
 .astro/
+.vercel/
 node_modules/
 
 # Environment and sensitive credentials
