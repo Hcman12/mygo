@@ -611,7 +611,7 @@ import CountryFlag from './CountryFlag.astro';
           <svg class="w-4 h-4 text-brand-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
           </svg>
-          <span>Official Pass Card emailed to <strong id="card-recipient-email" class="text-slate-900 dark:text-white"></strong> from <strong>network@mygotravel.eu</strong></span>
+          <span>Official Pass Card emailed to <strong id="card-recipient-email" class="text-slate-900 dark:text-white"></strong> from <strong>support@mygotravel.eu</strong></span>
         </div>
       </div>
 
@@ -702,17 +702,32 @@ import CountryFlag from './CountryFlag.astro';
       </div>
 
       <!-- Action Buttons Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 max-w-xl mx-auto">
+      <!-- Action Buttons Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto">
         
-        <!-- 1. WhatsApp Button -->
+        <!-- 1. Track Application Button -->
+        <a 
+          id="btn-track-application" 
+          href="/track" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-bold shadow-lg shadow-amber-600/25 transition-all transform hover:-translate-y-0.5 text-center group"
+        >
+          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform text-lg">
+            📦
+          </div>
+          <span class="text-xs sm:text-sm font-bold">Track Online</span>
+        </a>
+
+        <!-- 2. WhatsApp Button -->
         <a 
           id="btn-send-whatsapp" 
           href="https://wa.me/12099493346" 
           target="_blank" 
           rel="noopener noreferrer"
-          class="flex flex-col items-center justify-center p-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-lg shadow-emerald-600/25 transition-all transform hover:-translate-y-0.5 text-center group"
+          class="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-600/25 transition-all transform hover:-translate-y-0.5 text-center group"
         >
-          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform">
             <svg class="w-6 h-6" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <defs>
                 <path id="a_wiz" d="M1023.941 765.153c0 5.606-.171 17.766-.508 27.159-.824 22.982-2.646 52.639-5.401 66.151-4.141 20.306-10.392 39.472-18.542 55.425-9.643 18.871-21.943 35.775-36.559 50.364-14.584 14.56-31.472 26.812-50.315 36.416-16.036 8.172-35.322 14.426-55.744 18.549-13.378 2.701-42.812 4.488-65.648 5.3-9.402.336-21.564.505-27.15.505l-504.226-.081c-5.607 0-17.765-.172-27.158-.509-22.983-.824-52.639-2.646-66.152-5.4-20.306-4.142-39.473-10.392-55.425-18.542-18.872-9.644-35.775-21.944-50.364-36.56-14.56-14.584-26.812-31.471-36.415-50.314-8.174-16.037-14.428-35.323-18.551-55.744-2.7-13.378-4.487-42.812-5.3-65.649-.334-9.401-.503-21.563-.503-27.148l.08-504.228c0-5.607.171-17.766.508-27.159.825-22.983 2.646-52.639 5.401-66.151 4.141-20.306 10.391-39.473 18.542-55.426C34.154 93.24 46.455 76.336 61.07 61.747c14.584-14.559 31.472-26.812 50.315-36.416 16.037-8.172 35.324-14.426 55.745-18.549 13.377-2.701 42.812-4.488 65.648-5.3 9.402-.335 21.565-.504 27.149-.504l504.227.081c5.608 0 17.766.171 27.159.508 22.983.825 52.638 2.646 66.152 5.401 20.305 4.141 39.472 10.391 55.425 18.542 18.871 9.643 35.774 21.944 50.363 36.559 14.559 14.584 26.812 31.471 36.415 50.315 8.174 16.037 14.428 35.323 18.551 55.744 2.7 13.378 4.486 42.812 5.3 65.649.335 9.402.504 21.564.504 27.15l-.082 504.226z"></path>
@@ -727,35 +742,35 @@ import CountryFlag from './CountryFlag.astro';
               </g>
             </svg>
           </div>
-          <span class="text-sm font-bold">Chat on WhatsApp</span>
+          <span class="text-xs sm:text-sm font-bold">WhatsApp</span>
         </a>
 
-        <!-- 2. NicerApp Button -->
+        <!-- 3. NicerApp Button -->
         <a 
           id="btn-send-nicerapp" 
           href="https://nicerapp.cloud/invite/cd0452e9-e0be-4f0d-9fde-2aaa865c4e01" 
           target="_blank" 
           rel="noopener noreferrer"
-          class="flex flex-col items-center justify-center p-4 rounded-2xl bg-brand-500 hover:bg-brand-600 text-white font-bold shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-0.5 text-center group"
+          class="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-brand-500 hover:bg-brand-600 text-white font-bold shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-0.5 text-center group"
         >
-          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform">
             <img src="/nicerapplogo.png" alt="NicerApp" class="w-6 h-6 object-contain rounded-full" />
           </div>
-          <span class="text-sm font-bold">Contact us on nicerapp</span>
+          <span class="text-xs sm:text-sm font-bold">NicerApp</span>
         </a>
 
-        <!-- 3. Download Pass Card Image -->
+        <!-- 4. Download Pass Card Image -->
         <button 
           type="button" 
           id="btn-download-pass" 
-          class="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-bold shadow-lg transition-all transform hover:-translate-y-0.5 text-center group cursor-pointer"
+          class="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-bold shadow-lg transition-all transform hover:-translate-y-0.5 text-center group cursor-pointer"
         >
-          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
             </svg>
           </div>
-          <span class="text-sm font-bold">Save Card Image</span>
+          <span class="text-xs sm:text-sm font-bold">Save Card</span>
         </button>
 
       </div>
@@ -1291,6 +1306,11 @@ Work Authorization: Legal Sponsorship`;
 
     const agentMsgEl = document.getElementById('agent-message-text');
     if (agentMsgEl) agentMsgEl.textContent = messageBody;
+
+    const btnTrack = document.getElementById('btn-track-application') as HTMLAnchorElement | null;
+    if (btnTrack) {
+      btnTrack.href = `/track?id=${encodeURIComponent(candidateTrackingId)}`;
+    }
 
     const btnWhatsapp = document.getElementById('btn-send-whatsapp') as HTMLAnchorElement | null;
     if (btnWhatsapp) {

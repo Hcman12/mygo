@@ -92,6 +92,15 @@ const currentPath = Astro.url.pathname;
           Our Team
         </a>
         <a 
+          href="/track" 
+          class={`text-sm font-semibold transition-colors hover:text-amber-500 flex items-center gap-1.5 ${currentPath === '/track' ? 'text-amber-500 font-bold' : 'text-slate-600 dark:text-slate-300'}`}
+        >
+          <span>Track</span>
+          <span class="inline-flex items-center px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+            Live
+          </span>
+        </a>
+        <a 
           href="/support" 
           class={`text-sm font-semibold transition-colors hover:text-brand-500 flex items-center gap-1.5 ${currentPath === '/support' ? 'text-brand-500 font-bold' : 'text-slate-600 dark:text-slate-300'}`}
         >
@@ -167,6 +176,10 @@ const currentPath = Astro.url.pathname;
     </a>
     <a href="/team" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-navy-800">
       Our Team
+    </a>
+    <a href="/track" class="block px-3 py-2 rounded-lg text-base font-semibold text-amber-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-navy-800 flex items-center justify-between">
+      <span>Track Application</span>
+      <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-500 font-mono">Live</span>
     </a>
     <a href="/support" class="block px-3 py-2 rounded-lg text-base font-semibold text-brand-600 dark:text-brand-400 hover:bg-slate-100 dark:hover:bg-navy-800">
       Support Desk (support@mygotravel.eu)

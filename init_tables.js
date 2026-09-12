@@ -71,10 +71,28 @@ async function main() {
         sent_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
       );
 
+      CREATE TABLE IF NOT EXISTS inquiries (
+        id SERIAL PRIMARY KEY,
+        tracking_id VARCHAR(50),
+        full_name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        phone VARCHAR(100),
+        topic VARCHAR(100),
+        subject VARCHAR(255),
+        message TEXT NOT NULL,
+        status VARCHAR(50) DEFAULT 'unread',
+        is_starred BOOLEAN DEFAULT false,
+        admin_reply TEXT,
+        replied_at TIMESTAMP WITH TIME ZONE,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+
       CREATE INDEX IF NOT EXISTS idx_evaluations_tracking_id ON evaluations(tracking_id);
       CREATE INDEX IF NOT EXISTS idx_evaluations_email ON evaluations(email);
       CREATE INDEX IF NOT EXISTS idx_evaluations_created ON evaluations(created_at DESC);
       CREATE INDEX IF NOT EXISTS idx_page_views_created ON page_views(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_inquiries_created ON inquiries(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_inquiries_status ON inquiries(status);
     `);
     console.log('All tables created successfully!');
     const res = await client.query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'");

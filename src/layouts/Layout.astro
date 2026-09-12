@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import WhatsAppWidget from '../components/WhatsAppWidget.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -198,5 +199,6 @@ const organizationSchema = {
       <slot />
     </main>
     {!hideHeaderFooter && <Footer />}
+    {!hideHeaderFooter && <WhatsAppWidget />}
   </body>
 </html>

@@ -23,7 +23,8 @@ export async function sendEmail({ to, name, subject, text, html, trackingId, att
   const port = parseInt(process.env.SMTP_PORT || '587', 10);
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
-  const from = process.env.SMTP_FROM || 'MyGo Travel <network@mygotravel.eu>';
+  const from = process.env.SMTP_FROM || 'MyGo Travel Support <support@mygotravel.eu>';
+  const replyTo = 'support@mygotravel.eu';
 
   let status: 'sent' | 'logged' | 'failed' = 'sent';
   let errorMessage: string | null = null;
@@ -39,6 +40,7 @@ export async function sendEmail({ to, name, subject, text, html, trackingId, att
 
       await transporter.sendMail({
         from,
+        replyTo,
         to,
         subject,
         text: text || html?.replace(/<[^>]*>?/gm, ''),

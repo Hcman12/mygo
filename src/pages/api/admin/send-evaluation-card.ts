@@ -85,7 +85,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     return new Response(JSON.stringify({
       success: true,
       status: result.status,
-      message: `Evaluation Card dispatched to ${candidate.email} via network@mygotravel.eu.`
+      message: `Evaluation Card dispatched to ${candidate.email} via support@mygotravel.eu.`
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }

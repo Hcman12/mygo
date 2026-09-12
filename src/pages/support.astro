@@ -373,18 +373,66 @@ import Layout from '../layouts/Layout.astro';
     const feedbackEl = document.getElementById('form-feedback');
     const submitBtn = document.getElementById('btn-submit-ticket');
 
-    supportForm?.addEventListener('submit', (e) => {
+    supportForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (feedbackEl) {
-        feedbackEl.classList.remove('hidden');
-        feedbackEl.className = 'mb-6 p-4 rounded-2xl text-sm font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400';
-        feedbackEl.innerHTML = `
-          ✓ Thank you! Your support docket has been registered.<br/>
-          Our admissions desk has received your request and will contact you at <strong>${document.getElementById('ticket-email')?.value}</strong> shortly.
-        `;
+
+      const fullName = document.getElementById('ticket-name')?.value || '';
+      const email = document.getElementById('ticket-email')?.value || '';
+      const phone = document.getElementById('ticket-phone')?.value || '';
+      const topic = document.getElementById('ticket-topic')?.value || 'general';
+      const trackingId = document.getElementById('ticket-tracking-id')?.value || '';
+      const message = document.getElementById('ticket-message')?.value || '';
+
+      if (submitBtn) {
+        submitBtn.setAttribute('disabled', 'true');
+        submitBtn.innerHTML = 'Transmitting Docket to Admissions...';
       }
-      supportForm.reset();
-      window.scrollTo({ top: feedbackEl.offsetTop - 100, behavior: 'smooth' });
+
+      try {
+        const res = await fetch('/api/inquiries', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fullName, email, phone, topic, trackingId, message })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          if (feedbackEl) {
+            feedbackEl.classList.remove('hidden');
+            feedbackEl.className = 'mb-6 p-5 rounded-2xl text-sm font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 leading-relaxed';
+            feedbackEl.innerHTML = `
+              ✓ <strong>Support Docket Registered Successfully!</strong> (Docket #INQ-${data.inquiryId})<br/>
+              Our admissions desk has logged your request and dispatched an email receipt to <strong>${email}</strong>.<br/>
+              An admissions officer will respond directly from <strong class="underline">support@mygotravel.eu</strong>.
+            `;
+          }
+          supportForm.reset();
+        } else {
+          if (feedbackEl) {
+            feedbackEl.classList.remove('hidden');
+            feedbackEl.className = 'mb-6 p-4 rounded-2xl text-sm font-semibold bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400';
+            feedbackEl.textContent = data.error || 'Failed to submit inquiry. Please retry.';
+          }
+        }
+      } catch (err) {
+        if (feedbackEl) {
+          feedbackEl.classList.remove('hidden');
+          feedbackEl.className = 'mb-6 p-4 rounded-2xl text-sm font-semibold bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400';
+          feedbackEl.textContent = 'Server connection error. Please try again.';
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.removeAttribute('disabled');
+          submitBtn.innerHTML = `
+            <span>Submit Inquiry to Admissions Desk</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          `;
+        }
+        if (feedbackEl) {
+          window.scrollTo({ top: feedbackEl.offsetTop - 100, behavior: 'smooth' });
+        }
+      }
     });
   </script>
 </Layout>

@@ -95,6 +95,25 @@ export async function initDb() {
       );
     `);
 
+    // 4. Inquiries & Inbound Messages table (Support desk & candidate inquiries)
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS inquiries (
+        id SERIAL PRIMARY KEY,
+        tracking_id VARCHAR(50),
+        full_name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        phone VARCHAR(100),
+        topic VARCHAR(100),
+        subject VARCHAR(255),
+        message TEXT NOT NULL,
+        status VARCHAR(50) DEFAULT 'unread',
+        is_starred BOOLEAN DEFAULT false,
+        admin_reply TEXT,
+        replied_at TIMESTAMP WITH TIME ZONE,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+    `);
+
     // Indexes for fast search
     await client.query(`
       CREATE INDEX IF NOT EXISTS idx_evaluations_tracking_id ON evaluations(tracking_id);
@@ -102,6 +121,9 @@ export async function initDb() {
       CREATE INDEX IF NOT EXISTS idx_evaluations_status ON evaluations(status);
       CREATE INDEX IF NOT EXISTS idx_evaluations_created ON evaluations(created_at DESC);
       CREATE INDEX IF NOT EXISTS idx_page_views_created ON page_views(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_inquiries_created ON inquiries(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_inquiries_status ON inquiries(status);
+      CREATE INDEX IF NOT EXISTS idx_inquiries_tracking_id ON inquiries(tracking_id);
     `);
 
     schemaInitialized = true;

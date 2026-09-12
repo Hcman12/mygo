@@ -76,7 +76,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         return new Response(JSON.stringify({
           success: true,
           status: result.status,
-          message: `Official Evaluation Card dispatched successfully to ${to} via network@mygotravel.eu.`
+          message: `Official Evaluation Card dispatched successfully to ${to} via support@mygotravel.eu.`
         }), {
           status: 200,
           headers: { 'Content-Type': 'application/json' }
@@ -204,6 +204,16 @@ export const POST: APIRoute = async ({ request, cookies }) => {
                   Admissions & Case Support Desk:
                 </div>
                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                  ${trackingId ? `
+                  <tr>
+                    <td align="center" style="padding-bottom:10px;">
+                      <a href="https://mygotravel.eu/track?id=${encodeURIComponent(trackingId)}" target="_blank" style="display:inline-block; width:88%; max-width:280px; background-color:#ea580c; color:#ffffff; text-decoration:none; padding:11px 16px; border-radius:8px; font-size:13px; font-weight:800; text-align:center; vertical-align:middle; box-shadow:0 2px 6px rgba(234,88,12,0.25);">
+                        <span style="vertical-align:middle; margin-right:6px;">📦</span>
+                        <span style="vertical-align:middle;">Track Application Online</span>
+                      </a>
+                    </td>
+                  </tr>
+                  ` : ''}
                   <tr>
                     <td align="center" style="padding-bottom:10px;">
                       <a href="${whatsappUrl}" target="_blank" style="display:inline-block; width:88%; max-width:280px; background-color:#25D366; color:#ffffff; text-decoration:none; padding:11px 16px; border-radius:8px; font-size:13px; font-weight:700; text-align:center; vertical-align:middle;">
@@ -232,7 +242,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
                 MyGo Travel European Admissions Directorate
               </p>
               <p style="margin:0 0 6px 0;">
-                Official Inquiries: <a href="mailto:network@mygotravel.eu" style="color:#0284c7; text-decoration:none;">network@mygotravel.eu</a>
+                Official Inquiries: <a href="mailto:support@mygotravel.eu" style="color:#0284c7; text-decoration:none; font-weight:600;">support@mygotravel.eu</a>
               </p>
               <p style="margin:0; font-size:10px; color:#94a3b8;">
                 © 2026 MyGo Travel. All rights reserved. Registered European Migration Advisory Services.
@@ -272,7 +282,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     return new Response(JSON.stringify({
       success: true,
       status: result.status,
-      message: `Email dispatched successfully to ${to} via network@mygotravel.eu.`
+      message: `Email dispatched successfully to ${to} via support@mygotravel.eu.`
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }

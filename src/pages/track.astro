@@ -1,0 +1,426 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+export const prerender = false;
+---
+
+<Layout 
+  title="Track Application Status · European Work Visa & Relocation Progress | MyGo Travel"
+  description="Track the step-by-step progress of your European relocation dossier, work permit issuance, and embassy visa stamping online. Real-time candidate tracking just like order tracking."
+  keywords="mygo travel track application, mygo tracking id, european visa status check, work permit tracking, mygo travel candidate status, track relocation docket"
+>
+  <!-- Hero Section with Search Input -->
+  <section class="relative bg-gradient-to-b from-slate-900 via-navy-950 to-slate-900 text-white pt-16 pb-20 overflow-hidden border-b border-slate-800">
+    <!-- Subtle ambient glows -->
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-brand-600/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-brand-500/10 border border-brand-500/30 text-brand-300">
+        <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+        <span>Real-Time Relocation Docket Tracker</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-black tracking-tight max-w-3xl mx-auto leading-tight">
+        Track Your European Relocation &amp; Visa Application
+      </h1>
+
+      <p class="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
+        Follow your candidate dossier step-by-step from evaluation pass to labor ministry sponsorship, consular visa stamping, and employer housing dispatch.
+      </p>
+
+      <!-- Tracking Search Box -->
+      <div class="max-w-2xl mx-auto mt-8">
+        <form id="track-search-form" class="relative flex flex-col sm:flex-row items-stretch gap-2.5 p-2 bg-slate-950/80 backdrop-blur-xl border border-slate-700/80 rounded-2xl shadow-2xl">
+          <div class="relative flex-grow">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+            </div>
+            <input 
+              type="text" 
+              id="input-tracking-id" 
+              required
+              placeholder="Enter Reference ID (e.g. mygo128934) or your registered email..." 
+              class="w-full pl-11 pr-4 py-3.5 bg-transparent text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:ring-0 font-mono tracking-wide"
+            />
+          </div>
+
+          <button 
+            type="submit" 
+            id="btn-track-submit"
+            class="px-7 py-3.5 rounded-xl font-extrabold text-sm text-white bg-gradient-to-r from-brand-600 to-amber-600 hover:from-brand-500 hover:to-amber-500 shadow-lg shadow-brand-600/30 transition flex items-center justify-center gap-2 cursor-pointer shrink-0"
+          >
+            <span>Track Status</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </button>
+        </form>
+
+        <!-- Example Search Suggestion -->
+        <div class="flex items-center justify-center gap-2 mt-3 text-xs text-slate-400">
+          <span>Forgot your Reference ID?</span>
+          <a href="/support" class="text-brand-400 hover:underline">Check your confirmation email or contact support →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Tracking Results Container -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 -mt-6">
+
+    <!-- Loading State Skeleton -->
+    <div id="tracking-loading" class="hidden bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-800 rounded-3xl p-8 sm:p-12 shadow-xl text-center space-y-4">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-brand-500/10 flex items-center justify-center text-brand-500">
+        <svg class="w-7 h-7 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-slate-900 dark:text-white">Connecting to European Relocation Records...</h3>
+      <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Fetching live visa processing timeline from admissions database.</p>
+    </div>
+
+    <!-- Error / Not Found Alert -->
+    <div id="tracking-error" class="hidden bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 rounded-3xl p-6 sm:p-8 shadow-lg text-center space-y-3">
+      <div class="w-12 h-12 mx-auto rounded-full bg-rose-100 dark:bg-rose-900/50 flex items-center justify-center text-rose-600 dark:text-rose-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+      </div>
+      <h3 class="text-base sm:text-lg font-bold text-rose-900 dark:text-rose-200" id="error-message-text">Dossier Reference Not Found</h3>
+      <p class="text-xs sm:text-sm text-rose-700 dark:text-rose-300 max-w-md mx-auto">
+        Please verify the Reference ID starting with <code class="font-mono font-bold">mygo...</code> sent to your email after completing the evaluation form.
+      </p>
+      <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
+        <a href="/assess" class="px-4 py-2 rounded-xl text-xs font-bold bg-white dark:bg-navy-900 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-navy-700 hover:border-brand-500">
+          Take Assessment Form
+        </a>
+        <a href="/support" class="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 text-white hover:bg-rose-500">
+          Contact Admissions Help Desk
+        </a>
+      </div>
+    </div>
+
+    <!-- Live Tracking Dossier Card -->
+    <div id="tracking-result-card" class="hidden space-y-6">
+      
+      <!-- Top Overview Header Card -->
+      <div class="bg-white dark:bg-navy-900 border border-slate-200/80 dark:border-navy-800 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+        <!-- Top accent banner -->
+        <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-500 via-amber-500 to-emerald-500"></div>
+
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-slate-100 dark:border-navy-800/80">
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2.5">
+              <span id="badge-status" class="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                Pending Review
+              </span>
+              <span class="text-xs text-slate-400 font-mono">Reference: <strong id="val-tracking-id" class="text-slate-900 dark:text-white font-bold">mygo000000</strong></span>
+              <button id="btn-copy-ref" class="text-slate-400 hover:text-brand-500 transition text-xs" title="Copy tracking code">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              </button>
+            </div>
+
+            <h2 id="val-candidate-name" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+              Candidate Dossier
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              Matched Placement: <strong id="val-job-title" class="text-slate-800 dark:text-slate-200">Logistics Associate</strong> · Destination: <strong id="val-country" class="text-slate-800 dark:text-slate-200">Poland</strong>
+            </p>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+            <a 
+              id="link-whatsapp-advisor" 
+              href="https://wa.me/12099493346" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md transition"
+            >
+              <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+              <span>WhatsApp Counselor</span>
+            </a>
+
+            <a 
+              href="/support" 
+              class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-navy-800 dark:hover:bg-navy-700 text-slate-800 dark:text-slate-200 transition"
+            >
+              <span>Inquire on Case</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Progress Bar (E-Commerce Style) -->
+        <div class="pt-6 space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Overall Dossier Progress</span>
+            <span id="progress-percentage-label" class="font-mono font-extrabold text-brand-600 dark:text-brand-400">25% Complete</span>
+          </div>
+
+          <div class="w-full h-3 bg-slate-100 dark:bg-navy-950 rounded-full overflow-hidden p-0.5 border border-slate-200 dark:border-navy-800">
+            <div 
+              id="progress-bar-fill" 
+              class="h-full bg-gradient-to-r from-brand-500 via-amber-500 to-emerald-500 rounded-full transition-all duration-700 ease-out"
+              style="width: 25%;"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5-Step Order-Style Stepper Card -->
+      <div class="bg-white dark:bg-navy-900 border border-slate-200/80 dark:border-navy-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+        <div class="mb-6 flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+              <span>Application Milestones &amp; Processing Stages</span>
+            </h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Live status timeline updated by the Admissions Directorate</p>
+          </div>
+
+          <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            Verified Database Sync
+          </span>
+        </div>
+
+        <!-- Interactive Vertical Step Timeline -->
+        <div id="timeline-steps-container" class="space-y-6 relative pl-4 sm:pl-6 before:absolute before:left-7 sm:before:left-9 before:top-4 before:bottom-4 before:w-0.5 before:bg-slate-200 dark:before:bg-navy-800">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Relocation Package Inclusions & Legal Assurances -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white dark:bg-navy-900 border border-slate-200/80 dark:border-navy-800 rounded-2xl p-5 shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-3 text-lg">
+            🏠
+          </div>
+          <h4 class="font-bold text-sm text-slate-900 dark:text-white">Guaranteed Accommodation</h4>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+            Furnished company housing arranged directly by your European employer near your work facility.
+          </p>
+          <span class="inline-block mt-3 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">✓ 100% Contractual Inclusions</span>
+        </div>
+
+        <div class="bg-white dark:bg-navy-900 border border-slate-200/80 dark:border-navy-800 rounded-2xl p-5 shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mb-3 text-lg">
+            🍲
+          </div>
+          <h4 class="font-bold text-sm text-slate-900 dark:text-white">Daily Meal Coverage</h4>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+            Daily hot meals during work shifts or monthly supermarket stipends provided by host corporation.
+          </p>
+          <span class="inline-block mt-3 text-[11px] font-semibold text-amber-600 dark:text-amber-400">✓ Subsidy Confirmed</span>
+        </div>
+
+        <div class="bg-white dark:bg-navy-900 border border-slate-200/80 dark:border-navy-800 rounded-2xl p-5 shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-3 text-lg">
+            📜
+          </div>
+          <h4 class="font-bold text-sm text-slate-900 dark:text-white">Legal Visa &amp; Work Permit</h4>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+            Official National D-Visa &amp; labor ministry certification with bilateral government registration.
+          </p>
+          <span class="inline-block mt-3 text-[11px] font-semibold text-blue-600 dark:text-blue-400">✓ Schengen Law Compliant</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Initial Help & FAQ (Visible before search) -->
+    <div id="tracking-initial-faq" class="mt-8 bg-white dark:bg-navy-900 border border-slate-200/80 dark:border-navy-800 rounded-3xl p-6 sm:p-10 shadow-sm space-y-6">
+      <div class="text-center max-w-xl mx-auto space-y-2">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white">How Application Tracking Works</h3>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+          Our automated consular docket pipeline gives you real-time visibility into each phase of your relocation.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 text-xs">
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-navy-950 border border-slate-200/60 dark:border-navy-800/60 space-y-2">
+          <div class="font-mono font-bold text-brand-600 text-sm">01. Tracking Reference</div>
+          <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+            Every candidate receives an official reference code (e.g. <code>mygo582194</code>) upon completing the candidate eligibility assessment.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-navy-950 border border-slate-200/60 dark:border-navy-800/60 space-y-2">
+          <div class="font-mono font-bold text-emerald-600 text-sm">02. Automated Status Updates</div>
+          <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+            As your assigned counselor verifies documents, files with the Ministry of Labor, and locks embassy interview dates, your tracker updates automatically.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-navy-950 border border-slate-200/60 dark:border-navy-800/60 space-y-2">
+          <div class="font-mono font-bold text-amber-600 text-sm">03. Departure Clearance</div>
+          <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+            Upon visa issuance, your employer accommodation contract and airport transit reception details appear right inside your tracker.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</Layout>
+
+<script is:inline>
+  (function() {
+    const searchForm = document.getElementById('track-search-form');
+    const inputId = document.getElementById('input-tracking-id');
+    const btnSubmit = document.getElementById('btn-track-submit');
+
+    const loadingEl = document.getElementById('tracking-loading');
+    const errorEl = document.getElementById('tracking-error');
+    const errorMsgText = document.getElementById('error-message-text');
+    const resultCard = document.getElementById('tracking-result-card');
+    const initialFaq = document.getElementById('tracking-initial-faq');
+
+    const badgeStatus = document.getElementById('badge-status');
+    const valTrackingId = document.getElementById('val-tracking-id');
+    const valCandidateName = document.getElementById('val-candidate-name');
+    const valJobTitle = document.getElementById('val-job-title');
+    const valCountry = document.getElementById('val-country');
+    const progressLabel = document.getElementById('progress-percentage-label');
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const timelineContainer = document.getElementById('timeline-steps-container');
+    const linkWhatsapp = document.getElementById('link-whatsapp-advisor');
+
+    async function executeSearch(trackingCode) {
+      const code = (trackingCode || '').trim();
+      if (!code) return;
+
+      // Update URL query string without page reload
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set('id', code);
+      window.history.replaceState({}, '', newUrl);
+
+      // Show loading
+      if (loadingEl) loadingEl.classList.remove('hidden');
+      if (errorEl) errorEl.classList.add('hidden');
+      if (resultCard) resultCard.classList.add('hidden');
+      if (initialFaq) initialFaq.classList.add('hidden');
+
+      try {
+        const res = await fetch(`/api/track?id=${encodeURIComponent(code)}`);
+        const json = await res.json();
+
+        if (loadingEl) loadingEl.classList.add('hidden');
+
+        if (!res.ok || !json.found || !json.data) {
+          if (errorEl) {
+            errorEl.classList.remove('hidden');
+            if (errorMsgText) {
+              errorMsgText.textContent = json.error || `No relocation record found for "${code}".`;
+            }
+          }
+          return;
+        }
+
+        const data = json.data;
+        renderTracker(data);
+      } catch (err) {
+        if (loadingEl) loadingEl.classList.add('hidden');
+        if (errorEl) {
+          errorEl.classList.remove('hidden');
+          if (errorMsgText) errorMsgText.textContent = 'Server connection error. Please try again.';
+        }
+      }
+    }
+
+    function renderTracker(d) {
+      if (valTrackingId) valTrackingId.textContent = d.trackingId;
+      if (valCandidateName) valCandidateName.textContent = d.fullName;
+      if (valJobTitle) valJobTitle.textContent = d.matchedJobTitle;
+      if (valCountry) valCountry.textContent = d.matchedCountry;
+
+      if (badgeStatus) {
+        badgeStatus.textContent = d.statusLabel;
+      }
+
+      if (progressLabel) progressLabel.textContent = `${d.progressPercentage}% Complete`;
+      if (progressBarFill) progressBarFill.style.width = `${d.progressPercentage}%`;
+
+      // Update WhatsApp link with prefilled reference
+      if (linkWhatsapp) {
+        const msg = `Hi MyGo Travel Admissions, regarding my relocation tracking ID ${d.trackingId} for ${d.matchedCountry}:`;
+        linkWhatsapp.href = `https://wa.me/12099493346?text=${encodeURIComponent(msg)}`;
+      }
+
+      // Render 5 steps
+      if (timelineContainer && d.steps) {
+        timelineContainer.innerHTML = d.steps.map((step) => {
+          const isCompleted = step.status === 'completed';
+          const isCurrent = step.status === 'current';
+
+          let iconBg = 'bg-slate-200 dark:bg-navy-800 text-slate-500';
+          let iconSvg = `<span class="font-bold text-xs">${step.id}</span>`;
+          let badgeHtml = '';
+
+          if (isCompleted) {
+            iconBg = 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30';
+            iconSvg = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>`;
+            badgeHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">Completed</span>`;
+          } else if (isCurrent) {
+            iconBg = 'bg-amber-500 text-white ring-4 ring-amber-500/20 shadow-md shadow-amber-500/30';
+            iconSvg = `<span class="w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>`;
+            badgeHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 animate-pulse">Current Stage</span>`;
+          } else {
+            badgeHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 dark:bg-navy-800 text-slate-400">Upcoming</span>`;
+          }
+
+          return `
+            <div class="relative flex items-start gap-4 group">
+              <!-- Step Icon Marker -->
+              <div class="w-8 h-8 rounded-full ${iconBg} flex items-center justify-center shrink-0 relative z-10 transition-transform group-hover:scale-110">
+                ${iconSvg}
+              </div>
+
+              <!-- Step Content -->
+              <div class="flex-grow p-4 rounded-2xl bg-slate-50 dark:bg-navy-950 border ${isCurrent ? 'border-amber-500/40 shadow-sm' : 'border-slate-200/60 dark:border-navy-800/60'} transition">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                  <div class="flex items-center gap-2">
+                    <h4 class="font-bold text-sm ${isCurrent ? 'text-amber-600 dark:text-amber-400' : isCompleted ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400'}">
+                      Step ${step.id}: ${step.title}
+                    </h4>
+                    ${badgeHtml}
+                  </div>
+                  ${step.dateLabel ? `<span class="text-xs text-slate-400 font-mono">${step.dateLabel}</span>` : ''}
+                </div>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">${step.description}</p>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      if (resultCard) resultCard.classList.remove('hidden');
+    }
+
+    // Handle Form Submit
+    searchForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      executeSearch(inputId?.value);
+    });
+
+    // Copy Ref ID
+    document.getElementById('btn-copy-ref')?.addEventListener('click', () => {
+      if (valTrackingId && valTrackingId.textContent) {
+        navigator.clipboard.writeText(valTrackingId.textContent);
+        alert(`Reference ID copied: ${valTrackingId.textContent}`);
+      }
+    });
+
+    // Auto-search if ?id= query param exists on load
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialId = urlParams.get('id');
+    if (initialId) {
+      if (inputId) inputId.value = initialId;
+      executeSearch(initialId);
+    }
+  })();
+</script>

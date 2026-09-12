@@ -141,6 +141,7 @@ export function buildAssessmentCardEmail(data: AssessmentCandidateData) {
 
   const whatsappUrl = `https://wa.me/12099493346?text=${encodeURIComponent(whatsappMessage)}`;
   const nicerappUrl = `https://nicerapp.cloud/invite/cd0452e9-e0be-4f0d-9fde-2aaa865c4e01`;
+  const trackUrl = `https://mygotravel.eu/track?id=${encodeURIComponent(trackingId)}`;
 
   const subject = `Eligibility Confirmed: Candidate Evaluation Card [Ref: ${trackingId}]`;
 
@@ -167,6 +168,10 @@ PLACEMENT & SPONSORSHIP DETAILS:
 - Housing Provision: Guaranteed Employer-Provided
 - Daily Meals: Included Daily Provision
 
+TRACK YOUR APPLICATION:
+You can track the step-by-step progress of your visa, work permit, and relocation online:
+${trackUrl}
+
 NEXT STEPS:
 Please connect directly with your assigned placement desk quoting Reference ID ${trackingId}:
 - WhatsApp Desk: ${whatsappUrl}
@@ -174,7 +179,7 @@ Please connect directly with your assigned placement desk quoting Reference ID $
 
 Best regards,
 MyGo Travel European Admissions Directorate
-Email: network@mygotravel.eu
+Official Support & Inquiries: support@mygotravel.eu
 Website: https://mygotravel.eu
 `.trim();
 
@@ -378,6 +383,15 @@ Website: https://mygotravel.eu
 
               <!-- Action Buttons Table -->
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <!-- Primary Action: Track Application Online -->
+                <tr>
+                  <td align="center" style="padding-bottom:12px;">
+                    <a href="${trackUrl}" target="_blank" style="display:inline-block; width:88%; max-width:300px; background-color:#ea580c; color:#ffffff; text-decoration:none; padding:12px 18px; border-radius:8px; font-size:14px; font-weight:800; text-align:center; vertical-align:middle; box-shadow:0 2px 8px rgba(234,88,12,0.25);">
+                      <span style="vertical-align:middle; margin-right:6px;">📦</span>
+                      <span style="vertical-align:middle;">Track Application Online</span>
+                    </a>
+                  </td>
+                </tr>
                 <tr>
                   <td align="center" style="padding-bottom:12px;">
                     <a href="${whatsappUrl}" target="_blank" style="display:inline-block; width:88%; max-width:300px; background-color:#25D366; color:#ffffff; text-decoration:none; padding:12px 18px; border-radius:8px; font-size:14px; font-weight:700; text-align:center; vertical-align:middle;">
@@ -406,7 +420,7 @@ Website: https://mygotravel.eu
                 MyGo Travel European Relocation Services
               </p>
               <p style="margin:0 0 8px 0;">
-                Official Inquiries: <a href="mailto:network@mygotravel.eu" style="color:#0284c7; text-decoration:none; font-weight:600;">network@mygotravel.eu</a> • Ref: <strong>${trackingId}</strong>
+                Official Inquiries: <a href="mailto:support@mygotravel.eu" style="color:#0284c7; text-decoration:none; font-weight:600;">support@mygotravel.eu</a> • Ref: <strong>${trackingId}</strong>
               </p>
               <p style="margin:0 0 10px 0; color:#94a3b8; font-size:10px;">
                 Admissions Directorate: Warsaw • Prague • Bratislava • Lisbon • Vilnius

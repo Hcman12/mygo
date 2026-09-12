@@ -166,6 +166,12 @@ const authenticated = isAuthenticated(Astro.cookies);
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             </a>
 
+            <button id="btn-header-inbox" class="flex items-center gap-1.5 text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg transition cursor-pointer" title="Open Inbound Inquiries Inbox">
+              <svg class="w-3.5 h-3.5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+              <span>Inbox</span>
+              <span id="badge-header-inbox" class="px-1.5 py-0.2 text-[10px] rounded-full bg-rose-600 text-white font-mono font-bold hidden">0</span>
+            </button>
+
             <button id="btn-admin-logout" class="flex items-center gap-1.5 text-xs font-semibold text-rose-400 hover:text-rose-300 bg-rose-950/30 hover:bg-rose-950/50 border border-rose-900/50 px-3 py-1.5 rounded-lg transition cursor-pointer">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
               <span>Sign Out</span>
@@ -190,6 +196,12 @@ const authenticated = isAuthenticated(Astro.cookies);
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             <span>Email Composer &amp; Dispatches</span>
             <span id="badge-email-count" class="ml-1 px-2 py-0.5 text-xs rounded-full bg-slate-800 font-mono text-slate-300">0</span>
+          </button>
+
+          <button id="tab-btn-inbox" class="tab-button flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-slate-400 hover:text-white hover:bg-slate-800/60 transition cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+            <span>Inbound Inquiries</span>
+            <span id="badge-inbox-count" class="ml-1 px-2 py-0.5 text-xs rounded-full bg-slate-800 font-mono text-slate-300">0</span>
           </button>
         </nav>
 
@@ -626,6 +638,128 @@ const authenticated = isAuthenticated(Astro.cookies);
             </div>
           </section>
 
+          <!-- ================= TAB 4: INBOUND INQUIRIES & INBOX ================= -->
+          <section id="section-inbox" class="hidden space-y-6">
+            <!-- Filter Bar -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              <div class="relative flex-grow max-w-md">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500 pointer-events-none">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </span>
+                <input
+                  type="text"
+                  id="inbox-search-input"
+                  placeholder="Search inquiries by candidate, email, phone, tracking ID..."
+                  class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition"
+                />
+              </div>
+
+              <div class="flex items-center gap-2.5">
+                <select id="inbox-status-filter" class="bg-slate-950 border border-slate-800 text-slate-300 text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-brand-500 cursor-pointer">
+                  <option value="all">All Inquiries</option>
+                  <option value="unread" selected>✉ Unread Only</option>
+                  <option value="read">Read</option>
+                  <option value="replied">✓ Replied</option>
+                </select>
+
+                <button id="btn-refresh-inbox" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition cursor-pointer">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                  <span>Refresh</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Master-Detail 2-Column Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <!-- Left Column: Inquiries List -->
+              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl flex flex-col">
+                <div class="border-b border-slate-800 pb-3 mb-3 flex items-center justify-between">
+                  <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                    <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                    <span>Inbound Inquiries</span>
+                  </h3>
+                  <span id="inbox-list-count" class="text-xs text-slate-500 font-mono">0 messages</span>
+                </div>
+
+                <div id="inbox-messages-list" class="flex-grow overflow-y-auto max-h-[600px] space-y-2 pr-1 text-xs">
+                  <div class="text-center py-10 text-slate-500">Loading inbox messages...</div>
+                </div>
+              </div>
+
+              <!-- Right Column: Detail / Response View -->
+              <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col">
+                <div id="inbox-detail-empty" class="flex-grow flex flex-col items-center justify-center py-20 text-slate-500 text-center space-y-3">
+                  <div class="w-16 h-16 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-600 text-2xl">
+                    ✉
+                  </div>
+                  <h4 class="font-bold text-slate-400 text-sm">Select an Inquiry Docket</h4>
+                  <p class="text-xs text-slate-600 max-w-sm">Click any message in the inbox list to read candidate questions, check linked tracking ID, and dispatch official email replies.</p>
+                </div>
+
+                <div id="inbox-detail-content" class="hidden flex flex-col flex-grow space-y-5">
+                  <!-- Header -->
+                  <div class="border-b border-slate-800 pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div>
+                      <div class="flex items-center gap-2 mb-1">
+                        <span id="detail-inbox-status-badge" class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                          Unread
+                        </span>
+                        <span id="detail-inbox-topic-badge" class="px-2 py-0.5 rounded text-[10px] font-semibold bg-brand-500/20 text-brand-300">
+                          Topic
+                        </span>
+                        <span id="detail-inbox-tracking-tag" class="text-xs font-mono text-amber-400"></span>
+                      </div>
+                      <h3 id="detail-inbox-subject" class="text-base sm:text-lg font-bold text-white">
+                        Inquiry Subject
+                      </h3>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center gap-2">
+                      <button id="btn-inbox-toggle-read" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition cursor-pointer">
+                        Mark Read
+                      </button>
+                      <button id="btn-inbox-quick-reply" class="px-4 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold shadow-md shadow-brand-600/20 transition flex items-center gap-1.5 cursor-pointer">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        <span>Reply via Email</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Candidate Info Strip -->
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs">
+                    <div>
+                      <span class="text-slate-500 uppercase font-semibold text-[10px] block">Candidate</span>
+                      <span id="detail-inbox-name" class="font-bold text-white text-sm"></span>
+                    </div>
+                    <div>
+                      <span class="text-slate-500 uppercase font-semibold text-[10px] block">Email</span>
+                      <a id="detail-inbox-email" href="#" class="text-brand-400 hover:underline font-medium break-all"></a>
+                    </div>
+                    <div>
+                      <span class="text-slate-500 uppercase font-semibold text-[10px] block">Phone / WhatsApp</span>
+                      <span id="detail-inbox-phone" class="text-slate-300 font-mono"></span>
+                    </div>
+                  </div>
+
+                  <!-- Message Content -->
+                  <div class="flex-grow space-y-2">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Candidate Message:</span>
+                    <div id="detail-inbox-message" class="p-4 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-200 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap font-sans"></div>
+                  </div>
+
+                  <!-- Footer Meta -->
+                  <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-500">
+                    <span id="detail-inbox-date">Received: --</span>
+                    <a id="detail-inbox-track-link" href="#" target="_blank" class="text-amber-400 hover:underline font-semibold hidden">
+                      View Application Tracking Record →
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
         </main>
 
         <!-- ================= FULL CANDIDATE PROFILE MODAL ================= -->
@@ -794,7 +928,7 @@ const authenticated = isAuthenticated(Astro.cookies);
               </button>
 
               <div class="flex items-center gap-3">
-                <button id="modal-btn-send-card" class="px-4 py-2 rounded-xl bg-tealbrand-600 hover:bg-tealbrand-500 text-white text-xs font-semibold flex items-center gap-1.5 transition shadow cursor-pointer" title="Send or resend Evaluation Card via SMTP (network@mygotravel.eu)">
+                <button id="modal-btn-send-card" class="px-4 py-2 rounded-xl bg-tealbrand-600 hover:bg-tealbrand-500 text-white text-xs font-semibold flex items-center gap-1.5 transition shadow cursor-pointer" title="Send or resend Evaluation Card via SMTP (support@mygotravel.eu)">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                   <span>Send Evaluation Card</span>
                 </button>
@@ -888,13 +1022,15 @@ const authenticated = isAuthenticated(Astro.cookies);
           const tabBtns = {
             evaluations: document.getElementById('tab-btn-evaluations'),
             analytics: document.getElementById('tab-btn-analytics'),
-            email: document.getElementById('tab-btn-email')
+            email: document.getElementById('tab-btn-email'),
+            inbox: document.getElementById('tab-btn-inbox')
           };
 
           const tabSections = {
             evaluations: document.getElementById('section-evaluations'),
             analytics: document.getElementById('section-analytics'),
-            email: document.getElementById('section-email')
+            email: document.getElementById('section-email'),
+            inbox: document.getElementById('section-inbox')
           };
 
           function switchTab(target) {
@@ -912,11 +1048,14 @@ const authenticated = isAuthenticated(Astro.cookies);
 
             if (target === 'analytics') loadAnalytics();
             if (target === 'email') loadSentEmails();
+            if (target === 'inbox') loadInbox();
           }
 
           tabBtns.evaluations?.addEventListener('click', () => switchTab('evaluations'));
           tabBtns.analytics?.addEventListener('click', () => switchTab('analytics'));
           tabBtns.email?.addEventListener('click', () => switchTab('email'));
+          tabBtns.inbox?.addEventListener('click', () => switchTab('inbox'));
+          document.getElementById('btn-header-inbox')?.addEventListener('click', () => switchTab('inbox'));
 
           // Sign Out Handler
           document.getElementById('btn-admin-logout')?.addEventListener('click', async () => {
@@ -1043,11 +1182,11 @@ const authenticated = isAuthenticated(Astro.cookies);
                       </td>
                       <td class="py-3 px-4 text-right space-x-1 whitespace-nowrap">
                         ${(item.emails_sent_count || 0) === 0 ? `
-                          <button onclick="sendEvaluationCard('${item.tracking_id}', this)" class="px-2 py-1 text-xs rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition font-medium cursor-pointer" title="Send Evaluation Card via network@mygotravel.eu">
+                          <button onclick="sendEvaluationCard('${item.tracking_id}', this)" class="px-2 py-1 text-xs rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition font-medium cursor-pointer" title="Send Evaluation Card via support@mygotravel.eu">
                             ✉ Send Card
                           </button>
                         ` : `
-                          <button onclick="sendEvaluationCard('${item.tracking_id}', this)" class="px-2 py-1 text-xs rounded-lg bg-slate-800 hover:bg-tealbrand-600 text-slate-300 hover:text-white transition font-medium cursor-pointer" title="Resend Evaluation Card via network@mygotravel.eu">
+                          <button onclick="sendEvaluationCard('${item.tracking_id}', this)" class="px-2 py-1 text-xs rounded-lg bg-slate-800 hover:bg-tealbrand-600 text-slate-300 hover:text-white transition font-medium cursor-pointer" title="Resend Evaluation Card via support@mygotravel.eu">
                             Resend Card
                           </button>
                         `}
@@ -1099,7 +1238,7 @@ const authenticated = isAuthenticated(Astro.cookies);
             }
           };
 
-          // Dispatch Official Candidate Evaluation Card via SMTP (network@mygotravel.eu)
+          // Dispatch Official Candidate Evaluation Card via SMTP (support@mygotravel.eu)
           window.sendEvaluationCard = async function(trackingId, btnEl) {
             if (!trackingId) return;
 
@@ -1115,7 +1254,7 @@ const authenticated = isAuthenticated(Astro.cookies);
               `;
             }
 
-            showToast(`Dispatching evaluation card for ${trackingId} via SMTP (network@mygotravel.eu)...`);
+            showToast(`Dispatching evaluation card for ${trackingId} via SMTP (support@mygotravel.eu)...`);
 
             try {
               const res = await fetch('/api/admin/send-evaluation-card', {
@@ -1737,10 +1876,280 @@ const authenticated = isAuthenticated(Astro.cookies);
             if (feedback) feedback.classList.add('hidden');
           });
 
+          // ================= INBOUND INBOX LOGIC =================
+          let inboxCache = [];
+          let currentSelectedInquiry = null;
+
+          async function loadInbox() {
+            const listEl = document.getElementById('inbox-messages-list');
+            const countEl = document.getElementById('inbox-list-count');
+            const badgeTab = document.getElementById('badge-inbox-count');
+            const badgeHeader = document.getElementById('badge-header-inbox');
+            const searchVal = document.getElementById('inbox-search-input')?.value.trim() || '';
+            const statusVal = document.getElementById('inbox-status-filter')?.value || 'all';
+
+            try {
+              let url = `/api/admin/inbox?status=${encodeURIComponent(statusVal)}`;
+              if (searchVal) url += `&search=${encodeURIComponent(searchVal)}`;
+
+              const res = await fetch(url);
+              if (!res.ok) return;
+              const data = await res.json();
+              inboxCache = data.inquiries || [];
+
+              const unread = data.unreadCount || 0;
+              if (badgeTab) badgeTab.textContent = unread;
+              if (badgeHeader) {
+                badgeHeader.textContent = unread;
+                if (unread > 0) {
+                  badgeHeader.classList.remove('hidden');
+                } else {
+                  badgeHeader.classList.add('hidden');
+                }
+              }
+              if (countEl) countEl.textContent = `${data.total || inboxCache.length} inquiry(s)`;
+
+              renderInboxList(inboxCache);
+            } catch (err) {
+              console.error('Error loading inbox:', err);
+              if (listEl) listEl.innerHTML = '<div class="text-center py-6 text-rose-400">Failed to load inquiries.</div>';
+            }
+          }
+
+          function renderInboxList(inquiries) {
+            const listEl = document.getElementById('inbox-messages-list');
+            if (!listEl) return;
+
+            if (inquiries.length === 0) {
+              listEl.innerHTML = `
+                <div class="text-center py-12 text-slate-500 space-y-2">
+                  <div class="text-2xl">📬</div>
+                  <div>No inquiries match current filters.</div>
+                </div>
+              `;
+              return;
+            }
+
+            listEl.innerHTML = inquiries.map(item => {
+              const isSelected = currentSelectedInquiry && currentSelectedInquiry.id === item.id;
+              const isUnread = item.status === 'unread';
+              const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString(undefined, {
+                month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+              }) : 'Recent';
+
+              const statusBadge = item.status === 'replied'
+                ? '<span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">Replied</span>'
+                : isUnread
+                  ? '<span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-rose-950 text-rose-300 border border-rose-800">New</span>'
+                  : '<span class="px-1.5 py-0.2 rounded text-[10px] font-medium bg-slate-800 text-slate-400">Read</span>';
+
+              return `
+                <div
+                  onclick="openInquiryDetail(${item.id})"
+                  class="p-3 rounded-xl border transition cursor-pointer space-y-1.5 ${
+                    isSelected
+                      ? 'bg-slate-800/80 border-brand-500 shadow-md ring-1 ring-brand-500/50'
+                      : isUnread
+                        ? 'bg-slate-950 border-rose-900/40 hover:border-slate-700'
+                        : 'bg-slate-950/60 border-slate-800/80 hover:border-slate-700'
+                  }"
+                >
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-1.5 truncate">
+                      ${isUnread ? '<span class="w-2 h-2 rounded-full bg-rose-500 shrink-0 animate-pulse"></span>' : ''}
+                      <span class="font-bold text-white text-xs truncate">${item.full_name || 'Candidate'}</span>
+                    </div>
+                    <span class="text-[10px] text-slate-500 shrink-0">${dateStr}</span>
+                  </div>
+
+                  <div class="flex items-center gap-1.5">
+                    ${statusBadge}
+                    ${item.tracking_id ? `<span class="text-[10px] font-mono text-amber-400 font-semibold bg-amber-950/40 px-1 rounded border border-amber-800/40 truncate max-w-[110px]">${item.tracking_id}</span>` : ''}
+                    <span class="text-[10px] text-brand-300/80 font-medium truncate">${item.topic || 'Inquiry'}</span>
+                  </div>
+
+                  <div class="text-xs font-semibold text-slate-200 truncate">${item.subject || '(No Subject)'}</div>
+                  <div class="text-[11px] text-slate-400 line-clamp-2 leading-tight">${item.message || ''}</div>
+                </div>
+              `;
+            }).join('');
+          }
+
+          window.openInquiryDetail = async function(id) {
+            const item = inboxCache.find(i => i.id === id);
+            if (!item) return;
+
+            currentSelectedInquiry = item;
+            renderInboxList(inboxCache);
+
+            const emptyEl = document.getElementById('inbox-detail-empty');
+            const contentEl = document.getElementById('inbox-detail-content');
+            if (emptyEl) emptyEl.classList.add('hidden');
+            if (contentEl) contentEl.classList.remove('hidden');
+
+            // Populate fields
+            const subjectEl = document.getElementById('detail-inbox-subject');
+            const nameEl = document.getElementById('detail-inbox-name');
+            const emailEl = document.getElementById('detail-inbox-email');
+            const phoneEl = document.getElementById('detail-inbox-phone');
+            const messageEl = document.getElementById('detail-inbox-message');
+            const dateEl = document.getElementById('detail-inbox-date');
+            const topicBadge = document.getElementById('detail-inbox-topic-badge');
+            const trackingTag = document.getElementById('detail-inbox-tracking-tag');
+            const statusBadge = document.getElementById('detail-inbox-status-badge');
+            const trackLink = document.getElementById('detail-inbox-track-link');
+            const toggleReadBtn = document.getElementById('btn-inbox-toggle-read');
+
+            if (subjectEl) subjectEl.textContent = item.subject || '(No Subject)';
+            if (nameEl) nameEl.textContent = item.full_name || 'Candidate';
+            if (emailEl) {
+              emailEl.textContent = item.email;
+              emailEl.href = `mailto:${item.email}`;
+            }
+            if (phoneEl) phoneEl.textContent = item.phone || 'None provided';
+            if (messageEl) messageEl.textContent = item.message || '';
+            if (dateEl) dateEl.textContent = `Received: ${new Date(item.created_at).toLocaleString()}`;
+            if (topicBadge) topicBadge.textContent = item.topic || 'General Inquiry';
+            if (trackingTag) trackingTag.textContent = item.tracking_id ? `Ref: ${item.tracking_id}` : '';
+
+            function updateStatusUI(status) {
+              if (!statusBadge) return;
+              if (status === 'replied') {
+                statusBadge.textContent = '✓ Replied';
+                statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+              } else if (status === 'unread') {
+                statusBadge.textContent = 'Unread';
+                statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-rose-500/20 text-rose-300 border border-rose-500/30';
+              } else {
+                statusBadge.textContent = 'Read';
+                statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-semibold uppercase bg-slate-800 text-slate-300 border border-slate-700';
+              }
+              if (toggleReadBtn) {
+                toggleReadBtn.textContent = status === 'unread' ? 'Mark Read' : 'Mark Unread';
+              }
+            }
+
+            updateStatusUI(item.status);
+
+            // Handle Tracking link
+            if (trackLink) {
+              if (item.tracking_id) {
+                trackLink.href = `/track?id=${encodeURIComponent(item.tracking_id)}`;
+                trackLink.classList.remove('hidden');
+              } else {
+                trackLink.classList.add('hidden');
+              }
+            }
+
+            // If unread, automatically mark as read
+            if (item.status === 'unread') {
+              try {
+                await fetch('/api/admin/inbox', {
+                  method: 'PATCH',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ id: item.id, status: 'read' })
+                });
+                item.status = 'read';
+                updateStatusUI('read');
+                // Refresh unread counter
+                const badgeTab = document.getElementById('badge-inbox-count');
+                const badgeHeader = document.getElementById('badge-header-inbox');
+                const currentCount = parseInt(badgeTab?.textContent || '1', 10);
+                const nextCount = Math.max(0, currentCount - 1);
+                if (badgeTab) badgeTab.textContent = nextCount;
+                if (badgeHeader) {
+                  badgeHeader.textContent = nextCount;
+                  if (nextCount === 0) badgeHeader.classList.add('hidden');
+                }
+              } catch (e) {
+                console.error('Failed to mark read:', e);
+              }
+            }
+          };
+
+          // Toggle Read / Unread handler
+          document.getElementById('btn-inbox-toggle-read')?.addEventListener('click', async () => {
+            if (!currentSelectedInquiry) return;
+            const newStatus = currentSelectedInquiry.status === 'unread' ? 'read' : 'unread';
+            try {
+              const res = await fetch('/api/admin/inbox', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentSelectedInquiry.id, status: newStatus })
+              });
+              if (res.ok) {
+                currentSelectedInquiry.status = newStatus;
+                showToast(`Inquiry marked as ${newStatus}`);
+                loadInbox();
+                window.openInquiryDetail(currentSelectedInquiry.id);
+              }
+            } catch (err) {
+              showToast('Error changing status: ' + err.message, 'error');
+            }
+          });
+
+          // Quick Reply: Switches to Email tab, pre-fills composer, and marks inquiry replied
+          document.getElementById('btn-inbox-quick-reply')?.addEventListener('click', async () => {
+            if (!currentSelectedInquiry) return;
+            const item = currentSelectedInquiry;
+            switchTab('email');
+
+            const toEmailInput = document.getElementById('composer-to-email');
+            const toNameInput = document.getElementById('composer-to-name');
+            const trackingInput = document.getElementById('composer-tracking-id');
+            const subjectInput = document.getElementById('composer-subject');
+            const messageInput = document.getElementById('composer-message');
+
+            if (toEmailInput) toEmailInput.value = item.email;
+            if (toNameInput) toNameInput.value = item.full_name || 'Applicant';
+            if (trackingInput) trackingInput.value = item.tracking_id || '';
+            if (subjectInput) {
+              subjectInput.value = item.subject?.toLowerCase().startsWith('re:')
+                ? item.subject
+                : `Re: ${item.subject || 'MyGo Travel Relocation Support'}`;
+            }
+            if (messageInput) {
+              messageInput.value = `Dear ${item.full_name || 'Applicant'},\n\nThank you for reaching out to MyGo Travel regarding your inquiry: "${item.subject || 'Application Inquiry'}".\n\n\n\n${item.tracking_id ? `You can track the live progress of your relocation dossier anytime at:\nhttps://mygotravel.eu/track?id=${item.tracking_id}\n\n` : ''}Please reply directly to this email if you require any further assistance.\n\nWarm regards,\nMyGo Travel Support Directorate\nsupport@mygotravel.eu`;
+              messageInput.focus();
+            }
+
+            // Mark inquiry as replied
+            try {
+              await fetch('/api/admin/inbox', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: item.id, status: 'replied' })
+              });
+              item.status = 'replied';
+              loadInbox();
+            } catch (e) {
+              console.error('Failed to mark replied:', e);
+            }
+          });
+
+          // Inbox Search & Filters
+          let inboxSearchTimeout = null;
+          document.getElementById('inbox-search-input')?.addEventListener('input', () => {
+            clearTimeout(inboxSearchTimeout);
+            inboxSearchTimeout = setTimeout(() => {
+              loadInbox();
+            }, 300);
+          });
+
+          document.getElementById('inbox-status-filter')?.addEventListener('change', () => {
+            loadInbox();
+          });
+
+          document.getElementById('btn-refresh-inbox')?.addEventListener('click', () => {
+            loadInbox();
+            showToast('Inbound inquiries refreshed');
+          });
+
           // Initial Page Load
           loadEvaluations();
           loadAnalytics();
           loadSentEmails();
+          loadInbox();
         </script>
       </div>
     )
