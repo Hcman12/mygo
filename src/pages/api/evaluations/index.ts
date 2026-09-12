@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro';
 import { query } from '../../../lib/db';
 import { getClientIp, lookupIp } from '../../../lib/geo';
+import { sendEmail } from '../../../lib/mailer';
+import { buildAssessmentCardEmail } from '../../../lib/assessmentCardEmail';
 
 export const prerender = false;
 
@@ -91,11 +93,48 @@ export const POST: APIRoute = async ({ request }) => {
     const result = await query(sql, values);
     const saved = result.rows[0];
 
+    // Immediately dispatch official Assessment Pass Card email to candidate
+    let emailStatus = 'pending';
+    try {
+      const emailContent = buildAssessmentCardEmail({
+        trackingId: saved?.tracking_id || trackingId,
+        fullName: fullName.trim(),
+        email: email.trim().toLowerCase(),
+        phone,
+        age,
+        passportNumber,
+        jobCategory,
+        matchedCountry,
+        matchedJobTitle,
+        matchedProcessingTime,
+        score,
+        photoData,
+        startTimeline
+      });
+
+      const emailResult = await sendEmail({
+        to: email.trim().toLowerCase(),
+        name: fullName.trim(),
+        subject: emailContent.subject,
+        text: emailContent.text,
+        html: emailContent.html,
+        trackingId: saved?.tracking_id || trackingId,
+        attachments: emailContent.attachments
+      });
+
+      emailStatus = emailResult.status;
+      console.log(`[Assessment Email] Dispatched to ${email.trim().toLowerCase()} (Tracking: ${saved?.tracking_id || trackingId}) - Status: ${emailStatus}`);
+    } catch (mailError: any) {
+      console.error('[Assessment Email Dispatch Error]:', mailError);
+      emailStatus = 'failed';
+    }
+
     return new Response(JSON.stringify({
       success: true,
       id: saved.id,
       trackingId: saved.tracking_id,
-      message: 'Candidate evaluation recorded successfully.'
+      emailStatus,
+      message: 'Candidate evaluation recorded and assessment card dispatched successfully.'
     }), {
       status: 201,
       headers: { 'Content-Type': 'application/json' }

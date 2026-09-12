@@ -245,6 +245,13 @@ const authenticated = isAuthenticated(Astro.cookies);
                     <option value="rejected">Rejected</option>
                   </select>
 
+                  <!-- Delivery / Email Filter -->
+                  <select id="eval-email-filter" class="bg-slate-950 border border-slate-800 text-slate-300 text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-brand-500 cursor-pointer" title="Filter by candidate email status">
+                    <option value="all">All Email Status</option>
+                    <option value="unsent">✉ Not Sent Yet</option>
+                    <option value="sent">✓ Emailed</option>
+                  </select>
+
                   <!-- Sort Selector -->
                   <select id="eval-sort-by" class="bg-slate-950 border border-slate-800 text-slate-300 text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-brand-500 cursor-pointer">
                     <option value="newest">Newest First</option>
@@ -535,6 +542,7 @@ const authenticated = isAuthenticated(Astro.cookies);
                       <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Quick Message Template</label>
                       <select id="composer-template-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-brand-500 cursor-pointer">
                         <option value="">Custom Message</option>
+                        <option value="eval_card">Official Candidate Evaluation Card (Pass)</option>
                         <option value="congrats">Approval &amp; Next Steps for Visa Dossier</option>
                         <option value="docs">Request for High-Resolution Passport Bio Data</option>
                         <option value="interview">Sponsor Consular Interview Scheduled</option>
@@ -563,6 +571,12 @@ const authenticated = isAuthenticated(Astro.cookies);
                       placeholder="Write your official response to the candidate..."
                       class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-sm text-white focus:outline-none focus:border-brand-500 leading-relaxed font-sans transition"
                     ></textarea>
+                    <div class="pt-2">
+                      <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-300">
+                        <input type="checkbox" id="composer-send-as-card" class="rounded bg-slate-950 border-slate-700 text-brand-600 focus:ring-0">
+                        <span>Dispatch as Official Candidate Evaluation Card (with placement details &amp; verified pass)</span>
+                      </label>
+                    </div>
                   </div>
 
                   <div class="flex items-center justify-end gap-3 pt-2">
@@ -780,8 +794,12 @@ const authenticated = isAuthenticated(Astro.cookies);
               </button>
 
               <div class="flex items-center gap-3">
-                <button id="modal-btn-reply" class="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold flex items-center gap-1.5 transition shadow cursor-pointer">
+                <button id="modal-btn-send-card" class="px-4 py-2 rounded-xl bg-tealbrand-600 hover:bg-tealbrand-500 text-white text-xs font-semibold flex items-center gap-1.5 transition shadow cursor-pointer" title="Send or resend Evaluation Card via SMTP (network@mygotravel.eu)">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                  <span>Send Evaluation Card</span>
+                </button>
+                <button id="modal-btn-reply" class="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold flex items-center gap-1.5 transition shadow cursor-pointer">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                   <span>Dispatch Official Email</span>
                 </button>
               </div>
@@ -914,6 +932,7 @@ const authenticated = isAuthenticated(Astro.cookies);
             const searchVal = document.getElementById('eval-search-input')?.value.trim() || '';
             const destinationVal = document.getElementById('eval-country-filter')?.value || '';
             const statusVal = document.getElementById('eval-status-filter')?.value || 'all';
+            const emailStatusVal = document.getElementById('eval-email-filter')?.value || 'all';
             const sortByVal = document.getElementById('eval-sort-by')?.value || 'newest';
             const limitVal = parseInt(document.getElementById('eval-page-limit')?.value || '50', 10);
             pageLimit = limitVal;
@@ -925,6 +944,7 @@ const authenticated = isAuthenticated(Astro.cookies);
               if (searchVal) url += `&q=${encodeURIComponent(searchVal)}`;
               if (destinationVal) url += `&destination=${encodeURIComponent(destinationVal)}`;
               if (statusVal && statusVal !== 'all') url += `&status=${encodeURIComponent(statusVal)}`;
+              if (emailStatusVal && emailStatusVal !== 'all') url += `&emailStatus=${encodeURIComponent(emailStatusVal)}`;
 
               const res = await fetch(url);
               if (res.status === 401) {
@@ -987,7 +1007,12 @@ const authenticated = isAuthenticated(Astro.cookies);
                       </td>
                       <td class="py-3 px-4 text-xs">
                         <div class="text-slate-200 font-medium">${item.email}</div>
-                        <div class="text-slate-400">${item.phone || '-'}</div>
+                        <div class="text-slate-400 flex items-center gap-1.5 mt-0.5">
+                          <span>${item.phone || '-'}</span>
+                          ${(item.emails_sent_count || 0) > 0 
+                            ? `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" title="${item.emails_sent_count} official email(s) sent">✓ Sent</span>`
+                            : `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30" title="No email dispatched yet">✉ Not Sent</span>`}
+                        </div>
                       </td>
                       <td class="py-3 px-4 text-xs">
                         <div class="text-white font-medium truncate max-w-[180px]" title="${item.matched_job_title || item.job_category || 'Logistics'}">${item.matched_job_title || item.job_category || 'Logistics'}</div>
@@ -1016,11 +1041,20 @@ const authenticated = isAuthenticated(Astro.cookies);
                       <td class="py-3 px-4 text-xs text-slate-400 whitespace-nowrap">
                         ${dateStr}
                       </td>
-                      <td class="py-3 px-4 text-right space-x-1.5 whitespace-nowrap">
-                        <button onclick="openModal('${item.tracking_id}')" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 hover:bg-brand-600 text-slate-200 hover:text-white transition font-medium cursor-pointer">
+                      <td class="py-3 px-4 text-right space-x-1 whitespace-nowrap">
+                        ${(item.emails_sent_count || 0) === 0 ? `
+                          <button onclick="sendEvaluationCard('${item.tracking_id}', this)" class="px-2 py-1 text-xs rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition font-medium cursor-pointer" title="Send Evaluation Card via network@mygotravel.eu">
+                            ✉ Send Card
+                          </button>
+                        ` : `
+                          <button onclick="sendEvaluationCard('${item.tracking_id}', this)" class="px-2 py-1 text-xs rounded-lg bg-slate-800 hover:bg-tealbrand-600 text-slate-300 hover:text-white transition font-medium cursor-pointer" title="Resend Evaluation Card via network@mygotravel.eu">
+                            Resend Card
+                          </button>
+                        `}
+                        <button onclick="openModal('${item.tracking_id}')" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 hover:bg-brand-600 text-slate-200 hover:text-white transition font-medium cursor-pointer" title="View Dossier">
                           Dossier
                         </button>
-                        <button onclick="quickReply('${item.email}', '${encodeURIComponent(item.full_name || '')}', '${item.tracking_id}')" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-200 hover:text-white transition font-medium cursor-pointer" title="Dispatch email">
+                        <button onclick="quickReply('${item.email}', '${encodeURIComponent(item.full_name || '')}', '${item.tracking_id}')" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-200 hover:text-white transition font-medium cursor-pointer" title="Dispatch custom email">
                           Email
                         </button>
                         <button onclick="deleteRecord('${item.tracking_id}')" class="px-2 py-1 text-xs rounded-lg bg-slate-800 hover:bg-rose-600 text-slate-400 hover:text-white transition cursor-pointer" title="Delete evaluation">
@@ -1065,11 +1099,61 @@ const authenticated = isAuthenticated(Astro.cookies);
             }
           };
 
+          // Dispatch Official Candidate Evaluation Card via SMTP (network@mygotravel.eu)
+          window.sendEvaluationCard = async function(trackingId, btnEl) {
+            if (!trackingId) return;
+
+            const originalHtml = btnEl ? btnEl.innerHTML : '';
+            if (btnEl) {
+              btnEl.disabled = true;
+              btnEl.innerHTML = `
+                <svg class="w-3.5 h-3.5 animate-spin inline-block mr-1" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                </svg>
+                <span>Sending...</span>
+              `;
+            }
+
+            showToast(`Dispatching evaluation card for ${trackingId} via SMTP (network@mygotravel.eu)...`);
+
+            try {
+              const res = await fetch('/api/admin/send-evaluation-card', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ trackingId })
+              });
+              const data = await res.json();
+
+              if (res.ok && data.success) {
+                showToast(data.message || `Evaluation card dispatched for ${trackingId}!`);
+                loadEvaluations();
+                loadSentEmails();
+                loadAnalytics();
+
+                // If modal is currently open with this record, reload it to reflect new communications
+                if (currentSelectedEval && currentSelectedEval.tracking_id === trackingId) {
+                  openModal(trackingId);
+                }
+              } else {
+                showToast(data.error || 'Failed to dispatch evaluation card.', 'error');
+              }
+            } catch (err) {
+              showToast('Error connecting to server: ' + err.message, 'error');
+            } finally {
+              if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.innerHTML = originalHtml;
+              }
+            }
+          };
+
           // Search and Filters Event Handlers
           let searchTimeout = null;
           const searchInput = document.getElementById('eval-search-input');
           const countryFilter = document.getElementById('eval-country-filter');
           const statusFilter = document.getElementById('eval-status-filter');
+          const emailFilter = document.getElementById('eval-email-filter');
           const sortBySelect = document.getElementById('eval-sort-by');
           const pageLimitSelect = document.getElementById('eval-page-limit');
           const clearSearchBtn = document.getElementById('btn-clear-search');
@@ -1099,6 +1183,11 @@ const authenticated = isAuthenticated(Astro.cookies);
           });
 
           statusFilter?.addEventListener('change', () => {
+            currentPage = 1;
+            loadEvaluations();
+          });
+
+          emailFilter?.addEventListener('change', () => {
             currentPage = 1;
             loadEvaluations();
           });
@@ -1327,6 +1416,13 @@ const authenticated = isAuthenticated(Astro.cookies);
             }
           });
 
+          // Modal Send Evaluation Card Button
+          document.getElementById('modal-btn-send-card')?.addEventListener('click', async function() {
+            if (currentSelectedEval) {
+              await window.sendEvaluationCard(currentSelectedEval.tracking_id, this);
+            }
+          });
+
           // Modal Reply
           document.getElementById('modal-btn-reply')?.addEventListener('click', () => {
             if (currentSelectedEval) {
@@ -1547,17 +1643,26 @@ const authenticated = isAuthenticated(Astro.cookies);
             const tracking = document.getElementById('composer-tracking-id')?.value || 'YOUR_TRACKING_ID';
             const subject = document.getElementById('composer-subject');
             const message = document.getElementById('composer-message');
+            const cardCheckbox = document.getElementById('composer-send-as-card');
 
-            if (val === 'congrats') {
+            if (val === 'eval_card') {
+              if (cardCheckbox) cardCheckbox.checked = true;
+              if (subject) subject.value = `Official Assessment Passed: European Relocation Placement Card [${tracking}]`;
+              if (message) message.value = `Dear ${name},\n\nCongratulations! We are pleased to confirm that your profile has been successfully reviewed and verified under the MyGo Travel European Relocation Program.\n\nYour official Candidate Evaluation Card has been issued and attached with certified eligibility for your matched placement.\n\nPlease review your verified placement details below. Contact our admissions directorate via WhatsApp or NicerApp to initiate your consular employer sponsorship docket.\n\nWarm regards,\nMyGo Travel Admissions Directorate`;
+            } else if (val === 'congrats') {
+              if (cardCheckbox) cardCheckbox.checked = false;
               if (subject) subject.value = `Official Confirmation: European Relocation Match Approved [${tracking}]`;
               if (message) message.value = `Dear ${name},\n\nCongratulations! Your European job placement and relocation assessment (Reference: ${tracking}) has been approved by our partner employers.\n\nAccommodation and meals are officially confirmed in your relocation package. Our admissions directorate will now assist you with consular filing and biometric scheduling.\n\nPlease reply to this email with your current availability for an introductory orientation call.\n\nWarm regards,\nMyGo Travel European Relocation Directorate`;
             } else if (val === 'docs') {
+              if (cardCheckbox) cardCheckbox.checked = false;
               if (subject) subject.value = `Document Action Required: International Passport Bio-Data Page [${tracking}]`;
               if (message) message.value = `Dear ${name},\n\nRegarding your European application dossier ${tracking}:\n\nTo ensure swift issuance of your work sponsorship certificate, our legal desk requires a clear, full-page digital copy of your International Passport Bio-Data page.\n\nPlease reply directly to this email attaching the document.\n\nSincerely,\nMyGo Travel Legal & Consular Operations`;
             } else if (val === 'interview') {
+              if (cardCheckbox) cardCheckbox.checked = false;
               if (subject) subject.value = `Sponsor Interview Notice: European Employment Placement [${tracking}]`;
               if (message) message.value = `Dear ${name},\n\nWe are pleased to inform you that the European employer review board has requested a brief video interview regarding your application ${tracking}.\n\nPlease let us know your preferred time slot between 10:00 CET and 16:00 CET this week.\n\nBest regards,\nMyGo Travel Operations Team`;
             } else if (val === 'work_permit') {
+              if (cardCheckbox) cardCheckbox.checked = false;
               if (subject) subject.value = `Consular Clearance: European Work Permit Issued [${tracking}]`;
               if (message) message.value = `Dear ${name},\n\nGreat news! Your European work permit and government labor clearance has been officially issued for reference ${tracking}.\n\nYour relocation package including guaranteed housing and daily meal provisions is locked in. Please contact your dedicated case manager to finalize travel arrangements and flight dates.\n\nCongratulations,\nMyGo Travel Admissions & Relocation Desk`;
             }
@@ -1574,6 +1679,7 @@ const authenticated = isAuthenticated(Astro.cookies);
             const trackingId = document.getElementById('composer-tracking-id')?.value;
             const subject = document.getElementById('composer-subject')?.value;
             const message = document.getElementById('composer-message')?.value;
+            const isEvaluationCard = document.getElementById('composer-send-as-card')?.checked;
 
             if (feedback) feedback.classList.add('hidden');
             if (sendBtn) {
@@ -1585,7 +1691,7 @@ const authenticated = isAuthenticated(Astro.cookies);
               const res = await fetch('/api/admin/send-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ to, name, trackingId, subject, message })
+                body: JSON.stringify({ to, name, trackingId, subject, message, isEvaluationCard })
               });
               const data = await res.json();
 
@@ -1596,6 +1702,7 @@ const authenticated = isAuthenticated(Astro.cookies);
                   feedback.classList.remove('hidden');
                 }
                 showToast(`Email dispatched to ${to}`);
+                loadEvaluations();
                 loadSentEmails();
                 loadAnalytics();
               } else {

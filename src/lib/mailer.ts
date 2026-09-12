@@ -8,14 +8,22 @@ interface SendEmailParams {
   text?: string;
   html?: string;
   trackingId?: string;
+  attachments?: Array<{
+    filename?: string;
+    content?: any;
+    path?: string;
+    cid?: string;
+    contentType?: string;
+    encoding?: string;
+  }>;
 }
 
-export async function sendEmail({ to, name, subject, text, html, trackingId }: SendEmailParams) {
+export async function sendEmail({ to, name, subject, text, html, trackingId, attachments }: SendEmailParams) {
   const host = process.env.SMTP_HOST;
   const port = parseInt(process.env.SMTP_PORT || '587', 10);
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
-  const from = process.env.SMTP_FROM || 'MyGo Travel <admissions@mygotravel.eu>';
+  const from = process.env.SMTP_FROM || 'MyGo Travel <network@mygotravel.eu>';
 
   let status: 'sent' | 'logged' | 'failed' = 'sent';
   let errorMessage: string | null = null;
@@ -34,7 +42,8 @@ export async function sendEmail({ to, name, subject, text, html, trackingId }: S
         to,
         subject,
         text: text || html?.replace(/<[^>]*>?/gm, ''),
-        html: html || text?.replace(/\n/g, '<br/>')
+        html: html || text?.replace(/\n/g, '<br/>'),
+        ...(attachments && attachments.length > 0 ? { attachments } : {})
       });
       status = 'sent';
     } catch (err: any) {

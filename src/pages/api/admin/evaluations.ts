@@ -18,6 +18,7 @@ export const GET: APIRoute = async ({ request, cookies }) => {
     const q = url.searchParams.get('q')?.trim();
     const destination = url.searchParams.get('destination')?.trim();
     const status = url.searchParams.get('status')?.trim();
+    const emailStatus = url.searchParams.get('emailStatus')?.trim();
     const sortBy = url.searchParams.get('sortBy') || 'newest';
     const limit = Math.min(parseInt(url.searchParams.get('limit') || '50', 10), 200);
     const offset = parseInt(url.searchParams.get('offset') || '0', 10);
@@ -61,41 +62,47 @@ export const GET: APIRoute = async ({ request, cookies }) => {
       params.push(`%${q}%`);
       const paramIdx = params.length;
       conditions.push(`(
-        tracking_id ILIKE $${paramIdx} OR
-        full_name ILIKE $${paramIdx} OR
-        email ILIKE $${paramIdx} OR
-        phone ILIKE $${paramIdx} OR
-        matched_country ILIKE $${paramIdx} OR
-        passport_number ILIKE $${paramIdx} OR
-        city ILIKE $${paramIdx} OR
-        country ILIKE $${paramIdx} OR
-        job_category ILIKE $${paramIdx} OR
-        COALESCE(admin_notes, '') ILIKE $${paramIdx}
+        e.tracking_id ILIKE $${paramIdx} OR
+        e.full_name ILIKE $${paramIdx} OR
+        e.email ILIKE $${paramIdx} OR
+        e.phone ILIKE $${paramIdx} OR
+        e.matched_country ILIKE $${paramIdx} OR
+        e.passport_number ILIKE $${paramIdx} OR
+        e.city ILIKE $${paramIdx} OR
+        e.country ILIKE $${paramIdx} OR
+        e.job_category ILIKE $${paramIdx} OR
+        COALESCE(e.admin_notes, '') ILIKE $${paramIdx}
       )`);
     }
 
     if (destination) {
       params.push(destination);
-      conditions.push(`LOWER(matched_country) = LOWER($${params.length})`);
+      conditions.push(`LOWER(e.matched_country) = LOWER($${params.length})`);
     }
 
     if (status && status !== 'all') {
       params.push(status.toLowerCase());
-      conditions.push(`LOWER(COALESCE(status, 'pending')) = LOWER($${params.length})`);
+      conditions.push(`LOWER(COALESCE(e.status, 'pending')) = LOWER($${params.length})`);
+    }
+
+    if (emailStatus === 'unsent') {
+      conditions.push(`NOT EXISTS (SELECT 1 FROM sent_emails s WHERE s.tracking_id = e.tracking_id OR LOWER(s.to_email) = LOWER(e.email))`);
+    } else if (emailStatus === 'sent') {
+      conditions.push(`EXISTS (SELECT 1 FROM sent_emails s WHERE s.tracking_id = e.tracking_id OR LOWER(s.to_email) = LOWER(e.email))`);
     }
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
     // Total count
-    const countRes = await query(`SELECT COUNT(*) as total FROM evaluations ${whereClause}`, params);
+    const countRes = await query(`SELECT COUNT(*) as total FROM evaluations e ${whereClause}`, params);
     const total = parseInt(countRes.rows[0].total, 10);
 
     // Sorting
-    let orderByClause = 'ORDER BY created_at DESC';
-    if (sortBy === 'oldest') orderByClause = 'ORDER BY created_at ASC';
-    else if (sortBy === 'score_desc') orderByClause = 'ORDER BY score DESC, created_at DESC';
-    else if (sortBy === 'score_asc') orderByClause = 'ORDER BY score ASC, created_at DESC';
-    else if (sortBy === 'status') orderByClause = 'ORDER BY status ASC, created_at DESC';
+    let orderByClause = 'ORDER BY e.created_at DESC';
+    if (sortBy === 'oldest') orderByClause = 'ORDER BY e.created_at ASC';
+    else if (sortBy === 'score_desc') orderByClause = 'ORDER BY e.score DESC, e.created_at DESC';
+    else if (sortBy === 'score_asc') orderByClause = 'ORDER BY e.score ASC, e.created_at DESC';
+    else if (sortBy === 'status') orderByClause = 'ORDER BY e.status ASC, e.created_at DESC';
 
     // Records
     const queryParams = [...params];
@@ -105,13 +112,14 @@ export const GET: APIRoute = async ({ request, cookies }) => {
     const offsetIdx = queryParams.length;
 
     const listRes = await query(
-      `SELECT id, tracking_id, full_name, phone, email, age, passport_number,
-              address, marital_status, experience_years, job_category,
-              start_timeline, preferred_destination, matched_country,
-              matched_job_title, matched_processing_time, score, status,
-              admin_notes, photo_data, cv_filename, ip_address, city, country, country_code,
-              created_at, updated_at
-       FROM evaluations
+      `SELECT e.id, e.tracking_id, e.full_name, e.phone, e.email, e.age, e.passport_number,
+              e.address, e.marital_status, e.experience_years, e.job_category,
+              e.start_timeline, e.preferred_destination, e.matched_country,
+              e.matched_job_title, e.matched_processing_time, e.score, e.status,
+              e.admin_notes, e.photo_data, e.cv_filename, e.ip_address, e.city, e.country, e.country_code,
+              e.created_at, e.updated_at,
+              COALESCE((SELECT COUNT(*) FROM sent_emails s WHERE s.tracking_id = e.tracking_id OR LOWER(s.to_email) = LOWER(e.email)), 0)::int AS emails_sent_count
+       FROM evaluations e
        ${whereClause}
        ${orderByClause}
        LIMIT $${limitIdx} OFFSET $${offsetIdx}`,
