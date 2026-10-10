@@ -45,6 +45,7 @@ export default {
           600: '#169B88', // Emerald/teal headline color from inspiration
           700: '#0f766e',
           800: '#0d5d57',
+          900: '#0b4a45',
         }
       },
       fontFamily: {
