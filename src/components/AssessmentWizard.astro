@@ -6,7 +6,7 @@ import CountryFlag from './CountryFlag.astro';
 <div class="min-h-screen flex flex-col justify-between bg-slate-50 dark:bg-navy-950 text-slate-900 dark:text-white transition-colors duration-200" id="wizard-fullscreen-container">
   
   <!-- TOP NAVBAR -->
-  <header class="sticky top-0 z-30 w-full backdrop-blur-md bg-white/90 dark:bg-navy-900/90 border-b border-slate-200 dark:border-navy-800 py-3.5 px-4 sm:px-8">
+  <header class="sticky top-0 z-30 w-full backdrop-blur-md bg-white/90 dark:bg-navy-900/90 border-b border-slate-200 dark:border-navy-800 py-2 px-4 sm:px-8">
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
       
       <!-- Brand Logo -->
@@ -14,12 +14,12 @@ import CountryFlag from './CountryFlag.astro';
         <img 
           src="/Mygo_Travel_Logo.png" 
           alt="MyGo Travel" 
-          class="h-8 w-auto object-contain dark:hidden transition-transform group-hover:scale-105"
+          class="h-7 w-auto object-contain dark:hidden"
         />
         <img 
           src="/Mygo_Travel_Logo_White.png" 
           alt="MyGo Travel" 
-          class="h-8 w-auto object-contain hidden dark:block transition-transform group-hover:scale-105"
+          class="h-7 w-auto object-contain hidden dark:block"
         />
       </a>
 
@@ -66,7 +66,7 @@ import CountryFlag from './CountryFlag.astro';
     </div>
 
     <!-- Mobile Progress Bar -->
-    <div class="sm:hidden mt-2 pt-2 border-t border-slate-200 dark:border-navy-800">
+    <div class="sm:hidden mt-1.5 pt-1.5 border-t border-slate-200 dark:border-navy-800">
       <div class="flex items-center justify-between text-[11px] font-semibold mb-1 text-slate-500 dark:text-slate-400">
         <span id="mobile-step-indicator">Step 1 of 6</span>
         <span id="mobile-step-pct">17%</span>

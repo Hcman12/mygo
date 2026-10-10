@@ -5,8 +5,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    /* Keep anchor targets clear of the sticky 64px header */
-    scroll-padding-top: 4.5rem;
+    /* Keep anchor targets clear of the sticky 56px header */
+    scroll-padding-top: 4rem;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   }
   

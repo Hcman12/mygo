@@ -15,21 +15,21 @@ const isActive = (href: string) => !href.includes('#') && currentPath === href;
 
 <header class="sticky top-0 z-40 w-full bg-white/90 dark:bg-navy-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-navy-800 transition-colors duration-200">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between gap-4 h-16">
+    <div class="flex items-center justify-between gap-3 h-14">
 
       <!-- Brand Logo -->
       <a href="/" class="flex items-center shrink-0" aria-label="MyGo Travel home">
-        <img src="/Mygo_Travel_Logo.png" alt="MyGo Travel" class="h-8 w-auto object-contain dark:hidden" />
-        <img src="/Mygo_Travel_Logo_White.png" alt="MyGo Travel" class="h-8 w-auto object-contain hidden dark:block" />
+        <img src="/Mygo_Travel_Logo.png" alt="MyGo Travel" class="h-7 w-auto object-contain dark:hidden" />
+        <img src="/Mygo_Travel_Logo_White.png" alt="MyGo Travel" class="h-7 w-auto object-contain hidden dark:block" />
       </a>
 
       <!-- Desktop Navigation -->
-      <nav class="hidden lg:flex items-center gap-1" aria-label="Main">
+      <nav class="hidden lg:flex items-center gap-0.5" aria-label="Main">
         {navLinks.map((link) => (
           <a
             href={link.href}
             aria-current={isActive(link.href) ? 'page' : undefined}
-            class={`px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+            class={`px-2.5 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors ${
               isActive(link.href)
                 ? 'text-brand-600 dark:text-brand-400'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-navy-800'
@@ -46,7 +46,7 @@ const isActive = (href: string) => !href.includes('#') && currentPath === href;
           id="theme-toggle"
           type="button"
           aria-label="Toggle dark/light theme"
-          class="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-navy-800 transition-colors"
+          class="p-1.5 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-navy-800 transition-colors"
         >
           <svg id="theme-icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
@@ -58,7 +58,7 @@ const isActive = (href: string) => !href.includes('#') && currentPath === href;
 
         <a
           href="/assess"
-          class="hidden sm:inline-flex items-center justify-center px-4 py-2 text-sm font-semibold whitespace-nowrap text-white bg-brand-500 hover:bg-brand-600 rounded-lg transition-colors"
+          class="hidden sm:inline-flex items-center justify-center px-3.5 py-1.5 text-sm font-semibold whitespace-nowrap text-white bg-brand-500 hover:bg-brand-600 rounded-md transition-colors"
         >
           Check Eligibility
         </a>
@@ -66,7 +66,7 @@ const isActive = (href: string) => !href.includes('#') && currentPath === href;
         <button
           id="mobile-menu-btn"
           type="button"
-          class="lg:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-navy-800"
+          class="lg:hidden p-1.5 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-navy-800"
           aria-label="Open menu"
           aria-controls="mobile-menu"
           aria-expanded="false"
@@ -83,22 +83,22 @@ const isActive = (href: string) => !href.includes('#') && currentPath === href;
   </div>
 
   <!-- Mobile Navigation -->
-  <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 dark:border-navy-800 bg-white dark:bg-navy-900 max-h-[calc(100vh-4rem)] overflow-y-auto">
-    <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col gap-1" aria-label="Mobile">
-      <a href="/" class="px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-navy-800">Home</a>
+  <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 dark:border-navy-800 bg-white dark:bg-navy-900 max-h-[calc(100vh-3.5rem)] overflow-y-auto">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-col gap-0.5" aria-label="Mobile">
+      <a href="/" class="px-3 py-2 rounded-md text-[15px] font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-navy-800">Home</a>
       {navLinks.map((link) => (
         <a
           href={link.href}
           aria-current={isActive(link.href) ? 'page' : undefined}
-          class={`px-3 py-2.5 rounded-lg text-base font-medium hover:bg-slate-100 dark:hover:bg-navy-800 ${
+          class={`px-3 py-2 rounded-md text-[15px] font-medium hover:bg-slate-100 dark:hover:bg-navy-800 ${
             isActive(link.href) ? 'text-brand-600 dark:text-brand-400' : 'text-slate-700 dark:text-slate-200'
           }`}
         >
           {link.label}
         </a>
       ))}
-      <a href="/#contact" class="px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-navy-800">Contact</a>
-      <a href="/assess" class="mt-2 block w-full text-center px-4 py-3 rounded-lg font-semibold text-white bg-brand-500 hover:bg-brand-600">
+      <a href="/#contact" class="px-3 py-2 rounded-md text-[15px] font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-navy-800">Contact</a>
+      <a href="/assess" class="mt-2 block w-full text-center px-4 py-2.5 rounded-md font-semibold text-white bg-brand-500 hover:bg-brand-600">
         Check Eligibility
       </a>
     </nav>
